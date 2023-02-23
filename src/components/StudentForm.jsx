@@ -34,13 +34,16 @@ const schema = yup.object().shape({
     orderSubtype: yup.number(),
     speciality: yup.array(),
     supervisors: yup.array(),
+    steeringCommittee: yup.array(),
 });
 
 const StudentForm = ({countries, orders, schools, specialities, supervisors}) => {
 
-    const maxSelectedSpecialities = 1;
+    const MAX_SELECTED_SPECIALITIES = 1;
 
-    const maxSelectedSupervisors = 2;
+    const MAX_SELECTED_SUPERVISORS = 2;
+
+    const MAX_STEERING_COMMITTEE = 3;
 
     const years = tools.yearList(50, 15);
 
@@ -73,6 +76,8 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
 
     const [selectedSupervisors, setSelectedSupervisors] = useState([]);
 
+    const [selectedSteeringCommittee, setSelectedSteeringCommittee] = useState([]);
+
     const sortedSpecialities = useMemo(() => {
             if (schoolId === '0') return [];
             return specialities.items
@@ -87,13 +92,14 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
             return supervisors.items
                 .filter(item => item.value.toLowerCase()
                     .includes(sortedSupervisorValue.toLowerCase()))
-                .filter(item => !selectedSupervisors.includes(item));
+                .filter(item => !selectedSupervisors.includes(item) &&
+                    !selectedSteeringCommittee.includes(item));
         },
-        [selectedSupervisors, schoolId, sortedSupervisorValue, supervisors.items])
+        [selectedSupervisors, selectedSteeringCommittee, schoolId, sortedSupervisorValue, supervisors.items])
 
     const transferSpeciality = (itemId) => {
         itemId = Number(itemId)
-        if (selectedSpecialities.length < maxSelectedSpecialities) {
+        if (selectedSpecialities.length < MAX_SELECTED_SPECIALITIES) {
             setSelectedSpecialities(selectedSpecialities
                 .concat(specialities.items.filter(item => item.id === itemId)));
         }
@@ -101,12 +107,19 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
 
     const transferSupervisor = (itemId) => {
         itemId = Number(itemId)
-        if (selectedSupervisors.length < maxSelectedSupervisors) {
+        if (selectedSupervisors.length < MAX_SELECTED_SUPERVISORS) {
             setSelectedSupervisors(selectedSupervisors
                 .concat(supervisors.items.filter(item => item.id === itemId)));
         }
     }
 
+    const transferSteeringCommittee= (itemId) => {
+        itemId = Number(itemId)
+        if (selectedSteeringCommittee.length < MAX_STEERING_COMMITTEE) {
+            setSelectedSteeringCommittee(selectedSteeringCommittee
+                .concat(supervisors.items.filter(item => item.id === itemId)));
+        }
+    }
     const removeSpeciality = (itemId) => {
         itemId = Number(itemId)
         setSelectedSpecialities(selectedSpecialities.filter(item => item.id !== itemId));
@@ -115,6 +128,11 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
     const removeSupervisor = (itemId) => {
         itemId = Number(itemId)
         setSelectedSupervisors(selectedSupervisors.filter(item => item.id !== itemId));
+    }
+
+    const removeSteeringCommittee = (itemId) => {
+        itemId = Number(itemId);
+        setSelectedSteeringCommittee(selectedSteeringCommittee.filter(item => item.id !== itemId))
     }
 
 
@@ -147,6 +165,7 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                 orderSubtype: '1',
                 speciality: [],
                 supervisors: [],
+                steeringCommittee: [],
             }}
         >
             {({
@@ -161,6 +180,7 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                 <Form noValidate onSubmit={e => {
                     values.speciality = selectedSpecialities;
                     values.supervisors = selectedSupervisors;
+                    values.steeringCommittee = selectedSteeringCommittee;
                     if (e.nativeEvent.submitter.name !== "submitBtn") {
                         e.preventDefault();
                     } else {
@@ -168,8 +188,10 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                     }
                 }}>
                     <Card>
-                        <Card.Body>
+                        <Card.Header>
                             <Card.Title>Date personale</Card.Title>
+                        </Card.Header>
+                        <Card.Body>
                             <Row className="mb-3">
                                 <Col>
                                     <Form.Group md="4" controlId="formFirstName">
@@ -330,8 +352,10 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                     </Card>
                     <br/>
                     <Card>
-                        <Card.Body>
+                        <Card.Header>
                             <Card.Title>Inamatriculare</Card.Title>
+                        </Card.Header>
+                        <Card.Body>
                             <Row>
                                 <Col>
                                     <Form.Label>Diploma la înmatriculare</Form.Label>
@@ -545,8 +569,10 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                     </Card>
                     <br/>
                     <Card>
-                        <Card.Body>
+                        <Card.Header>
                             <Card.Title>Școala doctorală</Card.Title>
+                        </Card.Header>
+                        <Card.Body>
                             <Row>
                                 <Col>
                                     <Form.Group md="4" controlId={"formSchool"}>
@@ -575,8 +601,10 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                     <Row>
                         <Col>
                             <Card>
-                                <Card.Body>
+                                <Card.Header>
                                     <Card.Title>Specialitatea</Card.Title>
+                                </Card.Header>
+                                <Card.Body>
                                     <Row>
                                         <Col>
                                             <ItemFilter
@@ -593,23 +621,6 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                                                 height={"10em"}
                                                 onChange={e => transferSpeciality(e.target.id)}
                                             />
-                                            {/*<Form.Group md="4" controlId={"formSpeciality"}>*/}
-                                            {/*    <Form.Select*/}
-                                            {/*        name={"speciality"}*/}
-                                            {/*        value={values.speciality}*/}
-                                            {/*        onChange={handleChange}*/}
-                                            {/*        isValid={touched.speciality && !errors.speciality}*/}
-                                            {/*        disabled={isDisabled}*/}
-                                            {/*    >*/}
-                                            {/*        {*/}
-                                            {/*            sortedSpecialities.map(item => {*/}
-                                            {/*                return <option key={item.id} value={item.id}>*/}
-                                            {/*                    {item.value}*/}
-                                            {/*                </option>*/}
-                                            {/*            })*/}
-                                            {/*        }*/}
-                                            {/*    </Form.Select>*/}
-                                            {/*</Form.Group>*/}
                                         </Col>
                                     </Row>
                                     <br/>
@@ -642,8 +653,10 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                         </Col>
                         <Col>
                             <Card>
-                                <Card.Body>
+                                <Card.Header>
                                     <Card.Title>Conducător de doctorat</Card.Title>
+                                </Card.Header>
+                                <Card.Body>
                                     <Row>
                                         <Col>
                                             <ItemFilter
@@ -655,7 +668,6 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                                     <br/>
                                     <Row>
                                         <Col>
-
                                             <ScrollList
                                                 items={sortedSupervisors}
                                                 height={"10em"}
@@ -692,6 +704,54 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                             </Card>
                         </Col>
                     </Row>
+                    <br/>
+                    <Card>
+                        <Card.Header>
+                            <Card.Title>Membrii comisiei de îndrumare</Card.Title>
+                        </Card.Header>
+                        <Card.Body>
+                            <Row>
+                                <Col>
+                                    <ItemFilter
+                                        onChange={setSortedSupervisorValue}
+                                        placeholder={"Cautarea persoanei"}
+                                    />
+                                </Col>
+                                <Col>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <Row>
+                                <Col>
+                                    <ScrollList
+                                        items={sortedSupervisors}
+                                        height={"10em"}
+                                        onChange={e => transferSteeringCommittee(e.target.id)}
+                                    />
+                                </Col>
+                                <Col>
+                                    <Form.Group md="4" controlId={"formSteeringCommittee"}>
+                                        <Form.Control
+                                            name={"steeringCommittee"}
+                                            value={values.steeringCommittee}
+                                            onChange={handleChange}
+                                            isValid={touched.steeringCommittee && !errors.steeringCommittee}
+                                            isInvalid={!!errors.steeringCommittee}
+                                            hidden={true}
+                                        />
+                                        <ScrollList
+                                            items={selectedSteeringCommittee}
+                                            height={"10em"}
+                                            onChange={e => removeSteeringCommittee(e.target.id)}
+                                        />
+                                        <Form.Control.Feedback type={"invalid"}>
+                                            {errors.steeringCommittee}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
                     <br/>
                     <Button type="submit" name={"submitBtn"}>Submit form</Button>
                 </Form>
