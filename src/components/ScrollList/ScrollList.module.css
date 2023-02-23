@@ -1,0 +1,23 @@
+
+.scrollList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollList::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgb(206, 212, 218);
+}
+
+.scrollList::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+.scrollList {
+    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(206, 212, 218) white;
+    margin: 0 auto;
+    overflow: auto;
+    width: 100%;
+    border-radius: 5px;
+}
