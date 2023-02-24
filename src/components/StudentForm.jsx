@@ -9,6 +9,7 @@ import {Card, InputGroup} from "react-bootstrap";
 import * as tools from './utils/FormTools';
 import ScrollList from "./ScrollList/ScrollList";
 import ItemFilter from "./ItemFilter";
+import DateSelect from "./DateSelect";
 
 
 const schema = yup.object().shape({
@@ -24,9 +25,9 @@ const schema = yup.object().shape({
     diplomaSeries: yup.string(),
     diplomaNumber: yup.string(),
     orderNumber: yup.string(),
-    orderDateYear: yup.string(),
-    orderDateMonth: yup.string(),
-    orderDateDay: yup.string(),
+    orderDate: yup.date(),
+    beginDate: yup.date(),
+    endDate: yup.date(),
     registration: yup.string(),
     studyType: yup.string(),
     financing: yup.string(),
@@ -35,9 +36,10 @@ const schema = yup.object().shape({
     speciality: yup.array(),
     supervisors: yup.array(),
     steeringCommittee: yup.array(),
+    searchTopic: yup.string(),
 });
 
-const StudentForm = ({countries, orders, schools, specialities, supervisors}) => {
+const StudentForm = ({student, setStudent, countries, orders, schools, specialities, supervisors}) => {
 
     const MAX_SELECTED_SPECIALITIES = 1;
 
@@ -45,17 +47,39 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
 
     const MAX_STEERING_COMMITTEE = 3;
 
-    const years = tools.yearList(50, 15);
+    const MIN_SIZE_AREA = 3;
 
-    const orderYears = tools.yearList(5);
+    const years = Array.from(new Array(50),
+        (val, index) => ((new Date()).getFullYear()) - 15 - index);
+
+    const [sortedSpecialityValue, setSortedSpecialityValue] = useState('');
+
+    const [sortedSupervisorValue, setSortedSupervisorValue] = useState('');
+
+    const [sortedSteeringCommitteeValue, setSortedSteeringCommitteeValue] = useState('');
+
+    const [selectedSpecialities, setSelectedSpecialities] = useState([]);
+
+    const [selectedSupervisors, setSelectedSupervisors] = useState([]);
+
+    const [selectedSteeringCommittee, setSelectedSteeringCommittee] = useState([]);
+
+    const [sizeArea, setSizeArea] = useState(MIN_SIZE_AREA);
+
+    const [orderDate, setOrderDate] = useState(new Date());
+
+    const [beginDate, setBeginDate] = useState(new Date());
+
+    const [endDate, setEndDate] = useState(new Date());
 
     const [order, setOrder] = useState(orders.at(0));
+
+    const [schoolId, setSchoolId] = useState('0');
 
     const setSubtypeOrder = (event) => {
         setOrder(orders.filter(order => order.id.toString() === event.target.value).at(0));
     }
 
-    const [schoolId, setSchoolId] = useState('0');
 
     const setSpecialitiesAndSupervisors = (event) => {
         let id = event.target.value;
@@ -67,16 +91,6 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
             setSchoolId('0')
         }
     }
-
-    const [sortedSpecialityValue, setSortedSpecialityValue] = useState('');
-
-    const [sortedSupervisorValue, setSortedSupervisorValue] = useState('');
-
-    const [selectedSpecialities, setSelectedSpecialities] = useState([]);
-
-    const [selectedSupervisors, setSelectedSupervisors] = useState([]);
-
-    const [selectedSteeringCommittee, setSelectedSteeringCommittee] = useState([]);
 
     const sortedSpecialities = useMemo(() => {
             if (schoolId === '0') return [];
@@ -97,6 +111,16 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
         },
         [selectedSupervisors, selectedSteeringCommittee, schoolId, sortedSupervisorValue, supervisors.items])
 
+    const sortedSteeringCommittee = useMemo(() => {
+            if (schoolId === '0') return [];
+            return supervisors.items
+                .filter(item => item.value.toLowerCase()
+                    .includes(sortedSteeringCommitteeValue.toLowerCase()))
+                .filter(item => !selectedSupervisors.includes(item) &&
+                    !selectedSteeringCommittee.includes(item));
+        },
+        [selectedSupervisors, selectedSteeringCommittee, schoolId, sortedSteeringCommitteeValue, supervisors.items])
+    
     const transferSpeciality = (itemId) => {
         itemId = Number(itemId)
         if (selectedSpecialities.length < MAX_SELECTED_SPECIALITIES) {
@@ -135,13 +159,32 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
         setSelectedSteeringCommittee(selectedSteeringCommittee.filter(item => item.id !== itemId))
     }
 
+    const resizeArea = (value) => {
+        let size = 0;
+        let position = 0;
+        while(true) {
+            if((position = value.indexOf('\n', position)) !== -1) {
+                position += 1;
+                size += 1;
+                continue;
+            }
+            break;
+        }
+        size += 1;
+        if(MIN_SIZE_AREA > size) {
+            setSizeArea(MIN_SIZE_AREA)
+        } else {
+            setSizeArea(size);
+        }
+    }
+
 
     return (
         <Formik
             validateOnChange={false}
             validateOnBlur={false}
             validationSchema={schema}
-            onSubmit={console.log}
+            onSubmit={setStudent}
             initialValues={{
                 firstName: 'Denis',
                 lastName: 'Negura',
@@ -155,9 +198,9 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                 diplomaSeries: '',
                 diplomaNumber: '',
                 orderNumber: '',
-                orderDateYear: (new Date()).getFullYear().toString(),
-                orderDateMonth: (new Date()).getMonth() + 1 + '',
-                orderDateDay: (new Date()).getDate().toString(),
+                orderDate: '',
+                beginDate: '',
+                endDate: '',
                 registration: 'ENROLLED',
                 studyType: 'FREQUENCY',
                 financing: 'BUDGET',
@@ -166,6 +209,7 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                 speciality: [],
                 supervisors: [],
                 steeringCommittee: [],
+                searchTopic: '',
             }}
         >
             {({
@@ -181,6 +225,9 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                     values.speciality = selectedSpecialities;
                     values.supervisors = selectedSupervisors;
                     values.steeringCommittee = selectedSteeringCommittee;
+                    values.orderDate = orderDate;
+                    values.beginDate = beginDate;
+                    values.endDate = endDate;
                     if (e.nativeEvent.submitter.name !== "submitBtn") {
                         e.preventDefault();
                     } else {
@@ -440,6 +487,48 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                                         </Form.Select>
                                     </Form.Group>
                                 </Col>
+                                <Col>
+                                    <Form.Group md="4" controlId={"formStudy"}>
+                                        <Form.Label>Anul de studii</Form.Label>
+                                        <Form.Select
+                                            name={"study"}
+                                            value={values.study}
+                                            onChange={handleChange}
+                                            isValid={touched.study && !errors.study}
+                                        >
+                                            <option value="I">Anul I</option>
+                                            <option value="II">Anul II</option>
+                                            <option value="III">Anul III</option>
+                                            <option value="IV">Anul IV</option>
+                                            <option value="EXTRA_I">Grație I-II</option>
+                                            <option value="EXTRA_II">Grație II</option>
+                                        </Form.Select>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <hr/>
+                            <Row>
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Label>Inceputul studiilor</Form.Label>
+                                        <DateSelect
+                                            setDate={setBeginDate}
+                                            maxAge={(new Date()).getFullYear() + 2}
+                                            count={5}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Label>Finalizarea studiilor</Form.Label>
+                                        <DateSelect
+                                            setDate={setEndDate}
+                                            maxAge={(new Date()).getFullYear() + 5}
+                                            count={10}
+                                        />
+                                    </Form.Group>
+                                </Col>
                             </Row>
                             <br/>
                             <hr/>
@@ -463,56 +552,10 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                                             </Form.Group>
                                         </Col>
                                         <Col>
-                                            <Form.Group md={"4"} controlId={"formOrderDate"}>
-                                                <InputGroup>
-                                                    <InputGroup.Text>Data</InputGroup.Text>
-                                                    <InputGroup.Text>An</InputGroup.Text>
-                                                    <Form.Select
-                                                        name={"orderDateYear"}
-                                                        value={values.orderDateYear}
-                                                        onChange={handleChange}
-                                                        isValid={touched.orderDateYear && !errors.orderDateYear}
-                                                    >
-                                                        {
-                                                            orderYears.map((year, index) => {
-                                                                return <option key={index} value={year}>
-                                                                    {year}
-                                                                </option>
-                                                            })
-                                                        }
-                                                    </Form.Select>
-                                                    <InputGroup.Text>Luna</InputGroup.Text>
-                                                    <Form.Select
-                                                        name={"orderDateMonth"}
-                                                        value={values.orderDateMonth}
-                                                        onChange={handleChange}
-                                                        isValid={touched.orderDateMonth && !errors.orderDateMonth}
-                                                    >
-                                                        {
-                                                            tools.months.map((month, index) => {
-                                                                return <option key={index + 1} value={index + 1}>
-                                                                    {index + 1 + '. ' + month}
-                                                                </option>
-                                                            })
-                                                        }
-                                                    </Form.Select>
-                                                    <InputGroup.Text>Zi</InputGroup.Text>
-                                                    <Form.Select
-                                                        name={"orderDateDay"}
-                                                        value={values.orderDateDay}
-                                                        onChange={handleChange}
-                                                        isValid={touched.orderDateDay && !errors.orderDateDay}
-                                                    >
-                                                        {
-                                                            tools.days.map(day => {
-                                                                return <option key={day} value={day}>
-                                                                    {day}
-                                                                </option>
-                                                            })
-                                                        }
-                                                    </Form.Select>
-                                                </InputGroup>
-                                            </Form.Group>
+                                            <DateSelect
+                                                setDate={setOrderDate}
+                                                count={5}
+                                            />
                                         </Col>
                                     </Row>
                                     <br/>
@@ -713,7 +756,7 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                             <Row>
                                 <Col>
                                     <ItemFilter
-                                        onChange={setSortedSupervisorValue}
+                                        onChange={setSortedSteeringCommitteeValue}
                                         placeholder={"Cautarea persoanei"}
                                     />
                                 </Col>
@@ -724,7 +767,7 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                             <Row>
                                 <Col>
                                     <ScrollList
-                                        items={sortedSupervisors}
+                                        items={sortedSteeringCommittee}
                                         height={"10em"}
                                         onChange={e => transferSteeringCommittee(e.target.id)}
                                     />
@@ -753,6 +796,35 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
                         </Card.Body>
                     </Card>
                     <br/>
+                    <Card>
+                        <Card.Header>
+                            <Card.Title>Tema de cercetare</Card.Title>
+                        </Card.Header>
+                        <Card.Body>
+                            <Row>
+                                <Col>
+                                    <Form.Group md="4" controlId={"formSearchTopic"}>
+                                        <Form.Control
+                                            name={"searchTopic"}
+                                            value={values.searchTopic}
+                                            onChange={e => {
+                                                resizeArea(e.target.value);
+                                                handleChange(e);
+                                            }}
+                                            isValid={touched.searchTopic && !errors.searchTopic}
+                                            isInvalid={!!errors.searchTopic}
+                                            as={"textarea"}
+                                            rows={sizeArea}
+                                        />
+                                        <Form.Control.Feedback type={"invalid"}>
+                                            {errors.searchTopic}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
+                    <br/>
                     <Button type="submit" name={"submitBtn"}>Submit form</Button>
                 </Form>
             )}
@@ -760,5 +832,4 @@ const StudentForm = ({countries, orders, schools, specialities, supervisors}) =>
     );
 }
 
-// render(<FormExample />);
 export default StudentForm;

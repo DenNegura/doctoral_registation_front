@@ -1,24 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
 import StudentForm from "./components/StudentForm";
-import FormExample from "./components/StudentForm";
 import axios from "axios";
 import React, {useState} from "react";
-import TestComponent from "./components/TestComponent";
-import ScrollList from "./components/ScrollList/ScrollList";
-import Form from "react-bootstrap/Form";
+import DateSelect from "./components/DateSelect";
+import StudentFormPage from "./pages/StudentFormPage";
 
 function App() {
 
     // const [orders, setOrders] = useState([])
 
     let countries = [
-        {id : 1, country: 'Republica Moldova'},
-        {id : 2, country: 'România'},
-        {id : 3, country: 'Georgia'},
-        {id : 4, country: 'Grecia'},
-        {id : 5, country: 'Israel'},
-        {id : 6, country: 'Polonia'},
+        {id: 1, country: 'Republica Moldova'},
+        {id: 2, country: 'România'},
+        {id: 3, country: 'Georgia'},
+        {id: 4, country: 'Grecia'},
+        {id: 5, country: 'Israel'},
+        {id: 6, country: 'Polonia'},
     ]
 
     // async function getOrderTypes() {
@@ -42,62 +39,40 @@ function App() {
 
     const schools = JSON.parse(schoolsJson);
 
-    // const [items, setItems] = useState([{id: 1, value: 'item1'},
-    //                                             {id: 2, value: "item2"},
-    //                                             {id: 3, value: "item3"}]);
-    // // console.log(items)
-    //
-    // const [item, setItem] = useState({id: '', value: ''});
-    //
-    // const removeItem = (id) => {
-    //     if(!Number.isInteger(id)) {
-    //         id = Number(id);
-    //     }
-    //     setItems(items.filter(item => {
-    //         if(item.id === id) {
-    //             setItem({id: item.id, value: item.value});
-    //             return false;
-    //         }
-    //         return true;
-    //     }));
-    //     console.log(items)
-    //     console.log(id)
-    // }
-
     const [specialities, setSpecialities] = useState([]);
 
     const [supervisors, setSupervisors] = useState([]);
 
     async function getSpecialitiesBySchoolId(id) {
+        console.log("StudentForm ---> load specialities")
         const response = await axios.get('http://localhost:8080/api/sciences/specialities/schools/' + id)
         setSpecialities(response.data.map(item => {
-            return {id: item.id, value: item.id + ' ' + item.name}}));
+            return {id: item.id, value: item.id + ' ' + item.name}
+        }));
     }
 
     async function getSupervisorsBySchoolId(id) {
+        console.log("StudentForm ---> load supervisors")
         const response = await axios.get('http://localhost:8080/api/supervisors/schools/' + id)
-            setSupervisors(response.data.map(item => {
-                return {id: item.id, value: item.firstName + ' ' + item.lastName}}));
+        setSupervisors(response.data.map(item => {
+            return {
+                id: item.id,
+                value: item.firstName + ' ' + item.lastName + ', ' + item.post + ', ' + item.speciality
+            }
+        }));
     }
 
-  return (
-    <div style={{"margin": "40px 200px"}}>
-        {/*<button onClick={getOrderTypes}>GET</button>*/}
-      {/*<StudentForm countries={countries}/>*/}
-        <StudentForm
-            countries={countries}
-            orders={orders}
-            schools={schools}
-            specialities={{items: specialities, get: getSpecialitiesBySchoolId}}
-            supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}
-        />
-      {/*  <ScrollList*/}
-      {/*      items = {items}*/}
-      {/*      height={"10em"}*/}
-      {/*      onChange={e => removeItem( e.target.id)}*/}
-      {/*  />*/}
-    </div>
-  );
+    return (
+        <div style={{"margin": "40px 20%"}}>
+            <StudentForm
+                countries={countries}
+                orders={orders}
+                schools={schools}
+                specialities={{items: specialities, get: getSpecialitiesBySchoolId}}
+                supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}
+            />
+        </div>
+    );
 }
 
 export default App;
