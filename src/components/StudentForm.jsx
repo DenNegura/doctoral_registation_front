@@ -76,6 +76,32 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
 
     const [schoolId, setSchoolId] = useState('0');
 
+    const [orderErrorInput, setOrderErrorInput] = useState('')
+
+    const [orderInput, setOrderInput] = useState(
+        {number: '', date: orderDate, type: {value: ''}, subtype: {id: ''}})
+
+    const orderValidator = (order) => {
+        setOrderErrorInput('')
+        if(order.number === '') {
+            setOrderErrorInput('Order number not be empty')
+            return false;
+        } else if(order.date === '') {
+            setOrderErrorInput('Order date not be empty')
+            return false;
+        }
+        return true;
+    }
+
+    const saveOrder = () => {
+        console.log(orderInput)
+        orderInput.date = orderDate;
+        orderInput.type = order;
+        // orderInput.subtype =
+        if(orderValidator(orderInput) === false) {
+            return false;
+        }
+    }
     const setSubtypeOrder = (event) => {
         setOrder(orders.filter(order => order.id.toString() === event.target.value).at(0));
     }
@@ -120,7 +146,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                     !selectedSteeringCommittee.includes(item));
         },
         [selectedSupervisors, selectedSteeringCommittee, schoolId, sortedSteeringCommitteeValue, supervisors.items])
-    
+
     const transferSpeciality = (itemId) => {
         itemId = Number(itemId)
         if (selectedSpecialities.length < MAX_SELECTED_SPECIALITIES) {
@@ -184,7 +210,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
             validateOnChange={false}
             validateOnBlur={false}
             validationSchema={schema}
-            onSubmit={setStudent}
+            onSubmit={console.log}
             initialValues={{
                 firstName: 'Denis',
                 lastName: 'Negura',
@@ -530,11 +556,16 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            <br/>
-                            <hr/>
+                        </Card.Body>
+                    </Card>
+                    <br/>
+                    <Card>
+                        <Card.Header>
+                            <Card.Title>Ordin</Card.Title>
+                        </Card.Header>
+                        <Card.Body>
                             <Row>
                                 <Col>
-                                    <Form.Label>Ordin înmatriculare</Form.Label>
                                     <Row>
                                         <Col>
                                             <Form.Group md={"4"} controlId={"formOrderNumber"}>
@@ -542,11 +573,11 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                                     <InputGroup.Text>Ordin numar</InputGroup.Text>
                                                     <Form.Control
                                                         type={"text"}
-                                                        name={"orderNumber"}
-                                                        value={values.orderNumber}
-                                                        onChange={handleChange}
-                                                        isValid={touched.orderNumber && !errors.orderNumber}
-                                                        isInvalid={!!errors.orderNumber}
+                                                        onChange={e => {
+                                                            let order = orderInput;
+                                                            order.number = e.target.value;
+                                                            setOrderInput(order);
+                                                        }}
                                                     />
                                                 </InputGroup>
                                             </Form.Group>
@@ -588,10 +619,14 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                                 <InputGroup>
                                                     <InputGroup.Text>Subtip</InputGroup.Text>
                                                     <Form.Select
-                                                        name={"orderSubtype"}
-                                                        value={values.orderSubtype}
-                                                        onChange={handleChange}
-                                                        isValid={touched.orderSubtype && !errors.orderSubtype}
+                                                        //name={"orderSubtype"}
+                                                        //value={values.orderSubtype}
+                                                        onChange={e => {
+                                                            let order = orderInput;
+                                                            order.subtype.id = e.target.value;
+                                                            setOrderInput(order)
+                                                        }}
+                                                        //isValid={touched.orderSubtype && !errors.orderSubtype}
                                                     >
                                                         {
                                                             order.orderSubtypes.map(orderSubtype => {
@@ -606,6 +641,35 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                             </Form.Group>
                                         </Col>
                                     </Row>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <Row>
+                                <Col style={{width: "100%"}}>
+                                    {orderErrorInput === '' ? '' :
+                                        <label style={{color: "red"}}>⚠️ {orderErrorInput}</label>}
+                                </Col>
+                                <Col md={"auto"}>
+                                    <Row>
+                                        <Col md={"auto"}>
+                                            <Button
+                                                variant="outline-primary"
+                                                onClick={saveOrder}
+                                            >Salvează ordin</Button>
+                                        </Col>
+                                        <Col md={"auto"}>
+                                            <Button variant="outline-danger">Sterge ordin</Button>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <Row>
+                                <Col>
+                                    <ScrollList
+                                        items={[]}
+                                        height={"10em"}
+                                    />
                                 </Col>
                             </Row>
                         </Card.Body>
