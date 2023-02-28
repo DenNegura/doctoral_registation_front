@@ -10,6 +10,7 @@ import * as tools from './utils/FormTools';
 import ScrollList from "./ScrollList/ScrollList";
 import ItemFilter from "./ItemFilter";
 import DateSelect from "./DateSelect";
+import OrderForm from "./OrderForm";
 
 
 const schema = yup.object().shape({
@@ -80,31 +81,6 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
 
     const [orderInput, setOrderInput] = useState(
         {number: '', date: orderDate, type: {value: ''}, subtype: {id: ''}})
-
-    const orderValidator = (order) => {
-        setOrderErrorInput('')
-        if(order.number === '') {
-            setOrderErrorInput('Order number not be empty')
-            return false;
-        } else if(order.date === '') {
-            setOrderErrorInput('Order date not be empty')
-            return false;
-        }
-        return true;
-    }
-
-    const saveOrder = () => {
-        console.log(orderInput)
-        orderInput.date = orderDate;
-        orderInput.type = order;
-        // orderInput.subtype =
-        if(orderValidator(orderInput) === false) {
-            return false;
-        }
-    }
-    const setSubtypeOrder = (event) => {
-        setOrder(orders.filter(order => order.id.toString() === event.target.value).at(0));
-    }
 
 
     const setSpecialitiesAndSupervisors = (event) => {
@@ -540,8 +516,9 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                         <Form.Label>Inceputul studiilor</Form.Label>
                                         <DateSelect
                                             setDate={setBeginDate}
-                                            maxAge={(new Date()).getFullYear() + 2}
-                                            count={5}
+                                            maxAge={new Date().getFullYear() + 2}
+                                            defaultDate={beginDate}
+                                            count={8}
                                         />
                                     </Form.Group>
                                 </Col>
@@ -551,6 +528,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                         <DateSelect
                                             setDate={setEndDate}
                                             maxAge={(new Date()).getFullYear() + 5}
+                                            defaultDate={endDate}
                                             count={10}
                                         />
                                     </Form.Group>
@@ -559,121 +537,128 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                         </Card.Body>
                     </Card>
                     <br/>
-                    <Card>
-                        <Card.Header>
-                            <Card.Title>Ordin</Card.Title>
-                        </Card.Header>
-                        <Card.Body>
-                            <Row>
-                                <Col>
-                                    <Row>
-                                        <Col>
-                                            <Form.Group md={"4"} controlId={"formOrderNumber"}>
-                                                <InputGroup>
-                                                    <InputGroup.Text>Ordin numar</InputGroup.Text>
-                                                    <Form.Control
-                                                        type={"text"}
-                                                        onChange={e => {
-                                                            let order = orderInput;
-                                                            order.number = e.target.value;
-                                                            setOrderInput(order);
-                                                        }}
-                                                    />
-                                                </InputGroup>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col>
-                                            <DateSelect
-                                                setDate={setOrderDate}
-                                                count={5}
-                                            />
-                                        </Col>
-                                    </Row>
-                                    <br/>
-                                    <Row>
-                                        <Col>
-                                            <Form.Group md="4" controlId={"formOrderType"}>
-                                                <InputGroup>
-                                                    <InputGroup.Text>Tip</InputGroup.Text>
-                                                    <Form.Select
-                                                        name={"orderType"}
-                                                        value={values.orderType}
-                                                        onChange={handleChange}
-                                                        onClick={setSubtypeOrder}
-                                                        isValid={touched.orderType && !errors.orderType}
-                                                    >
-                                                        {
-                                                            orders.map(order => {
-                                                                return <option key={order.id}
-                                                                               value={order.id}>
-                                                                    {order.order}
-                                                                </option>
-                                                            })
-                                                        }
-                                                    </Form.Select>
-                                                </InputGroup>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col>
-                                            <Form.Group md="4" controlId={"formOrderSubtype"}>
-                                                <InputGroup>
-                                                    <InputGroup.Text>Subtip</InputGroup.Text>
-                                                    <Form.Select
-                                                        //name={"orderSubtype"}
-                                                        //value={values.orderSubtype}
-                                                        onChange={e => {
-                                                            let order = orderInput;
-                                                            order.subtype.id = e.target.value;
-                                                            setOrderInput(order)
-                                                        }}
-                                                        //isValid={touched.orderSubtype && !errors.orderSubtype}
-                                                    >
-                                                        {
-                                                            order.orderSubtypes.map(orderSubtype => {
-                                                                return <option key={orderSubtype.id}
-                                                                               value={orderSubtype.id}>
-                                                                    {orderSubtype.order}
-                                                                </option>
-                                                            })
-                                                        }
-                                                    </Form.Select>
-                                                </InputGroup>
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Row>
-                            <br/>
-                            <Row>
-                                <Col style={{width: "100%"}}>
-                                    {orderErrorInput === '' ? '' :
-                                        <label style={{color: "red"}}>⚠️ {orderErrorInput}</label>}
-                                </Col>
-                                <Col md={"auto"}>
-                                    <Row>
-                                        <Col md={"auto"}>
-                                            <Button
-                                                variant="outline-primary"
-                                                onClick={saveOrder}
-                                            >Salvează ordin</Button>
-                                        </Col>
-                                        <Col md={"auto"}>
-                                            <Button variant="outline-danger">Sterge ordin</Button>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Row>
-                            <br/>
-                            <Row>
-                                <Col>
-                                    <ScrollList
-                                        items={[]}
-                                        height={"10em"}
-                                    />
-                                </Col>
-                            </Row>
-                        </Card.Body>
-                    </Card>
+                    <div>
+                    {/*<Card>*/}
+                    {/*    <Card.Header>*/}
+                    {/*        <Card.Title>Ordin</Card.Title>*/}
+                    {/*    </Card.Header>*/}
+                    {/*    <Card.Body>*/}
+                    {/*        <Row>*/}
+                    {/*            <Col>*/}
+                    {/*                <Row>*/}
+                    {/*                    <Col>*/}
+                    {/*                        <Form.Group md={"4"} controlId={"formOrderNumber"}>*/}
+                    {/*                            <InputGroup>*/}
+                    {/*                                <InputGroup.Text>Ordin numar</InputGroup.Text>*/}
+                    {/*                                <Form.Control*/}
+                    {/*                                    type={"text"}*/}
+                    {/*                                    onChange={e => {*/}
+                    {/*                                        let order = orderInput;*/}
+                    {/*                                        order.number = e.target.value;*/}
+                    {/*                                        setOrderInput(order);*/}
+                    {/*                                    }}*/}
+                    {/*                                />*/}
+                    {/*                            </InputGroup>*/}
+                    {/*                        </Form.Group>*/}
+                    {/*                    </Col>*/}
+                    {/*                    <Col>*/}
+                    {/*                        <DateSelect*/}
+                    {/*                            setDate={setOrderDate}*/}
+                    {/*                            count={5}*/}
+                    {/*                        />*/}
+                    {/*                    </Col>*/}
+                    {/*                </Row>*/}
+                    {/*                <br/>*/}
+                    {/*                <Row>*/}
+                    {/*                    <Col>*/}
+                    {/*                        <Form.Group md="4" controlId={"formOrderType"}>*/}
+                    {/*                            <InputGroup>*/}
+                    {/*                                <InputGroup.Text>Tip</InputGroup.Text>*/}
+                    {/*                                <Form.Select*/}
+                    {/*                                    name={"orderType"}*/}
+                    {/*                                    value={values.orderType}*/}
+                    {/*                                    onChange={handleChange}*/}
+                    {/*                                    onClick={setSubtypeOrder}*/}
+                    {/*                                    isValid={touched.orderType && !errors.orderType}*/}
+                    {/*                                >*/}
+                    {/*                                    {*/}
+                    {/*                                        orders.map(order => {*/}
+                    {/*                                            return <option key={order.id}*/}
+                    {/*                                                           value={order.id}>*/}
+                    {/*                                                {order.order}*/}
+                    {/*                                            </option>*/}
+                    {/*                                        })*/}
+                    {/*                                    }*/}
+                    {/*                                </Form.Select>*/}
+                    {/*                            </InputGroup>*/}
+                    {/*                        </Form.Group>*/}
+                    {/*                    </Col>*/}
+                    {/*                    <Col>*/}
+                    {/*                        <Form.Group md="4" controlId={"formOrderSubtype"}>*/}
+                    {/*                            <InputGroup>*/}
+                    {/*                                <InputGroup.Text>Subtip</InputGroup.Text>*/}
+                    {/*                                <Form.Select*/}
+                    {/*                                    //name={"orderSubtype"}*/}
+                    {/*                                    //value={values.orderSubtype}*/}
+                    {/*                                    onChange={e => {*/}
+                    {/*                                        let order = orderInput;*/}
+                    {/*                                        order.subtype.id = e.target.value;*/}
+                    {/*                                        setOrderInput(order)*/}
+                    {/*                                    }}*/}
+                    {/*                                    //isValid={touched.orderSubtype && !errors.orderSubtype}*/}
+                    {/*                                >*/}
+                    {/*                                    {*/}
+                    {/*                                        order.orderSubtypes.map(orderSubtype => {*/}
+                    {/*                                            return <option key={orderSubtype.id}*/}
+                    {/*                                                           value={orderSubtype.id}>*/}
+                    {/*                                                {orderSubtype.order}*/}
+                    {/*                                            </option>*/}
+                    {/*                                        })*/}
+                    {/*                                    }*/}
+                    {/*                                </Form.Select>*/}
+                    {/*                            </InputGroup>*/}
+                    {/*                        </Form.Group>*/}
+                    {/*                    </Col>*/}
+                    {/*                </Row>*/}
+                    {/*            </Col>*/}
+                    {/*        </Row>*/}
+                    {/*        <br/>*/}
+                    {/*        <Row>*/}
+                    {/*            <Col style={{width: "100%"}}>*/}
+                    {/*                {orderErrorInput === '' ? '' :*/}
+                    {/*                    <label style={{color: "red"}}>⚠️ {orderErrorInput}</label>}*/}
+                    {/*            </Col>*/}
+                    {/*            <Col md={"auto"}>*/}
+                    {/*                <Row>*/}
+                    {/*                    <Col md={"auto"}>*/}
+                    {/*                        <Button*/}
+                    {/*                            variant="outline-primary"*/}
+                    {/*                            onClick={saveOrder}*/}
+                    {/*                        >Salvează ordin</Button>*/}
+                    {/*                    </Col>*/}
+                    {/*                    <Col md={"auto"}>*/}
+                    {/*                        <Button variant="outline-danger">Sterge ordin</Button>*/}
+                    {/*                    </Col>*/}
+                    {/*                </Row>*/}
+                    {/*            </Col>*/}
+                    {/*        </Row>*/}
+                    {/*        <br/>*/}
+                    {/*        <Row>*/}
+                    {/*            <Col>*/}
+                    {/*                <ScrollList*/}
+                    {/*                    items={[]}*/}
+                    {/*                    height={"10em"}*/}
+                    {/*                />*/}
+                    {/*            </Col>*/}
+                    {/*        </Row>*/}
+                    {/*    </Card.Body>*/}
+                    {/*</Card>*/}
+
+                    </div>
+                    <OrderForm orders={orders} studentOrders={
+                        [{id: 1, number: '11c', date: new Date(2015, 5, 5),
+                            orderSubtype: {id: 17, order: 'Schimbarea conducătorului',
+                                orderType: {id: 2, order: 'Inmatriculat in anul II'}}}]}/>
                     <br/>
                     <Card>
                         <Card.Header>

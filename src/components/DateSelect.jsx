@@ -1,24 +1,24 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {InputGroup} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
-const DateSelect = ({count, setDate, minAge = null, maxAge = (new Date()).getFullYear()}) => {
+const DateSelect = ({count, setDate, defaultDate = new Date(),
+                        minAge = null, maxAge = (new Date()).getFullYear()}) => {
 
     count = Number(count)
 
-    if(minAge == null) {
-        if(count) {
+    if (minAge == null) {
+        if (count) {
             minAge = maxAge - count;
         } else {
             minAge = maxAge - 10;
         }
     }
 
-    const defaultYear = maxAge > (new Date()).getFullYear() ? (new Date()).getFullYear() : maxAge;
+    if(minAge > defaultDate.getFullYear()) {
+        minAge = defaultDate.getFullYear() - 2;
+    }
 
-    const defaultMouth = (new Date()).getMonth();
-
-    const defaultDay = (new Date()).getDate();
 
     const getLeapYear = year => year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
 
@@ -40,17 +40,11 @@ const DateSelect = ({count, setDate, minAge = null, maxAge = (new Date()).getFul
         {id: 11, name: 'Decembrie', size: 31}];
 
 
-    const [year, setYear] = useState(defaultYear);
-
-    const [month, setMonth] = useState(defaultMouth);
-
-    const [day, setDay] = useState(defaultDay);
-
     const days = useMemo(() => {
-            const selectedMonth = months.filter(m => m.id === month).at(0);
+            const selectedMonth = months.filter(m => m.id === defaultDate.getMonth()).at(0);
             let size;
             if (selectedMonth.id === 1) {
-                if (getLeapYear(year)) {
+                if (getLeapYear(defaultDate.getFullYear())) {
                     size = 29;
                 } else {
                     size = 28;
@@ -60,19 +54,16 @@ const DateSelect = ({count, setDate, minAge = null, maxAge = (new Date()).getFul
             }
             return Array.from(new Array(size), (val, index) => size - index);
         },
-        [month, months, year])
+        [months, defaultDate])
 
     return (
         <Form.Group md={"4"}>
             <InputGroup>
                 <InputGroup.Text>An</InputGroup.Text>
                 <Form.Select
-                    defaultValue={defaultYear}
-                    onChange={e => {
-                        const value = Number(e.target.value);
-                        setYear(value);
-                        setDate(new Date(value, month, day));
-                    }}
+                    value={defaultDate.getFullYear()}
+                    onChange={e =>
+                        setDate(new Date(Number(e.target.value), defaultDate.getMonth(), defaultDate.getDate()))}
                 >
                     {
                         years.map(year => {
@@ -84,12 +75,9 @@ const DateSelect = ({count, setDate, minAge = null, maxAge = (new Date()).getFul
                 </Form.Select>
                 <InputGroup.Text>Luna</InputGroup.Text>
                 <Form.Select
-                    defaultValue={defaultMouth}
-                    onChange={e => {
-                        const value = Number(e.target.value);
-                        setMonth(value);
-                        setDate(new Date(year, value, day));
-                    }}
+                    value={defaultDate.getMonth()}
+                    onChange={e =>
+                        setDate(new Date(defaultDate.getFullYear(),  Number(e.target.value), defaultDate.getDate()))}
                 >
                     {
                         months.map(month => {
@@ -101,12 +89,9 @@ const DateSelect = ({count, setDate, minAge = null, maxAge = (new Date()).getFul
                 </Form.Select>
                 <InputGroup.Text>Zi</InputGroup.Text>
                 <Form.Select
-                    defaultValue={defaultDay}
-                    onChange={e => {
-                        const value = Number(e.target.value);
-                        setDay(value);
-                        setDate(new Date(year, month, value));
-                    }}
+                    value={defaultDate.getDate()}
+                    onChange={e =>
+                        setDate(new Date(defaultDate.getFullYear(), defaultDate.getMonth(), Number(e.target.value)))}
                 >
                     {
                         days.map(day => {
