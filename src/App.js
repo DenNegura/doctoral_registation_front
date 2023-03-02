@@ -4,6 +4,7 @@ import axios from "axios";
 import React, {useState} from "react";
 import DateSelect from "./components/DateSelect";
 import StudentFormPage from "./pages/StudentFormPage";
+import StudentPrint from "./components/StudentPrint";
 
 function App() {
 
@@ -43,6 +44,8 @@ function App() {
 
     const [supervisors, setSupervisors] = useState([]);
 
+    const [student, setStudent] = useState();
+
     async function getSpecialitiesBySchoolId(id) {
         console.log("StudentForm ---> load specialities")
         const response = await axios.get('http://localhost:8080/api/sciences/specialities/schools/' + id)
@@ -62,9 +65,44 @@ function App() {
         }));
     }
 
+    const studentPrint = {
+        id: 1,
+        corporateEmail: 'ion.ionita@usm.com',
+        firstName: 'Ion',
+        lastName: 'Ionita',
+        patronymicName: 'Ionca',
+        yearBirth: 2002,
+        identNumber: '123456789123',
+        gender: 'M',
+        citizenship: {
+            id: 1,
+            country: 'Republica Moldova',
+        },
+        diplomaSeries: 'AMP12345678',
+        diplomaNumber: '12345678',
+        personalEmail: 'ion.ionita@gmial.com',
+        phoneNumber: '067412255',
+        status: 'ACTIVE',
+        registration: 'ENROLLED',
+        orders: [],
+        yearStudy: 'I',
+        beginStudies: '12-04-2020',
+        endStudies: '12-04-2023',
+        studyType: 'FREQUENCY',
+        financing: 'BUDGET',
+        remark: 'info',
+        supervisor: null,
+        speciality: null,
+        steeringCommittee: [],
+        scienceTopic: 'topic to searching',
+    }
+
     return (
         <div style={{"margin": "40px 20%"}}>
+            <StudentPrint student={studentPrint}/>
             <StudentForm
+                student={student}
+                setStudent={setStudent}
                 countries={countries}
                 orders={orders}
                 schools={schools}

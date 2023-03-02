@@ -25,15 +25,15 @@ const schema = yup.object().shape({
     personalPhone: yup.string().required(),
     diplomaSeries: yup.string(),
     diplomaNumber: yup.string(),
-    orderNumber: yup.string(),
-    orderDate: yup.date(),
+    // orderNumber: yup.string(),
+    // orderDate: yup.date(),
     beginDate: yup.date(),
     endDate: yup.date(),
     registration: yup.string(),
     studyType: yup.string(),
     financing: yup.string(),
-    orderType: yup.number(),
-    orderSubtype: yup.number(),
+    // orderType: yup.number(),
+    // orderSubtype: yup.number(),
     speciality: yup.array(),
     supervisors: yup.array(),
     steeringCommittee: yup.array(),
@@ -67,20 +67,20 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
 
     const [sizeArea, setSizeArea] = useState(MIN_SIZE_AREA);
 
-    const [orderDate, setOrderDate] = useState(new Date());
+    // const [orderDate, setOrderDate] = useState(new Date());
 
     const [beginDate, setBeginDate] = useState(new Date());
 
     const [endDate, setEndDate] = useState(new Date());
 
-    const [order, setOrder] = useState(orders.at(0));
+    // const [order, setOrder] = useState(orders.at(0));
 
     const [schoolId, setSchoolId] = useState('0');
 
-    const [orderErrorInput, setOrderErrorInput] = useState('')
+    // const [orderErrorInput, setOrderErrorInput] = useState('')
 
-    const [orderInput, setOrderInput] = useState(
-        {number: '', date: orderDate, type: {value: ''}, subtype: {id: ''}})
+    // const [orderInput, setOrderInput] = useState(
+    //     {number: '', date: orderDate, type: {value: ''}, subtype: {id: ''}})
 
 
     const setSpecialitiesAndSupervisors = (event) => {
@@ -188,26 +188,24 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
             validationSchema={schema}
             onSubmit={console.log}
             initialValues={{
-                firstName: 'Denis',
-                lastName: 'Negura',
-                patronymicName: 'Aleksander',
-                gender: 'M',
-                identNumber: '',
-                yearBirth: years.at(0).toString(),
-                citizenship: countries.at(0).id.toString(),
-                personalEmail: 'denis.negura@gmail.com',
-                personalPhone: '068618833',
-                diplomaSeries: '',
-                diplomaNumber: '',
-                orderNumber: '',
-                orderDate: '',
-                beginDate: '',
-                endDate: '',
-                registration: 'ENROLLED',
-                studyType: 'FREQUENCY',
-                financing: 'BUDGET',
-                orderType: '1',
-                orderSubtype: '1',
+                firstName: student ? student.firstName : '',
+                lastName: student ? student.lastName : '',
+                patronymicName: student ? student.patronymicName : '',
+                gender: student ? student.gender : '',
+                identNumber: student ? student.identNumber : '',
+                yearBirth: student ? student.yearBirth : years.at(0).toString(),
+                citizenship: student ? student.citizenship : countries.at(0).id.toString(),
+                personalEmail: student ? student.personalEmail : '',
+                personalPhone: student ? student.personalPhone : '',
+                diplomaSeries: student ? student.diplomaSeries : '',
+                diplomaNumber: student ? student.diplomaNumber : '',
+                beginDate: student ? student.beginDate : '',
+                endDate: student ? student.endDate : '',
+                registration: student ? student.registration : 'ENROLLED',
+                studyType: student ? student.studyType : 'FREQUENCY',
+                financing: student ? student.financing : 'BUDGET',
+                // orderType: '1',
+                // orderSubtype: '1',
                 speciality: [],
                 supervisors: [],
                 steeringCommittee: [],
@@ -227,7 +225,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                     values.speciality = selectedSpecialities;
                     values.supervisors = selectedSupervisors;
                     values.steeringCommittee = selectedSteeringCommittee;
-                    values.orderDate = orderDate;
+                    // values.orderDate = orderDate;
                     values.beginDate = beginDate;
                     values.endDate = endDate;
                     if (e.nativeEvent.submitter.name !== "submitBtn") {
@@ -537,124 +535,6 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                         </Card.Body>
                     </Card>
                     <br/>
-                    <div>
-                    {/*<Card>*/}
-                    {/*    <Card.Header>*/}
-                    {/*        <Card.Title>Ordin</Card.Title>*/}
-                    {/*    </Card.Header>*/}
-                    {/*    <Card.Body>*/}
-                    {/*        <Row>*/}
-                    {/*            <Col>*/}
-                    {/*                <Row>*/}
-                    {/*                    <Col>*/}
-                    {/*                        <Form.Group md={"4"} controlId={"formOrderNumber"}>*/}
-                    {/*                            <InputGroup>*/}
-                    {/*                                <InputGroup.Text>Ordin numar</InputGroup.Text>*/}
-                    {/*                                <Form.Control*/}
-                    {/*                                    type={"text"}*/}
-                    {/*                                    onChange={e => {*/}
-                    {/*                                        let order = orderInput;*/}
-                    {/*                                        order.number = e.target.value;*/}
-                    {/*                                        setOrderInput(order);*/}
-                    {/*                                    }}*/}
-                    {/*                                />*/}
-                    {/*                            </InputGroup>*/}
-                    {/*                        </Form.Group>*/}
-                    {/*                    </Col>*/}
-                    {/*                    <Col>*/}
-                    {/*                        <DateSelect*/}
-                    {/*                            setDate={setOrderDate}*/}
-                    {/*                            count={5}*/}
-                    {/*                        />*/}
-                    {/*                    </Col>*/}
-                    {/*                </Row>*/}
-                    {/*                <br/>*/}
-                    {/*                <Row>*/}
-                    {/*                    <Col>*/}
-                    {/*                        <Form.Group md="4" controlId={"formOrderType"}>*/}
-                    {/*                            <InputGroup>*/}
-                    {/*                                <InputGroup.Text>Tip</InputGroup.Text>*/}
-                    {/*                                <Form.Select*/}
-                    {/*                                    name={"orderType"}*/}
-                    {/*                                    value={values.orderType}*/}
-                    {/*                                    onChange={handleChange}*/}
-                    {/*                                    onClick={setSubtypeOrder}*/}
-                    {/*                                    isValid={touched.orderType && !errors.orderType}*/}
-                    {/*                                >*/}
-                    {/*                                    {*/}
-                    {/*                                        orders.map(order => {*/}
-                    {/*                                            return <option key={order.id}*/}
-                    {/*                                                           value={order.id}>*/}
-                    {/*                                                {order.order}*/}
-                    {/*                                            </option>*/}
-                    {/*                                        })*/}
-                    {/*                                    }*/}
-                    {/*                                </Form.Select>*/}
-                    {/*                            </InputGroup>*/}
-                    {/*                        </Form.Group>*/}
-                    {/*                    </Col>*/}
-                    {/*                    <Col>*/}
-                    {/*                        <Form.Group md="4" controlId={"formOrderSubtype"}>*/}
-                    {/*                            <InputGroup>*/}
-                    {/*                                <InputGroup.Text>Subtip</InputGroup.Text>*/}
-                    {/*                                <Form.Select*/}
-                    {/*                                    //name={"orderSubtype"}*/}
-                    {/*                                    //value={values.orderSubtype}*/}
-                    {/*                                    onChange={e => {*/}
-                    {/*                                        let order = orderInput;*/}
-                    {/*                                        order.subtype.id = e.target.value;*/}
-                    {/*                                        setOrderInput(order)*/}
-                    {/*                                    }}*/}
-                    {/*                                    //isValid={touched.orderSubtype && !errors.orderSubtype}*/}
-                    {/*                                >*/}
-                    {/*                                    {*/}
-                    {/*                                        order.orderSubtypes.map(orderSubtype => {*/}
-                    {/*                                            return <option key={orderSubtype.id}*/}
-                    {/*                                                           value={orderSubtype.id}>*/}
-                    {/*                                                {orderSubtype.order}*/}
-                    {/*                                            </option>*/}
-                    {/*                                        })*/}
-                    {/*                                    }*/}
-                    {/*                                </Form.Select>*/}
-                    {/*                            </InputGroup>*/}
-                    {/*                        </Form.Group>*/}
-                    {/*                    </Col>*/}
-                    {/*                </Row>*/}
-                    {/*            </Col>*/}
-                    {/*        </Row>*/}
-                    {/*        <br/>*/}
-                    {/*        <Row>*/}
-                    {/*            <Col style={{width: "100%"}}>*/}
-                    {/*                {orderErrorInput === '' ? '' :*/}
-                    {/*                    <label style={{color: "red"}}>⚠️ {orderErrorInput}</label>}*/}
-                    {/*            </Col>*/}
-                    {/*            <Col md={"auto"}>*/}
-                    {/*                <Row>*/}
-                    {/*                    <Col md={"auto"}>*/}
-                    {/*                        <Button*/}
-                    {/*                            variant="outline-primary"*/}
-                    {/*                            onClick={saveOrder}*/}
-                    {/*                        >Salvează ordin</Button>*/}
-                    {/*                    </Col>*/}
-                    {/*                    <Col md={"auto"}>*/}
-                    {/*                        <Button variant="outline-danger">Sterge ordin</Button>*/}
-                    {/*                    </Col>*/}
-                    {/*                </Row>*/}
-                    {/*            </Col>*/}
-                    {/*        </Row>*/}
-                    {/*        <br/>*/}
-                    {/*        <Row>*/}
-                    {/*            <Col>*/}
-                    {/*                <ScrollList*/}
-                    {/*                    items={[]}*/}
-                    {/*                    height={"10em"}*/}
-                    {/*                />*/}
-                    {/*            </Col>*/}
-                    {/*        </Row>*/}
-                    {/*    </Card.Body>*/}
-                    {/*</Card>*/}
-
-                    </div>
                     <OrderForm orders={orders} studentOrders={
                         [{id: 1, number: '11c', date: new Date(2015, 5, 5),
                             orderSubtype: {id: 17, order: 'Schimbarea conducătorului',
@@ -669,11 +549,10 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                 <Col>
                                     <Form.Group md="4" controlId={"formSchool"}>
                                         <Form.Select
-                                            name={"school"}
-                                            value={values.school}
-                                            onChange={handleChange}
-                                            onClick={setSpecialitiesAndSupervisors}
-                                            isValid={touched.school && !errors.school}
+                                            // name={"school"}
+                                            // onChange={handleChange}
+                                            onChange={setSpecialitiesAndSupervisors}
+                                            // isValid={touched.school && !errors.school}
                                         >
                                             <option value={0} key={0}></option>
                                             {
