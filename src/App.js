@@ -2,8 +2,6 @@ import './App.css';
 import StudentForm from "./components/StudentForm";
 import axios from "axios";
 import React, {useState} from "react";
-import DateSelect from "./components/DateSelect";
-import StudentFormPage from "./pages/StudentFormPage";
 import StudentPrint from "./components/StudentPrint";
 
 function App() {
@@ -84,31 +82,73 @@ function App() {
         phoneNumber: '067412255',
         status: 'ACTIVE',
         registration: 'ENROLLED',
-        orders: [],
+        orders: [
+            {
+                number: '11c-4', date: '12-07-2022',
+                orderSubtype: {
+                    order: 'Inmatriculare',
+                    orderType: {order: 'Inmatriculat in anul I'}
+                }
+            }
+        ],
         yearStudy: 'I',
         beginStudies: '12-04-2020',
         endStudies: '12-04-2023',
         studyType: 'FREQUENCY',
         financing: 'BUDGET',
         remark: 'info',
-        supervisor: null,
-        speciality: null,
-        steeringCommittee: [],
+        supervisor: {
+            firstName: 'Andronic',
+            lastName: 'Larisa',
+            post: 'conferențiar cercetător',
+            speciality: 'doctor habilitat în științe biologice'
+        },
+        speciality: {
+            name: 'Chimie anorganică',
+            id: 141.01,
+            scienceProfile: {
+                name: 'Chimie anorganică',
+                scienceBranch: {
+                    name: 'Ştiinţe chimice',
+                    scienceDomain: {
+                        name: 'Științe ale naturii',
+                        scienceSchool: {
+                            name: 'Științe Biologice, Geonomice, Chimice și Tehnologice',
+                        }
+                    }
+                }
+            }
+        },
+        steeringCommittee: [{
+            firstName: 'Andronic',
+            lastName: 'Larisa',
+            post: 'conferențiar cercetător',
+            speciality: 'doctor habilitat în științe biologice'
+        }, {
+            firstName: 'Andronic',
+            lastName: 'Larisa',
+            post: 'conferențiar cercetător',
+            speciality: 'doctor habilitat în științe biologice'
+        }],
         scienceTopic: 'topic to searching',
     }
 
     return (
         <div style={{"margin": "40px 20%"}}>
             <StudentPrint student={studentPrint}/>
-            <StudentForm
-                student={student}
-                setStudent={setStudent}
-                countries={countries}
-                orders={orders}
-                schools={schools}
-                specialities={{items: specialities, get: getSpecialitiesBySchoolId}}
-                supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}
-            />
+            {/*<br/>*/}
+            {/*<br/>*/}
+            {/*<br/>*/}
+            {/*<br/>*/}
+            {/*<StudentForm*/}
+            {/*    student={student}*/}
+            {/*    setStudent={setStudent}*/}
+            {/*    countries={countries}*/}
+            {/*    orders={orders}*/}
+            {/*    schools={schools}*/}
+            {/*    specialities={{items: specialities, get: getSpecialitiesBySchoolId}}*/}
+            {/*    supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}*/}
+            {/*/>*/}
         </div>
     );
 }
