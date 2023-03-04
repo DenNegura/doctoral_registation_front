@@ -3,6 +3,7 @@ import StudentForm from "./components/StudentForm";
 import axios from "axios";
 import React, {useState} from "react";
 import StudentPrint from "./components/StudentPrint";
+import Button from "react-bootstrap/Button";
 
 function App() {
 
@@ -63,83 +64,91 @@ function App() {
         }));
     }
 
-    const studentPrint = {
-        id: 1,
-        corporateEmail: 'ion.ionita@usm.com',
-        firstName: 'Ion',
-        lastName: 'Ionita',
-        patronymicName: 'Ionca',
-        yearBirth: 2002,
-        identNumber: '123456789123',
-        gender: 'M',
-        citizenship: {
-            id: 1,
-            country: 'Republica Moldova',
-        },
-        diplomaSeries: 'AMP12345678',
-        diplomaNumber: '12345678',
-        personalEmail: 'ion.ionita@gmial.com',
-        phoneNumber: '067412255',
-        status: 'ACTIVE',
-        registration: 'ENROLLED',
-        orders: [
-            {
-                number: '11c-4', date: '12-07-2022',
-                orderSubtype: {
-                    order: 'Inmatriculare',
-                    orderType: {order: 'Inmatriculat in anul I'}
-                }
-            }
-        ],
-        yearStudy: 'I',
-        beginStudies: '12-04-2020',
-        endStudies: '12-04-2023',
-        studyType: 'FREQUENCY',
-        financing: 'BUDGET',
-        remark: 'info',
-        supervisor: {
-            firstName: 'Andronic',
-            lastName: 'Larisa',
-            post: 'conferențiar cercetător',
-            speciality: 'doctor habilitat în științe biologice'
-        },
-        speciality: {
-            name: 'Chimie anorganică',
-            id: 141.01,
-            scienceProfile: {
-                name: 'Chimie anorganică',
-                scienceBranch: {
-                    name: 'Ştiinţe chimice',
-                    scienceDomain: {
-                        name: 'Științe ale naturii',
-                        scienceSchool: {
-                            name: 'Științe Biologice, Geonomice, Chimice și Tehnologice',
-                        }
-                    }
-                }
-            }
-        },
-        steeringCommittee: [{
-            firstName: 'Andronic',
-            lastName: 'Larisa',
-            post: 'conferențiar cercetător',
-            speciality: 'doctor habilitat în științe biologice'
-        }, {
-            firstName: 'Andronic',
-            lastName: 'Larisa',
-            post: 'conferențiar cercetător',
-            speciality: 'doctor habilitat în științe biologice'
-        }],
-        scienceTopic: 'topic to searching',
+    const [studentPrint, setStudentPrint] = useState(null);
+
+    async function getStudentById(id) {
+        console.log("StudentForm ---> load student " + id)
+        const response = await axios.get('http://localhost:8080/api/students/' + id)
+        console.log(response.data);
+        setStudentPrint(response.data);
     }
+    // const studentPrint = {
+    //     id: 1,
+    //     corporateEmail: 'ion.ionita@usm.com',
+    //     firstName: 'Ion',
+    //     lastName: 'Ionita',
+    //     patronymicName: 'Ionca',
+    //     yearBirth: 2002,
+    //     identNumber: '123456789123',
+    //     gender: 'M',
+    //     citizenship: {
+    //         id: 1,
+    //         country: 'Republica Moldova',
+    //     },
+    //     diplomaSeries: 'AMP12345678',
+    //     diplomaNumber: '12345678',
+    //     personalEmail: 'ion.ionita@gmial.com',
+    //     phoneNumber: '067412255',
+    //     status: 'ACTIVE',
+    //     registration: 'ENROLLED',
+    //     orders: [
+    //         {
+    //             number: '11c-4', date: '12-07-2022',
+    //             orderSubtype: {
+    //                 order: 'Inmatriculare',
+    //                 orderType: {order: 'Inmatriculat in anul I'}
+    //             }
+    //         }
+    //     ],
+    //     yearStudy: 'I',
+    //     beginStudies: '12-04-2020',
+    //     endStudies: '12-04-2023',
+    //     studyType: 'FREQUENCY',
+    //     financing: 'BUDGET',
+    //     remark: 'info',
+    //     supervisor: {
+    //         firstName: 'Andronic',
+    //         lastName: 'Larisa',
+    //         post: 'conferențiar cercetător',
+    //         speciality: 'doctor habilitat în științe biologice'
+    //     },
+    //     speciality: {
+    //         name: 'Chimie anorganică',
+    //         id: 141.01,
+    //         scienceProfile: {
+    //             name: 'Chimie anorganică',
+    //             scienceBranch: {
+    //                 name: 'Ştiinţe chimice',
+    //                 scienceDomain: {
+    //                     name: 'Științe ale naturii',
+    //                     scienceSchool: {
+    //                         name: 'Științe Biologice, Geonomice, Chimice și Tehnologice',
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     },
+    //     steeringCommittee: [{
+    //         firstName: 'Andronic',
+    //         lastName: 'Larisa',
+    //         post: 'conferențiar cercetător',
+    //         speciality: 'doctor habilitat în științe biologice'
+    //     }, {
+    //         firstName: 'Andronic',
+    //         lastName: 'Larisa',
+    //         post: 'conferențiar cercetător',
+    //         speciality: 'doctor habilitat în științe biologice'
+    //     }],
+    //     scienceTopic: 'topic to searching',
+    // }
 
     return (
         <div style={{"margin": "40px 20%"}}>
-            <StudentPrint student={studentPrint}/>
-            {/*<br/>*/}
-            {/*<br/>*/}
-            {/*<br/>*/}
-            {/*<br/>*/}
+
+            { studentPrint !== null ? <StudentPrint student={studentPrint}/>
+                : <Button onClick={e => getStudentById(1)}>GET</Button>}
+
+
             {/*<StudentForm*/}
             {/*    student={student}*/}
             {/*    setStudent={setStudent}*/}

@@ -129,20 +129,19 @@ const StudentPrint = ({student}) => {
                                 <tbody>
                                 <tr>
                                     <th>Școala doctorală</th>
-                                    <td>{student.speciality.scienceProfile
-                                        .scienceBranch.scienceDomain.scienceSchool.name}</td>
+                                    <td>{student.speciality.scienceSchool}</td>
                                 </tr>
                                 <tr>
                                     <th>Domeniul științific</th>
-                                    <td>{student.speciality.scienceProfile.scienceBranch.scienceDomain.name}</td>
+                                    <td>{student.speciality.scienceDomain}</td>
                                 </tr>
                                 <tr>
                                     <th>Ramura științifică</th>
-                                    <td>{student.speciality.scienceProfile.scienceBranch.name}</td>
+                                    <td>{student.speciality.scienceBranch}</td>
                                 </tr>
                                 <tr>
                                     <th>Profilul știițific</th>
-                                    <td>{student.speciality.scienceProfile.name}</td>
+                                    <td>{student.speciality.scienceProfile}</td>
                                 </tr>
                                 <tr>
                                     <th>Codul specialității</th>
@@ -179,8 +178,8 @@ const StudentPrint = ({student}) => {
                                         return <tr>
                                             <td>{order.number}</td>
                                             <td>{order.date}</td>
-                                            <td>{order.orderSubtype.order}</td>
-                                            <td>{order.orderSubtype.orderType.order}</td>
+                                            <td>{order.orderSubtype}</td>
+                                            <td>{order.orderType}</td>
                                         </tr>
                                     })
                                 }
