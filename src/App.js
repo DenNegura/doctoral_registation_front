@@ -145,19 +145,20 @@ function App() {
     return (
         <div style={{"margin": "40px 20%"}}>
 
-            { studentPrint !== null ? <StudentPrint student={studentPrint}/>
+            {/*{ studentPrint !== null ? <StudentPrint student={studentPrint}/>*/}
+            {/*    : <Button onClick={e => getStudentById(1)}>GET</Button>}*/}
+
+
+            { studentPrint !== null ? <StudentForm
+                student={studentPrint}
+                setStudent={setStudent}
+                countries={countries}
+                orders={orders}
+                schools={schools}
+                specialities={{items: specialities, get: getSpecialitiesBySchoolId}}
+                supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}
+            />
                 : <Button onClick={e => getStudentById(1)}>GET</Button>}
-
-
-            {/*<StudentForm*/}
-            {/*    student={student}*/}
-            {/*    setStudent={setStudent}*/}
-            {/*    countries={countries}*/}
-            {/*    orders={orders}*/}
-            {/*    schools={schools}*/}
-            {/*    specialities={{items: specialities, get: getSpecialitiesBySchoolId}}*/}
-            {/*    supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}*/}
-            {/*/>*/}
         </div>
     );
 }

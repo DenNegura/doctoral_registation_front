@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import * as yup from 'yup';
 import {Formik} from "formik";
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Card, InputGroup} from "react-bootstrap";
 import * as tools from './utils/FormTools';
 import ScrollList from "./ScrollList/ScrollList";
@@ -59,7 +59,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
 
     const [sortedSteeringCommitteeValue, setSortedSteeringCommitteeValue] = useState('');
 
-    const [selectedSpecialities, setSelectedSpecialities] = useState([]);
+    const [selectedSpecialities, setSelectedSpecialities] = useState(student ? [student.speciality] : []);
 
     const [selectedSupervisors, setSelectedSupervisors] = useState([]);
 
@@ -69,9 +69,9 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
 
     // const [orderDate, setOrderDate] = useState(new Date());
 
-    const [beginDate, setBeginDate] = useState(new Date());
+    const [beginDate, setBeginDate] = useState(student ? new Date(student.beginStudies) : new Date());
 
-    const [endDate, setEndDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(student ? new Date(student.endStudies) : new Date());
 
     // const [order, setOrder] = useState(orders.at(0));
 
@@ -82,6 +82,10 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
     // const [orderInput, setOrderInput] = useState(
     //     {number: '', date: orderDate, type: {value: ''}, subtype: {id: ''}})
 
+    // useMemo(() => {
+    //     student ? setSchoolId(student.speciality.scienceSchool) : setSchoolId('0');
+    //     console.log(student.speciality.scienceSchool)
+    // }, [])
 
     const setSpecialitiesAndSupervisors = (event) => {
         let id = event.target.value;
@@ -199,14 +203,14 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                 personalPhone: student ? student.personalPhone : '',
                 diplomaSeries: student ? student.diplomaSeries : '',
                 diplomaNumber: student ? student.diplomaNumber : '',
-                beginDate: student ? student.beginDate : '',
-                endDate: student ? student.endDate : '',
+                beginDate: student ? new Date(student.beginStudies) : '',
+                endDate: student ? new Date(student.endStudies) : '',
                 registration: student ? student.registration : 'ENROLLED',
                 studyType: student ? student.studyType : 'FREQUENCY',
                 financing: student ? student.financing : 'BUDGET',
                 // orderType: '1',
                 // orderSubtype: '1',
-                speciality: [],
+                speciality: student ? [student.speciality]: [],
                 supervisors: [],
                 steeringCommittee: [],
                 searchTopic: '',
@@ -535,10 +539,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                         </Card.Body>
                     </Card>
                     <br/>
-                    <OrderForm orders={orders} studentOrders={
-                        [{id: 1, number: '11c', date: new Date(2015, 5, 5),
-                            orderSubtype: {id: 17, order: 'Schimbarea conducătorului',
-                                orderType: {id: 2, order: 'Inmatriculat in anul II'}}}]}/>
+                    <OrderForm orders={orders} studentOrders={student.orders}/>
                     <br/>
                     <Card>
                         <Card.Header>
@@ -551,6 +552,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                         <Form.Select
                                             // name={"school"}
                                             // onChange={handleChange}
+                                            defaultValue={schoolId}
                                             onChange={setSpecialitiesAndSupervisors}
                                             // isValid={touched.school && !errors.school}
                                         >

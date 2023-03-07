@@ -11,13 +11,22 @@ const OrderForm = ({orders, studentOrders}) => {
 
     const DATE_FORMAT = 'yyyy-MM-dd';
 
+    // const DEFAULT_SELECTED_ORDER = {
+    //     id: '', number: '', date: new Date(),
+    //     orderSubtype: {
+    //         id: 1, orderType: {id: 1}
+    //     }
+    // }
+
     const DEFAULT_SELECTED_ORDER = {
         id: '', number: '', date: new Date(),
-        orderSubtype: {
-            id: 1, orderType: {id: 1}
-        }
+        orderSubtypeId: 1,
+        orderSubtype: '',
+        orderTypeId: 1,
+        orderType: '',
     }
 
+    studentOrders.map(order => order.date = new Date(order.date));
     const dateToString = date => DATE_FORMAT
         .replace('yyyy', date.getFullYear())
         .replace('MM', date.getMonth() > 9 ?
@@ -32,9 +41,20 @@ const OrderForm = ({orders, studentOrders}) => {
 
     const [orderInfo, setOrderInfo] = useState('');
 
+    // const setSubtypeOrdersOfOrder = useMemo(() => {
+    //     const order = orders.filter(order => order.id === selectedOrder.orderSubtype.orderType.id).at(0);
+    //     if(order.orderSubtypes.find(sub => sub.id === selectedOrder.orderSubtype.id) === undefined) {
+    //         setSelectedOrder({
+    //             ...selectedOrder,
+    //             orderSubtype: {...selectedOrder.orderSubtype, id: order.orderSubtypes.at(0).id}
+    //         });
+    //     }
+    //     return order;
+    // }, [orders, selectedOrder.orderSubtype.orderType.id])
+
     const setSubtypeOrdersOfOrder = useMemo(() => {
-        const order = orders.filter(order => order.id === selectedOrder.orderSubtype.orderType.id).at(0);
-        if(order.orderSubtypes.find(sub => sub.id === selectedOrder.orderSubtype.id) === undefined) {
+        const order = orders.filter(order => order.id === selectedOrder.orderTypeId).at(0);
+        if(order.orderSubtypes.find(sub => sub.id === selectedOrder.orderSubtypeId) === undefined) {
             setSelectedOrder({
                 ...selectedOrder,
                 orderSubtype: {...selectedOrder.orderSubtype, id: order.orderSubtypes.at(0).id}
@@ -47,6 +67,7 @@ const OrderForm = ({orders, studentOrders}) => {
         console.log(studentOrderId)
         setOrderError('')
         const order = studentOrders.filter(order => order.id === Number(studentOrderId)).at(0);
+
         setSelectedOrder(order)
         setOrderInfo('Editare ordin nr. ' + order.number + ' din ' + dateToString(order.date))
     }
@@ -220,8 +241,8 @@ const OrderForm = ({orders, studentOrders}) => {
                                     id: order.id,
                                     value: order.number + ' , ' +
                                         dateToString(order.date) + ' , ' +
-                                        order.orderSubtype.orderType.order + ' , ' +
-                                        order.orderSubtype.order
+                                        order.orderType + ' , ' +
+                                        order.orderSubtype
                                 }
                             })}
                             height={"10em"}
