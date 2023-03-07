@@ -57,11 +57,12 @@ const OrderForm = ({orders, studentOrders}) => {
         if(order.orderSubtypes.find(sub => sub.id === selectedOrder.orderSubtypeId) === undefined) {
             setSelectedOrder({
                 ...selectedOrder,
-                orderSubtype: {...selectedOrder.orderSubtype, id: order.orderSubtypes.at(0).id}
+                orderSubtypeId: order.orderSubtypes.at(0).id,
+                orderSubtype: order.orderSubtypes.at(0).order
             });
         }
         return order;
-    }, [orders, selectedOrder.orderSubtype.orderType.id])
+    }, [orders, selectedOrder.orderTypeId])
 
     const setStudentOrderInRedactor = (studentOrderId) => {
         console.log(studentOrderId)
@@ -141,7 +142,7 @@ const OrderForm = ({orders, studentOrders}) => {
                                     <InputGroup>
                                         <InputGroup.Text>Tip</InputGroup.Text>
                                         <Form.Select
-                                            value={selectedOrder.orderSubtype.orderType.id}
+                                            value={selectedOrder.orderSubtypeId}
                                             onChange={e => {
                                                 setSelectedOrder({
                                                     ...selectedOrder,
