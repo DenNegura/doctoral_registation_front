@@ -4,9 +4,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import * as yup from 'yup';
 import {Formik} from "formik";
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useMemo, useState} from "react";
 import {Card, InputGroup} from "react-bootstrap";
-import * as tools from './utils/FormTools';
 import ScrollList from "./ScrollList/ScrollList";
 import ItemFilter from "./ItemFilter";
 import DateSelect from "./DateSelect";
@@ -143,7 +142,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
         }
     }
 
-    const transferSteeringCommittee= (itemId) => {
+    const transferSteeringCommittee = (itemId) => {
         itemId = Number(itemId)
         if (selectedSteeringCommittee.length < MAX_STEERING_COMMITTEE) {
             setSelectedSteeringCommittee(selectedSteeringCommittee
@@ -168,8 +167,8 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
     const resizeArea = (value) => {
         let size = 0;
         let position = 0;
-        while(true) {
-            if((position = value.indexOf('\n', position)) !== -1) {
+        while (true) {
+            if ((position = value.indexOf('\n', position)) !== -1) {
                 position += 1;
                 size += 1;
                 continue;
@@ -177,7 +176,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
             break;
         }
         size += 1;
-        if(MIN_SIZE_AREA > size) {
+        if (MIN_SIZE_AREA > size) {
             setSizeArea(MIN_SIZE_AREA)
         } else {
             setSizeArea(size);
@@ -210,7 +209,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                 financing: student ? student.financing : 'BUDGET',
                 // orderType: '1',
                 // orderSubtype: '1',
-                speciality: student ? [student.speciality]: [],
+                speciality: student ? [student.speciality] : [],
                 supervisors: [],
                 steeringCommittee: [],
                 searchTopic: '',
@@ -539,7 +538,7 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                         </Card.Body>
                     </Card>
                     <br/>
-                    <OrderForm orders={orders} studentOrders={student.orders}/>
+                    <OrderForm orders={orders} studentOrders={student ? student.orders : []}/>
                     <br/>
                     <Card>
                         <Card.Header>

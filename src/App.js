@@ -4,6 +4,9 @@ import axios from "axios";
 import React, {useState} from "react";
 import StudentPrint from "./components/StudentPrint";
 import Button from "react-bootstrap/Button";
+import StudentList from "./components/StudentList";
+import SupervisorList from "./components/SupervisorList";
+import StudentFilterBar from "./components/student/FilterBar/StudentFilterBar";
 
 function App() {
 
@@ -37,11 +40,11 @@ function App() {
 
     const schoolsJson = "[{\"id\":1,\"name\":\"Științe Biologice, Geonomice, Chimice și Tehnologice\",\"scienceDomains\":[{\"id\":1,\"number\":1,\"name\":\"Științe ale naturii\",\"scienceSchoolId\":1,\"scienceBranches\":[{\"id\":14,\"name\":\"Ştiinţe chimice\",\"scienceDomainId\":1,\"scienceProfiles\":[{\"id\":141,\"name\":\"Chimie anorganică\",\"scienceBranchId\":14,\"specialities\":[{\"id\":141.01,\"name\":\"Chimie anorganică\",\"scienceProfileId\":141,\"students\":[]},{\"id\":141.02,\"name\":\"Chimie coordinativă\",\"scienceProfileId\":141,\"students\":[]}]},{\"id\":143,\"name\":\"Chimie organică\",\"scienceBranchId\":14,\"specialities\":[{\"id\":143.01,\"name\":\"Chimie organică\",\"scienceProfileId\":143,\"students\":[]},{\"id\":143.04,\"name\":\"Chimie bioorganică ,chimia compușilor naturali și filozofic activi\",\"scienceProfileId\":143,\"students\":[]}]},{\"id\":145,\"name\":\"Chimie ecologică\",\"scienceBranchId\":14,\"specialities\":[{\"id\":145.01,\"name\":\"Chimie ecologică\",\"scienceProfileId\":145,\"students\":[]}]}]},{\"id\":15,\"name\":\"Științe geonomice\",\"scienceDomainId\":1,\"scienceProfiles\":[{\"id\":153,\"name\":\"Geografie\",\"scienceBranchId\":15,\"specialities\":[{\"id\":153.05,\"name\":\"Meteorologie, climatologie, agroclimatologi\",\"scienceProfileId\":153,\"students\":[]}]},{\"id\":155,\"name\":\"Pedologie\",\"scienceBranchId\":15,\"specialities\":[{\"id\":155.01,\"name\":\"Pedologie\",\"scienceProfileId\":155,\"students\":[]}]}]},{\"id\":16,\"name\":\"Ştiinţe biologice\",\"scienceDomainId\":1,\"scienceProfiles\":[{\"id\":162,\"name\":\"Genetică\",\"scienceBranchId\":16,\"specialities\":[{\"id\":162.01,\"name\":\"Genetică vegetal\",\"scienceProfileId\":162,\"students\":[]}]},{\"id\":163,\"name\":\"Biologie celulară\",\"scienceBranchId\":16,\"specialities\":[{\"id\":163.01,\"name\":\"Biologie molecular\",\"scienceProfileId\":163,\"students\":[]},{\"id\":163.04,\"name\":\"Microbiologie\",\"scienceProfileId\":163,\"students\":[]}]},{\"id\":164,\"name\":\"Biologie vegetală\",\"scienceBranchId\":16,\"specialities\":[{\"id\":164.01,\"name\":\"Botanică\",\"scienceProfileId\":164,\"students\":[]},{\"id\":164.02,\"name\":\"Fiziologie vegetală\",\"scienceProfileId\":164,\"students\":[]}]},{\"id\":165,\"name\":\"Biologia omului și animalelor\",\"scienceBranchId\":16,\"specialities\":[{\"id\":165.01,\"name\":\"Fiziologia omului și animalelor\",\"scienceProfileId\":165,\"students\":[]},{\"id\":165.02,\"name\":\"Zoologie\",\"scienceProfileId\":165,\"students\":[]},{\"id\":165.03,\"name\":\"Ihtiologie\",\"scienceProfileId\":165,\"students\":[]},{\"id\":165.04,\"name\":\"Entomologie\",\"scienceProfileId\":165,\"students\":[]}]},{\"id\":166,\"name\":\"Ecologia și protecția mediului\",\"scienceBranchId\":16,\"specialities\":[{\"id\":166.01,\"name\":\"Ecologie\",\"scienceProfileId\":166,\"students\":[]},{\"id\":166.02,\"name\":\"Protecţia mediului şi folosirea raţională a resurselor naturale\",\"scienceProfileId\":166,\"students\":[]}]},{\"id\":167,\"name\":\"Biotehnologie\",\"scienceBranchId\":16,\"specialities\":[{\"id\":167.01,\"name\":\"Biotehnologie, bionanotehnologie\",\"scienceProfileId\":167,\"students\":[]}]}]},{\"id\":11,\"name\":\"Matematică\",\"scienceDomainId\":1,\"scienceProfiles\":[{\"id\":111,\"name\":\"Matematică pură\",\"scienceBranchId\":11,\"specialities\":[{\"id\":111.03,\"name\":\"Logică matematică, algebră și teoria numerelor\",\"scienceProfileId\":111,\"students\":[]}]},{\"id\":112,\"name\":\"Matematică aplicată\",\"scienceBranchId\":11,\"specialities\":[{\"id\":112.03,\"name\":\"Cibernetică matematică și cercetări operaționale\",\"scienceProfileId\":112,\"students\":[]}]}]},{\"id\":12,\"name\":\"Ştiinţa informaţiei\",\"scienceDomainId\":1,\"scienceProfiles\":[{\"id\":121,\"name\":\" Informatică teoretică\",\"scienceBranchId\":12,\"specialities\":[{\"id\":121.03,\"name\":\"Programarea calculatoarelor\",\"scienceProfileId\":121,\"students\":[]},{\"id\":122.03,\"name\":\"Modelare, metode matematice, produse program\",\"scienceProfileId\":121,\"students\":[]}]}]},{\"id\":13,\"name\":\"Ştiinţe fizice\",\"scienceDomainId\":1,\"scienceProfiles\":[{\"id\":131,\"name\":\"Fizică teoretic\",\"scienceBranchId\":13,\"specialities\":[{\"id\":131.03,\"name\":\"Fizică statistică și cinetică\",\"scienceProfileId\":131,\"students\":[]}]},{\"id\":133,\"name\":\"Fizica sistemelor macroscopice\",\"scienceBranchId\":13,\"specialities\":[{\"id\":133.04,\"name\":\"Fizica stării solide\",\"scienceProfileId\":133,\"students\":[]}]},{\"id\":134,\"name\":\"Ecologia și protecția mediului\",\"scienceBranchId\":13,\"specialities\":[{\"id\":134.01,\"name\":\"Fizica și tehnologia materialelor\",\"scienceProfileId\":134,\"students\":[]}]}]}]}]},{\"id\":2,\"name\":\"Științe Fizice, Matematice, ale Informației și Inginerești\",\"scienceDomains\":[{\"id\":2,\"number\":1,\"name\":\"Științe ale naturii\",\"scienceSchoolId\":2,\"scienceBranches\":[{\"id\":23,\"name\":\"Inginerie electronică și a informației\",\"scienceDomainId\":2,\"scienceProfiles\":[{\"id\":232,\"name\":\"Calculatoare și tehnologii informaționale\",\"scienceBranchId\":23,\"specialities\":[{\"id\":232.02,\"name\":\"Tehnologii, produse și sisteme informațional\",\"scienceProfileId\":232,\"students\":[]}]}]}]},{\"id\":3,\"number\":2,\"name\":\"Științe inginerești și tehnologii \",\"scienceSchoolId\":2,\"scienceBranches\":[]}]},{\"id\":3,\"name\":\"Științe Economice\",\"scienceDomains\":[{\"id\":4,\"number\":5,\"name\":\"Științe sociale și economice\",\"scienceSchoolId\":3,\"scienceBranches\":[{\"id\":52,\"name\":\"Ştiinţe economice\",\"scienceDomainId\":4,\"scienceProfiles\":[{\"id\":521,\"name\":\"Economie, business, administrar\",\"scienceBranchId\":52,\"specialities\":[{\"id\":521.01,\"name\":\"Teorie economică și politici economice\",\"scienceProfileId\":521,\"students\":[]},{\"id\":521.02,\"name\":\"Economie mondială; relații economice internaționale\",\"scienceProfileId\":521,\"students\":[]},{\"id\":521.03,\"name\":\"Economie și management în domeniul de activitate\",\"scienceProfileId\":521,\"students\":[]},{\"id\":521.04,\"name\":\"Marketing și logistică\",\"scienceProfileId\":521,\"students\":[]}]},{\"id\":522,\"name\":\"Finanțe, contabilitate, analiză economică\",\"scienceBranchId\":52,\"specialities\":[{\"id\":522.01,\"name\":\"Finanțe\",\"scienceProfileId\":522,\"students\":[]},{\"id\":522.02,\"name\":\"Contabilitate; audit; analiză economică\",\"scienceProfileId\":522,\"students\":[]}]}]}]}]},{\"id\":4,\"name\":\"Științe Juridice\",\"scienceDomains\":[{\"id\":5,\"number\":5,\"name\":\"Științe sociale și economice\",\"scienceSchoolId\":4,\"scienceBranches\":[{\"id\":55,\"name\":\"Ştiinţe juridice\",\"scienceDomainId\":5,\"scienceProfiles\":[{\"id\":551,\"name\":\"Economie, business, administrar\",\"scienceBranchId\":55,\"specialities\":[{\"id\":551.01,\"name\":\"Teoria generală a dreptului\",\"scienceProfileId\":551,\"students\":[]}]},{\"id\":552,\"name\":\"Drept public\",\"scienceBranchId\":55,\"specialities\":[{\"id\":552.01,\"name\":\"Drept constituțional\",\"scienceProfileId\":552,\"students\":[]},{\"id\":552.02,\"name\":\"Drept administrativ\",\"scienceProfileId\":552,\"students\":[]},{\"id\":552.03,\"name\":\"Drept financiar (bancar, fiscal, vamal)\",\"scienceProfileId\":552,\"students\":[]},{\"id\":552.07,\"name\":\"Drept contravenţional\",\"scienceProfileId\":552,\"students\":[]},{\"id\":552.08,\"name\":\"Drept internațional și european public\",\"scienceProfileId\":552,\"students\":[]}]},{\"id\":553,\"name\":\"Drept privat\",\"scienceBranchId\":55,\"specialities\":[{\"id\":553.01,\"name\":\"Drept civil\",\"scienceProfileId\":553,\"students\":[]},{\"id\":553.02,\"name\":\"Dreptul afacerilor\",\"scienceProfileId\":553,\"students\":[]},{\"id\":553.03,\"name\":\"Drept procesual civil\",\"scienceProfileId\":553,\"students\":[]},{\"id\":553.04,\"name\":\"Dreptul familiei\",\"scienceProfileId\":553,\"students\":[]},{\"id\":553.05,\"name\":\"Dreptul muncii și protecției sociale\",\"scienceProfileId\":553,\"students\":[]},{\"id\":553.06,\"name\":\"Drept internațional și european privat\",\"scienceProfileId\":553,\"students\":[]}]},{\"id\":554,\"name\":\"Drept penal\",\"scienceBranchId\":55,\"specialities\":[{\"id\":554.01,\"name\":\"Drept penal şi execuţional penal\",\"scienceProfileId\":554,\"students\":[]},{\"id\":554.02,\"name\":\"Criminologie\",\"scienceProfileId\":554,\"students\":[]},{\"id\":554.03,\"name\":\"Drept procesual penal\",\"scienceProfileId\":554,\"students\":[]},{\"id\":554.04,\"name\":\"Criminalistică, expertiza judiciară, investigații operative\",\"scienceProfileId\":554,\"students\":[]}]}]},{\"id\":51,\"name\":\"Psihologie\",\"scienceDomainId\":5,\"scienceProfiles\":[{\"id\":511,\"name\":\"Drept penal\",\"scienceBranchId\":51,\"specialities\":[{\"id\":511.01,\"name\":\"Psihologie generală\",\"scienceProfileId\":511,\"students\":[]}]}]},{\"id\":53,\"name\":\"Științe ale educației\",\"scienceDomainId\":5,\"scienceProfiles\":[{\"id\":531,\"name\":\"Pedagogie generală\",\"scienceBranchId\":53,\"specialities\":[{\"id\":531.01,\"name\":\"Teoria generală a educației\",\"scienceProfileId\":531,\"students\":[]}]},{\"id\":533,\"name\":\"Pedagogie profesională\",\"scienceBranchId\":53,\"specialities\":[{\"id\":533.01,\"name\":\"Pedagogie universitară\",\"scienceProfileId\":533,\"students\":[]},{\"id\":533.03,\"name\":\"Pedagogia adulţilor\",\"scienceProfileId\":533,\"students\":[]}]}]},{\"id\":54,\"name\":\"Sociologie\",\"scienceDomainId\":5,\"scienceProfiles\":[{\"id\":541,\"name\":\"Sociologie\",\"scienceBranchId\":54,\"specialities\":[{\"id\":541.01,\"name\":\"Teoria și metodologia sociologiei\",\"scienceProfileId\":541,\"students\":[]},{\"id\":541.02,\"name\":\"Structură socială, instituții și procese sociale\",\"scienceProfileId\":541,\"students\":[]}]},{\"id\":542,\"name\":\"Asistență socială\",\"scienceBranchId\":54,\"specialities\":[{\"id\":542.01,\"name\":\"Teoria și practica asistenței sociale\",\"scienceProfileId\":542,\"students\":[]}]}]},{\"id\":56,\"name\":\"Științe politice\",\"scienceDomainId\":5,\"scienceProfiles\":[{\"id\":561,\"name\":\"Politologie\",\"scienceBranchId\":56,\"specialities\":[{\"id\":561.01,\"name\":\"Teoria, metodologia și istoria politologiei; instituții și procese politice\",\"scienceProfileId\":561,\"students\":[]}]},{\"id\":562,\"name\":\"Relații internaționale\",\"scienceBranchId\":56,\"specialities\":[{\"id\":562.01,\"name\":\"Teoria și metodologia relațiilor internaționale și a diplomației\",\"scienceProfileId\":562,\"students\":[]},{\"id\":562.02,\"name\":\"Istoria relaţiilor internaţionale şi politicii externe\",\"scienceProfileId\":562,\"students\":[]},{\"id\":562.03,\"name\":\"Probleme și strategii ale dezvoltării globale și regionale\",\"scienceProfileId\":562,\"students\":[]}]},{\"id\":563,\"name\":\"Ştiinţe administrative\",\"scienceBranchId\":56,\"specialities\":[{\"id\":563.01,\"name\":\"Teoria, metodologia administraţiei publice\",\"scienceProfileId\":563,\"students\":[]},{\"id\":563.02,\"name\":\"Organizarea şi dirijarea în instituţiile administraţiei publice; servicii publice\",\"scienceProfileId\":563,\"students\":[]}]}]},{\"id\":57,\"name\":\"Media şi comunicare\",\"scienceDomainId\":5,\"scienceProfiles\":[{\"id\":571,\"name\":\"Jurnalism şi comunicare\",\"scienceBranchId\":57,\"specialities\":[{\"id\":571.01,\"name\":\"Jurnalism şi procese mediatice\",\"scienceProfileId\":571,\"students\":[]},{\"id\":571.02,\"name\":\"Comunicare și relații publice\",\"scienceProfileId\":571,\"students\":[]},{\"id\":611.02,\"name\":\"Istoria românilor (pe perioade)\",\"scienceProfileId\":571,\"students\":[]},{\"id\":611.07,\"name\":\"Istoria științei și tehnicii (pe domenii)\",\"scienceProfileId\":571,\"students\":[]}]},{\"id\":572,\"name\":\"Științe ale informării și documentări\",\"scienceBranchId\":57,\"specialities\":[{\"id\":572.02,\"name\":\"Infodocumentare; biblioteconomie și știința informării\",\"scienceProfileId\":572,\"students\":[]}]}]}]}]},{\"id\":5,\"name\":\"Științe Sociale și ale Educației\",\"scienceDomains\":[{\"id\":6,\"number\":5,\"name\":\"Științe sociale și economice\",\"scienceSchoolId\":5,\"scienceBranches\":[{\"id\":61,\"name\":\"Istorie şi arheologie\",\"scienceDomainId\":6,\"scienceProfiles\":[{\"id\":611,\"name\":\"Istorie\",\"scienceBranchId\":61,\"specialities\":[]},{\"id\":612,\"name\":\"Etnologie\",\"scienceBranchId\":61,\"specialities\":[{\"id\":612.01,\"name\":\"Etnologie\",\"scienceProfileId\":612,\"students\":[]}]},{\"id\":613,\"name\":\"Arheologie\",\"scienceBranchId\":61,\"specialities\":[{\"id\":613.01,\"name\":\"Arheologie\",\"scienceProfileId\":613,\"students\":[]}]}]},{\"id\":62,\"name\":\"Filologie\",\"scienceDomainId\":6,\"scienceProfiles\":[{\"id\":621,\"name\":\"Științe ale limbajului\",\"scienceBranchId\":62,\"specialities\":[{\"id\":621.03,\"name\":\"Fonetică şi fonologie; dialectologie; istoria limbii; sociolingvistică; etnolingvistică (cu specificarea limbii după caz)\",\"scienceProfileId\":621,\"students\":[]},{\"id\":621.04,\"name\":\"Lexicologie şi lexicografie; terminologie şi limbaje specializate; traductologie (cu specificarea limbii după caz)\",\"scienceProfileId\":621,\"students\":[]},{\"id\":621.05,\"name\":\"Semiotică; semantică; pragmatică (cu specificarea limbii după caz)\",\"scienceProfileId\":621,\"students\":[]},{\"id\":621.06,\"name\":\"Teoria textului; analiza discursului; stilistică (cu specificarea limbii, după caz – limba franceză)\",\"scienceProfileId\":621,\"students\":[]}]},{\"id\":622,\"name\":\"Literatură\",\"scienceBranchId\":62,\"specialities\":[{\"id\":622.01,\"name\":\"Literatura română\",\"scienceProfileId\":622,\"students\":[]},{\"id\":622.03,\"name\":\"Teoria literaturii\",\"scienceProfileId\":622,\"students\":[]},{\"id\":622.04,\"name\":\"Folcloristică\",\"scienceProfileId\":622,\"students\":[]}]}]},{\"id\":63,\"name\":\"Filosofie\",\"scienceDomainId\":6,\"scienceProfiles\":[{\"id\":631,\"name\":\"Filosofie\",\"scienceBranchId\":63,\"specialities\":[{\"id\":631.01,\"name\":\"Ontologie și gnoseologie\",\"scienceProfileId\":631,\"students\":[]},{\"id\":631.02,\"name\":\"Filosofie istorică\",\"scienceProfileId\":631,\"students\":[]},{\"id\":631.05,\"name\":\"Filosofie socială, antropologie filosofică și filosofia culturii\",\"scienceProfileId\":631,\"students\":[]}]}]}]}]},{\"id\":6,\"name\":\"Științe Umanistice\",\"scienceDomains\":[{\"id\":7,\"number\":6,\"name\":\"Științe umaniste\",\"scienceSchoolId\":6,\"scienceBranches\":[]}]}]";
 
-    const schools = JSON.parse(schoolsJson);
+    // const schools = JSON.parse(schoolsJson);
 
     const [specialities, setSpecialities] = useState([]);
 
-    const [supervisors, setSupervisors] = useState([]);
+    const [supervisors, setSupervisors] = useState(null);
 
     const [student, setStudent] = useState();
 
@@ -53,15 +56,25 @@ function App() {
         }));
     }
 
+
+    const [schools, setSchools] = useState(null)
+    async function getSchools() {
+        console.log("App -> all schools")
+        const response = await axios.get('http://localhost:8080/api/sciences/schools')
+        setSchools(response.data);
+    }
+
     async function getSupervisorsBySchoolId(id) {
         console.log("StudentForm ---> load supervisors")
         const response = await axios.get('http://localhost:8080/api/supervisors/schools/' + id)
-        setSupervisors(response.data.map(item => {
-            return {
-                id: item.id,
-                value: item.firstName + ' ' + item.lastName + ', ' + item.post + ', ' + item.speciality
-            }
-        }));
+        // setSupervisors(response.data.map(item => {
+        //     return {
+        //         id: item.id,
+        //         value: item.firstName + ' ' + item.lastName + ', ' + item.post + ', ' + item.speciality
+        //     }
+        // }));
+        console.log(response.data)
+        setSupervisors(response.data)
     }
 
     const [studentPrint, setStudentPrint] = useState(null);
@@ -143,22 +156,26 @@ function App() {
     // }
 
     return (
-        <div style={{"margin": "40px 20%"}}>
-
+        <div style={{"margin": "40px 10%"}}>
             {/*{ studentPrint !== null ? <StudentPrint student={studentPrint}/>*/}
             {/*    : <Button onClick={e => getStudentById(1)}>GET</Button>}*/}
 
 
-            { studentPrint !== null ? <StudentForm
-                student={studentPrint}
-                setStudent={setStudent}
-                countries={countries}
-                orders={orders}
-                schools={schools}
-                specialities={{items: specialities, get: getSpecialitiesBySchoolId}}
-                supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}
-            />
-                : <Button onClick={e => getStudentById(1)}>GET</Button>}
+            {/*{ studentPrint !== null ? <StudentForm*/}
+            {/*    student={null}*/}
+            {/*    setStudent={setStudent}*/}
+            {/*    countries={countries}*/}
+            {/*    orders={orders}*/}
+            {/*    schools={schools}*/}
+            {/*    specialities={{items: specialities, get: getSpecialitiesBySchoolId}}*/}
+            {/*    supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}*/}
+            {/*/>*/}
+            {/*    : <Button onClick={e => getStudentById(1)}>GET</Button>}*/}
+            { schools !== null ? <StudentFilterBar schools={schools}/> :
+                <Button onClick={e => getSchools()}>GET</Button>}
+            <div style={{paddingBottom: "5em"}}/>
+            { supervisors !== null ? <SupervisorList supervisors={supervisors} onSelectedSupervisor={e => console.log(e)}/> :
+                <Button onClick={e => getSupervisorsBySchoolId(1)}>GET</Button>}
         </div>
     );
 }
