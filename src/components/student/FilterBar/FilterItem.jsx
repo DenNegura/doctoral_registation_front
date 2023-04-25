@@ -1,68 +1,123 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Col from "react-bootstrap/Col";
 import classes from "../StudentStyles.module.css";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
+import {Card} from "react-bootstrap";
 
-const FilterItem = ({items, defaultItemValue, usedColor, notUsedColor, label, size, getActiveItems}) => {
+const FilterItem = ({label, labelTitle, allItemValue, items,
+                        activeColor, disableColor, labelColor,
+                        sizeButton, isActiveScroll, onActiveItems}) => {
 
-    const LABEL = label;
 
-    const SIZE = size;
+    const [selectedItems, setSelectedItems] = useState([])
 
-    const USED = usedColor;
+    const [isScroll, setScroll] = useState(isActiveScroll);
 
-    const NOT_USED = notUsedColor;
-
-    const [colorDefault, setColorDefault] = useState(USED)
+    const [allItemColor, setAllItemColor] = useState(activeColor)
 
     const [colors, setColors] = useState(Array
-        .from({length: items.length}, () => NOT_USED))
+        .from({length: items.length}, () => disableColor))
 
-    const selectDefault = (colors, setColorDefault, setColors) => {
-        const newColors = Array.from({length: colors.length}, () => NOT_USED);
+    const [isLoaded, setLoaded] = useState(true);
+
+    useEffect(() => {
+        // setLoaded(false);
+        let newColors = Array
+            .from({length: items.length}, () => disableColor);
+        if(selectedItems.length !== 0) {
+            let newSelectedItems = [];
+            selectedItems.forEach(sItem => {
+                if(items.includes(sItem)) {
+                    newSelectedItems = [...newSelectedItems, sItem];
+                }
+            })
+            newSelectedItems.forEach((item, index) => {
+                newColors[index] = activeColor;
+            })
+            setSelectedItems(newSelectedItems);
+            console.log(newSelectedItems)
+        }
+        console.log(newColors)
         setColors(newColors);
-        setColorDefault(USED);
-    }
-    const select = (index, colors, setColorDefault, setColors, ) => {
-        const newColors = [...colors]
-        if(newColors[index] === USED) {
-            newColors[index] = NOT_USED;
+    }, [items])
+
+    // useEffect(() => {
+    //     setLoaded(true);
+    // }, [colors])
+
+    const changeScroll = () => {
+        if(isScroll) {
+            setScroll(false);
         } else {
-            newColors[index] = USED;
+            setScroll(true);
+        }
+    }
+
+    const selectDefault = () => {
+        const newColors = Array.from({length: colors.length}, () => disableColor);
+        setColors(newColors);
+        setAllItemColor(activeColor);
+        setSelectedItems([]);
+        onActiveItems(label, [])
+    }
+
+    const select = (index) => {
+        const newColors = [...colors]
+        if(newColors[index] === activeColor) {
+            newColors[index] = disableColor;
+            let newSelectedItems = selectedItems
+                .filter(item => item !== items[index]);
+            setSelectedItems(newSelectedItems);
+            onActiveItems(label, newSelectedItems)
+        } else {
+            newColors[index] = activeColor;
+            let newSelectedItems = [...selectedItems, items[index]]
+            setSelectedItems(newSelectedItems)
+            onActiveItems(label, newSelectedItems);
         }
         setColors(newColors);
-        if(newColors.includes(USED)) {
-            setColorDefault(NOT_USED)
+        if(newColors.includes(activeColor)) {
+            setAllItemColor(disableColor)
         } else {
-            setColorDefault(USED);
+            setAllItemColor(activeColor);
         }
     }
 
     return (
-        <Row xs={"auto"}>
-            <Col className={classes.colFilterBar}>
-                <Button variant={LABEL} disabled size={SIZE}>{defaultItemValue}</Button>
-            </Col>
-            <Col className={classes.colFilterBar}>
-                <Button
-                    variant={colorDefault}
-                    size={SIZE}
-                    onClick={e => selectDefault(colors, setColorDefault, setColors)}>
-                    Toate
-                </Button>
-            </Col>
-            {schools.map((school, index) => {
-                return <Col key={index} className={classes.colFilterBar}>
-                    <Button
-                        variant={colors[index]}
-                        size={SIZE}
-                        onClick={e => select(index, colors, setColorDefault, setColors)}>
-                        {school.name}
-                    </Button>
-                </Col>
-            })}
-        </Row>
+        <Card>
+            <div className={isScroll ? `${classes.activeScrollFromFilterItem} ${classes.divScrollFilterItem}`
+                : classes.divScrollFilterItem}>
+                <Row xs={"auto"} className={isScroll ? "flex-nowrap" : ''}>
+                    <Col className={classes.colFilterBar}>
+                        <Button
+                            variant={labelColor}
+                            size={sizeButton}
+                            onClick={() => changeScroll()}>
+                            {labelTitle}
+                        </Button>
+                    </Col>
+                    <Col className={classes.colFilterBar}>
+                        <Button
+                            variant={allItemColor}
+                            size={sizeButton}
+                            onClick={() => selectDefault()}>
+                            {allItemValue}
+                        </Button>
+                    </Col>
+                    {isLoaded ? <> {items.map((item, index) => {
+                        return <Col key={index} className={classes.colFilterBar}>
+                            <Button
+                                variant={colors[index]}
+                                size={sizeButton}
+                                onClick={() => select(index)}>
+                                {item.name}
+                            </Button>
+                        </Col>
+                    })} </> : <></>}
+                </Row>
+            </div>
+        </Card>
     );
 };
 

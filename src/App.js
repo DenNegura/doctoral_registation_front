@@ -1,10 +1,7 @@
 import './App.css';
-import StudentForm from "./components/StudentForm";
 import axios from "axios";
 import React, {useState} from "react";
-import StudentPrint from "./components/StudentPrint";
 import Button from "react-bootstrap/Button";
-import StudentList from "./components/StudentList";
 import SupervisorList from "./components/SupervisorList";
 import StudentFilterBar from "./components/student/FilterBar/StudentFilterBar";
 
@@ -57,11 +54,22 @@ function App() {
     }
 
 
-    const [schools, setSchools] = useState(null)
+    const [schools, setSchools] = useState([])
+
+    const [domains, setDomains] = useState([])
+
     async function getSchools() {
         console.log("App -> all schools")
         const response = await axios.get('http://localhost:8080/api/sciences/schools')
-        setSchools(response.data);
+        // setSchools(response.data);
+        return response.data;
+    }
+
+    async function getDomains() {
+        console.log("App -> all domains")
+        const response = await axios.get('http://localhost:8080/api/sciences/domains')
+        //setDomains(response.data);
+        return response.data;
     }
 
     async function getSupervisorsBySchoolId(id) {
@@ -73,7 +81,6 @@ function App() {
         //         value: item.firstName + ' ' + item.lastName + ', ' + item.post + ', ' + item.speciality
         //     }
         // }));
-        console.log(response.data)
         setSupervisors(response.data)
     }
 
@@ -154,7 +161,6 @@ function App() {
     //     }],
     //     scienceTopic: 'topic to searching',
     // }
-
     return (
         <div style={{"margin": "40px 10%"}}>
             {/*{ studentPrint !== null ? <StudentPrint student={studentPrint}/>*/}
@@ -171,8 +177,21 @@ function App() {
             {/*    supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}*/}
             {/*/>*/}
             {/*    : <Button onClick={e => getStudentById(1)}>GET</Button>}*/}
-            { schools !== null ? <StudentFilterBar schools={schools}/> :
-                <Button onClick={e => getSchools()}>GET</Button>}
+            <StudentFilterBar
+                getSchools={getSchools}
+                getDomains={getDomains}
+            />
+            {/*{ schools.length !== 0 || domains.length !== 0 ?*/}
+            {/*    <StudentFilterBar*/}
+            {/*        schools={getSchools}*/}
+            {/*        domains={getDomains}*/}
+            {/*    /> :*/}
+            {/*    <Button onClick={*/}
+            {/*        () => {*/}
+            {/*            getDomains();*/}
+            {/*            getSchools();*/}
+            {/*        }*/}
+            {/*    }>GET</Button>}*/}
             <div style={{paddingBottom: "5em"}}/>
             { supervisors !== null ? <SupervisorList supervisors={supervisors} onSelectedSupervisor={e => console.log(e)}/> :
                 <Button onClick={e => getSupervisorsBySchoolId(1)}>GET</Button>}

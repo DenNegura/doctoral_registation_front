@@ -1,6 +1,5 @@
 import React from 'react';
 import {Card, Table} from "react-bootstrap";
-import ItemFilter from "./ItemFilter";
 
 const StudentList = ({students, title, onSelectedStudent}) => {
 

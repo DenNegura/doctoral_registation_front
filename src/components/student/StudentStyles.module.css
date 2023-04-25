@@ -1,4 +1,13 @@
 .colFilterBar {
     margin-top: 0.3em;
     margin-bottom: 0.3em;
+    padding: 0.5em;
+}
+
+.activeScrollFromFilterItem {
+    overflow-x: auto;
+}
+
+.divScrollFilterItem {
+    padding-left: 0.5em;
 }
