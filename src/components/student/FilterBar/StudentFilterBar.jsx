@@ -3,65 +3,106 @@ import {Container} from "react-bootstrap";
 
 import FilterItem from "./FilterItem";
 
-const StudentFilterBar = ({getSchools, getDomains}) => {
+const ALL_VALUE = "Toate"
 
-    const LABELS = ["school", "domain"]
+const LABEL_COLOR = "warning"
 
-    const LABELS_TITLE = ["Scoala", "Domen"]
+const SIZE_BUTTON = "sm"
 
-    const ALL_VALUE = "Toate"
+const ACTIVE_COLOR = "success"
 
-    const LABEL_COLOR = "warning"
+const DISABLE_COLOR = "outline-secondary"
 
-    const SIZE_BUTTON = "sm"
+const LABELS = ["school", "domain"]
 
-    const ACTIVE_COLOR = "success"
+const LABELS_TITLE = ["Scoala", "Domen"]
 
-    const DISABLE_COLOR = "outline-secondary"
+const IS_ACTIVE_SCROLL = false
 
-    const IS_ACTIVE_SCROLL = false
+class Item {
 
-    const [schools, setSchools] = useState(null)
+    static activeColor = ACTIVE_COLOR
 
-    const [domainsAll, setDomainsAll] = useState(null)
+    static disableColor = DISABLE_COLOR
 
-    const [domains, setDomains] = useState(null)
+    constructor(id, value, parentId, isActive, isVisible) {
+        this.id = id;
+        this.value = value;
+        this.parentId = parentId;
+        this.isActive = isActive;
+        this.isVisible = isVisible;
+    }
 
-    useEffect(() => {
-        getSchools().then(schools =>
-            setSchools(schools.map((school, index) => {
-                    return {id: school.id, name: school.name, parentId: null}})))
-        getDomains().then(domains => {
-            let domainsList = domains.map((domain, index) => {
-                return {id: domain.id, name: domain.name, parentId: domain.scienceSchoolId}})
-            setDomainsAll(domainsList)
-            setDomains([...domainsList]);
-        })
-    }, [getDomains, getSchools])
+    color() {
+        return this.isActive ? Item.activeColor : Item.disableColor;
+    }
 
+    setActive(isActive) {
+        this.isActive = isActive;
+    }
 
-    const onSelectedItems = (label, items) => {
-        if(LABELS[0] === label) {
-            let array = []
-            if(items.length === 0) {
-                array = [...domainsAll];
-            } else {
-                items.forEach(item => {
-                    array = [...array, ...domainsAll.filter(domain => domain.parentId === item.id)];
-                })
-            }
-            setDomains(array);
+    setVisible(isVisible) {
+        this.isVisible = isVisible;
+        if (this.isVisible === false) {
+            this.setActive(false);
         }
     }
 
-    if(schools && domains) {
+    static toVisible(items, isVisible) {
+        items.forEach(item => item.setVisible(isVisible));
+        return items;
+    }
+}
+
+
+const StudentFilterBar = ({getSchools, getDomains}) => {
+
+    const [schools, setSchools] = useState(null)
+
+    const [domains, setDomains] = useState(null)
+
+
+    useEffect(() => {
+            getSchools().then(schools =>
+                setSchools(schools.map(school =>
+                    new Item(school.id, school.name, null, false, true))))
+            getDomains().then(domains =>
+                setDomains(domains.map(domain =>
+                    new Item(domain.id, domain.name, domain.scienceSchoolId, false, true))))
+        },
+        [getDomains, getSchools])
+
+
+    const onSelectedItems = (label, items) => {
+        if (LABELS[0] === label) {
+            if (items.length === 0) {
+                Item.toVisible(domains, true);
+            } else {
+                domains.forEach(domain => {
+                    let isActive = domain.isActive;
+                    domain.setVisible(false);
+                    items.forEach(item => {
+                        if (item.id === domain.parentId) {
+                            domain.setVisible(true);
+                            if (isActive) {
+                                domain.setActive(true);
+                            }
+                        }
+                    })
+                })
+            }
+            setDomains([...domains]);
+        }
+    }
+
+    if (schools && domains) {
         return (
             <Container fluid style={{paddingLeft: "0", paddingRight: "0"}}>
                 <FilterItem
                     label={LABELS[0]}
                     labelTitle={LABELS_TITLE[0]}
                     allItemValue={ALL_VALUE}
-                    items={schools}
+                    allItems={schools}
                     activeColor={ACTIVE_COLOR}
                     disableColor={DISABLE_COLOR}
                     labelColor={LABEL_COLOR}
@@ -74,7 +115,7 @@ const StudentFilterBar = ({getSchools, getDomains}) => {
                     label={LABELS[1]}
                     labelTitle={LABELS_TITLE[1]}
                     allItemValue={ALL_VALUE}
-                    items={domains}
+                    allItems={domains}
                     activeColor={ACTIVE_COLOR}
                     disableColor={DISABLE_COLOR}
                     labelColor={LABEL_COLOR}
@@ -89,4 +130,5 @@ const StudentFilterBar = ({getSchools, getDomains}) => {
     }
 };
 
+export {Item};
 export default StudentFilterBar;

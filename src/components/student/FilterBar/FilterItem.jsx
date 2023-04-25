@@ -5,46 +5,25 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import {Card} from "react-bootstrap";
 
-const FilterItem = ({label, labelTitle, allItemValue, items,
+const FilterItem = ({label, labelTitle, allItemValue, allItems,
                         activeColor, disableColor, labelColor,
                         sizeButton, isActiveScroll, onActiveItems}) => {
 
-
-    const [selectedItems, setSelectedItems] = useState([])
-
     const [isScroll, setScroll] = useState(isActiveScroll);
 
-    const [allItemColor, setAllItemColor] = useState(activeColor)
+    const [allItemColor, setAllItemColor] = useState(activeColor);
 
-    const [colors, setColors] = useState(Array
-        .from({length: items.length}, () => disableColor))
-
-    const [isLoaded, setLoaded] = useState(true);
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
-        // setLoaded(false);
-        let newColors = Array
-            .from({length: items.length}, () => disableColor);
-        if(selectedItems.length !== 0) {
-            let newSelectedItems = [];
-            selectedItems.forEach(sItem => {
-                if(items.includes(sItem)) {
-                    newSelectedItems = [...newSelectedItems, sItem];
-                }
-            })
-            newSelectedItems.forEach((item, index) => {
-                newColors[index] = activeColor;
-            })
-            setSelectedItems(newSelectedItems);
-            console.log(newSelectedItems)
+        setItems([...allItems])
+        if(containsActiveItems(allItems)) {
+            setAllItemColor(disableColor);
+        } else {
+            setAllItemColor(activeColor);
         }
-        console.log(newColors)
-        setColors(newColors);
-    }, [items])
+    }, [activeColor, allItems, disableColor])
 
-    // useEffect(() => {
-    //     setLoaded(true);
-    // }, [colors])
 
     const changeScroll = () => {
         if(isScroll) {
@@ -54,34 +33,50 @@ const FilterItem = ({label, labelTitle, allItemValue, items,
         }
     }
 
-    const selectDefault = () => {
-        const newColors = Array.from({length: colors.length}, () => disableColor);
-        setColors(newColors);
+    const selectAll = () => {
         setAllItemColor(activeColor);
-        setSelectedItems([]);
+        let newItems = [...items]
+        newItems.forEach(item => item.setActive(false));
+        setItems(newItems);
         onActiveItems(label, [])
     }
 
-    const select = (index) => {
-        const newColors = [...colors]
-        if(newColors[index] === activeColor) {
-            newColors[index] = disableColor;
-            let newSelectedItems = selectedItems
-                .filter(item => item !== items[index]);
-            setSelectedItems(newSelectedItems);
-            onActiveItems(label, newSelectedItems)
+    const select = (item, index) => {
+        let newItems = [...items]
+        if(item.isActive) {
+            item.setActive(false);
         } else {
-            newColors[index] = activeColor;
-            let newSelectedItems = [...selectedItems, items[index]]
-            setSelectedItems(newSelectedItems)
-            onActiveItems(label, newSelectedItems);
+            item.setActive(true);
         }
-        setColors(newColors);
-        if(newColors.includes(activeColor)) {
-            setAllItemColor(disableColor)
+
+        newItems[index] = item;
+        setItems(newItems);
+        onActiveItems(label, getActiveItems(newItems));
+
+        if(containsActiveItems(newItems)) {
+            setAllItemColor(disableColor);
         } else {
             setAllItemColor(activeColor);
         }
+    }
+
+    const getActiveItems = (items) => {
+        let activeItems = []
+        items.forEach(item => {
+            if(item.isActive) {
+                activeItems.push(item);
+            }
+        })
+        return activeItems;
+    }
+
+    const containsActiveItems = (items) => {
+        for(let i = 0; i < items.length; i++) {
+            if(items[i].isActive) {
+                return true;
+            }
+        }
+        return false;
     }
 
     return (
@@ -101,20 +96,23 @@ const FilterItem = ({label, labelTitle, allItemValue, items,
                         <Button
                             variant={allItemColor}
                             size={sizeButton}
-                            onClick={() => selectDefault()}>
+                            onClick={() => selectAll()}>
                             {allItemValue}
                         </Button>
                     </Col>
-                    {isLoaded ? <> {items.map((item, index) => {
-                        return <Col key={index} className={classes.colFilterBar}>
-                            <Button
-                                variant={colors[index]}
-                                size={sizeButton}
-                                onClick={() => select(index)}>
-                                {item.name}
-                            </Button>
-                        </Col>
-                    })} </> : <></>}
+                    {items.map((item, index) => {
+                        if(item.isVisible) {
+                            return <Col key={item.id} className={classes.colFilterBar}>
+                                <Button
+                                    variant={item.color()}
+                                    size={sizeButton}
+                                    onClick={() => select(item, index)}>
+                                    {item.value}
+                                </Button>
+                            </Col>
+                        }
+                        return <div key={item.id} style={{display: "none"}}></div>
+                    })}
                 </Row>
             </div>
         </Card>
