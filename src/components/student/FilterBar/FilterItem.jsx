@@ -6,8 +6,8 @@ import Row from "react-bootstrap/Row";
 import {Card} from "react-bootstrap";
 
 const FilterItem = ({label, labelTitle, allItemValue, allItems,
-                        activeColor, disableColor, labelColor,
-                        sizeButton, isActiveScroll, onActiveItems}) => {
+                        activeColor, disableColor, labelColor, sizeButton,
+                        isActiveScroll, onActiveItems, onMouseEnterItem, onMouseLeaveItem}) => {
 
     const [isScroll, setScroll] = useState(isActiveScroll);
 
@@ -106,7 +106,9 @@ const FilterItem = ({label, labelTitle, allItemValue, allItems,
                                 <Button
                                     variant={item.color()}
                                     size={sizeButton}
-                                    onClick={() => select(item, index)}>
+                                    onClick={() => select(item, index)}
+                                    onMouseEnter={() => onMouseEnterItem(label, item)}
+                                    onMouseLeave={() => onMouseLeaveItem(label)}>
                                     {item.value}
                                 </Button>
                             </Col>

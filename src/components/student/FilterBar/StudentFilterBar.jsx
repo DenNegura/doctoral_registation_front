@@ -13,6 +13,8 @@ const ACTIVE_COLOR = "success"
 
 const DISABLE_COLOR = "outline-secondary"
 
+const MOUSE_ENTER_COLOR = "secondary";
+
 const LABELS = ["school", "domain"]
 
 const LABELS_TITLE = ["Scoala", "Domen"]
@@ -25,16 +27,21 @@ class Item {
 
     static disableColor = DISABLE_COLOR
 
-    constructor(id, value, parentId, isActive, isVisible) {
+    static mouseEnterColor = MOUSE_ENTER_COLOR
+
+    constructor(id, value, parentId, isActive=false,
+                isVisible=true, isMouseEnter=false) {
         this.id = id;
         this.value = value;
         this.parentId = parentId;
         this.isActive = isActive;
         this.isVisible = isVisible;
+        this.isMouseEnter = isMouseEnter;
     }
 
     color() {
-        return this.isActive ? Item.activeColor : Item.disableColor;
+        return this.isMouseEnter ? Item.mouseEnterColor :
+            this.isActive ? Item.activeColor : Item.disableColor;
     }
 
     setActive(isActive) {
@@ -46,6 +53,10 @@ class Item {
         if (this.isVisible === false) {
             this.setActive(false);
         }
+    }
+
+    setMouseEnter(isMouseEnter) {
+        this.isMouseEnter = isMouseEnter;
     }
 
     static toVisible(items, isVisible) {
@@ -65,10 +76,10 @@ const StudentFilterBar = ({getSchools, getDomains}) => {
     useEffect(() => {
             getSchools().then(schools =>
                 setSchools(schools.map(school =>
-                    new Item(school.id, school.name, null, false, true))))
+                    new Item(school.id, school.name, null))))
             getDomains().then(domains =>
                 setDomains(domains.map(domain =>
-                    new Item(domain.id, domain.name, domain.scienceSchoolId, false, true))))
+                    new Item(domain.id, domain.name, domain.scienceSchoolId))))
         },
         [getDomains, getSchools])
 
@@ -95,6 +106,24 @@ const StudentFilterBar = ({getSchools, getDomains}) => {
         }
     }
 
+    const onMouseEnter = (label, item) => {
+        if (LABELS[0] === label) {
+            domains.forEach(domain => {
+                if(domain.parentId === item.id) {
+                    domain.setMouseEnter(true);
+                }
+            });
+            setDomains([...domains]);
+        }
+    }
+
+    const onMouseLeave = (label) => {
+        if(LABELS[0] === label) {
+            domains.forEach(domain => domain.setMouseEnter(false));
+            setDomains([...domains]);
+        }
+    }
+
     if (schools && domains) {
         return (
             <Container fluid style={{paddingLeft: "0", paddingRight: "0"}}>
@@ -109,6 +138,8 @@ const StudentFilterBar = ({getSchools, getDomains}) => {
                     sizeButton={SIZE_BUTTON}
                     isActiveScroll={IS_ACTIVE_SCROLL}
                     onActiveItems={onSelectedItems}
+                    onMouseEnterItem={onMouseEnter}
+                    onMouseLeaveItem={onMouseLeave}
                 />
                 <br/>
                 <FilterItem
@@ -122,6 +153,8 @@ const StudentFilterBar = ({getSchools, getDomains}) => {
                     sizeButton={SIZE_BUTTON}
                     isActiveScroll={IS_ACTIVE_SCROLL}
                     onActiveItems={onSelectedItems}
+                    onMouseEnterItem={onMouseEnter}
+                    onMouseLeaveItem={onMouseLeave}
                 />
             </Container>
         );
