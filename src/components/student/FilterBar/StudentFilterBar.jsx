@@ -2,32 +2,33 @@ import React, {useEffect, useState} from 'react';
 import {Container} from "react-bootstrap";
 
 import FilterItem from "./FilterItem";
+import {set} from "react-hook-form";
 
-const ALL_VALUE = "Toate"
+const ALL_VALUE = "Toate";
 
-const LABEL_COLOR = "warning"
+const LABEL_COLOR = "warning";
 
-const SIZE_BUTTON = "sm"
+const SIZE_BUTTON = "sm";
 
-const ACTIVE_COLOR = "success"
+const ACTIVE_COLOR = "success";
 
-const DISABLE_COLOR = "outline-secondary"
+const DISABLE_COLOR = "outline-secondary";
 
 const MOUSE_ENTER_COLOR = "secondary";
 
-const LABELS = ["school", "domain"]
+const LABELS = ["school", "domain", "branch", "profile", "Speciality"];
 
-const LABELS_TITLE = ["Scoala", "Domen"]
+const LABELS_TITLE = ["Scoala", "Domen", "Branch", "Profile", "Specialitatea"];
 
-const IS_ACTIVE_SCROLL = false
+const IS_ACTIVE_SCROLL = false;
 
 class Item {
 
-    static activeColor = ACTIVE_COLOR
+    static activeColor = ACTIVE_COLOR;
 
-    static disableColor = DISABLE_COLOR
+    static disableColor = DISABLE_COLOR;
 
-    static mouseEnterColor = MOUSE_ENTER_COLOR
+    static mouseEnterColor = MOUSE_ENTER_COLOR;
 
     constructor(id, value, parentId, isActive=false,
                 isVisible=true, isMouseEnter=false) {
@@ -59,108 +60,219 @@ class Item {
         this.isMouseEnter = isMouseEnter;
     }
 
-    static toVisible(items, isVisible) {
-        items.forEach(item => item.setVisible(isVisible));
-        return items;
-    }
 }
 
 
-const StudentFilterBar = ({getSchools, getDomains}) => {
+const StudentFilterBar = ({getSchools, getDomains, getBranches, getProfiles, getSpecialities}) => {
 
-    const [schools, setSchools] = useState(null)
+    const [schools, setSchools] = useState(null);
 
-    const [domains, setDomains] = useState(null)
+    const [domains, setDomains] = useState(null);
 
+    const [branches, setBranches] = useState(null);
+
+    const [profiles, setProfiles] = useState(null);
+
+    const [specialities, setSpecialities] = useState(null);
 
     useEffect(() => {
             getSchools().then(schools =>
                 setSchools(schools.map(school =>
-                    new Item(school.id, school.name, null))))
+                    new Item(school.id, school.name, null))));
             getDomains().then(domains =>
                 setDomains(domains.map(domain =>
-                    new Item(domain.id, domain.name, domain.scienceSchoolId))))
+                    new Item(domain.id, domain.number + ' ' + domain.name, domain.scienceSchoolId))));
+            getBranches().then(branches =>
+                setBranches(branches.map(branch =>
+                    new Item(branch.id, branch.id + ' ' + branch.name, branch.scienceDomainId))));
+            getProfiles().then(profiles =>
+                setProfiles(profiles.map(profile =>
+                    new Item(profile.id, profile.id + ' ' + profile.name, profile.scienceBranchId))));
+            getSpecialities().then(specialities =>
+                setSpecialities(specialities.map(speciality =>
+                    new Item(speciality.id, speciality.id + ' ' + speciality.name, speciality.scienceProfileId))));
         },
-        [getDomains, getSchools])
+        [getSchools, getDomains, getBranches, getProfiles, getSpecialities])
 
 
     const onSelectedItems = (label, items) => {
+
+        const selectItems = (targetItems, setTargetItems, parentItems=null) => {
+            if(parentItems === null) {
+                targetItems.forEach(item => item.setVisible(true));
+                setTargetItems([...targetItems]);
+                return targetItems;
+            }
+            let selectItems = []
+            console.log(parentItems);
+            targetItems.forEach(targetItem => {
+                let isActive = targetItem.isActive;
+                targetItem.setVisible(false);
+                parentItems.forEach(parentItem => {
+                    if (parentItem.id === targetItem.parentId) {
+                        targetItem.setVisible(true);
+                        if (isActive) {
+                            targetItem.setActive(true);
+                        }
+                        selectItems.push(targetItem)
+                    }
+                })
+            });
+            setTargetItems([...targetItems]);
+            return selectItems;
+        }
+
         if (LABELS[0] === label) {
             if (items.length === 0) {
-                Item.toVisible(domains, true);
+                selectItems(domains, setDomains);
+                selectItems(branches, setBranches);
             } else {
-                domains.forEach(domain => {
-                    let isActive = domain.isActive;
-                    domain.setVisible(false);
-                    items.forEach(item => {
-                        if (item.id === domain.parentId) {
-                            domain.setVisible(true);
-                            if (isActive) {
-                                domain.setActive(true);
-                            }
-                        }
-                    })
-                })
+                let selectDomains = selectItems(domains, setDomains, items);
+                let selectBranches = selectItems(branches, setBranches, selectDomains);
+                let selectProfiles = selectItems(profiles, setProfiles, selectBranches);
+                selectItems(specialities, setSpecialities, selectProfiles);
             }
-            setDomains([...domains]);
+        } else if (LABELS[1] === label) {
+            let selectBranches = selectItems(branches, setBranches, items);
+            let selectProfiles = selectItems(profiles, setProfiles, selectBranches);
+            selectItems(specialities, setSpecialities, selectProfiles);
+        } else if (LABELS[2] === label) {
+            let selectProfiles = selectItems(profiles, setProfiles, items);
+            selectItems(specialities, setSpecialities, selectProfiles);
+        } else if (LABELS[3] === label) {
+            selectItems(specialities, setSpecialities, items);
         }
     }
 
     const onMouseEnter = (label, item) => {
-        if (LABELS[0] === label) {
-            domains.forEach(domain => {
-                if(domain.parentId === item.id) {
-                    domain.setMouseEnter(true);
-                }
+        const mouseEnter = (targetItems, setTargetItems, parentItems) => {
+            let hoverItems = [];
+            targetItems.forEach(targetItem => {
+                parentItems.forEach(parentItem => {
+                    if(targetItem.parentId === parentItem.id) {
+                        targetItem.setMouseEnter(true);
+                        hoverItems.push(targetItem)
+                    }
+                })
             });
-            setDomains([...domains]);
+            setTargetItems([...targetItems]);
+            return hoverItems;
+        }
+
+        if (LABELS[0] === label) {
+            let hoverDomains = mouseEnter(domains, setDomains, [item]);
+            let hoverBranches = mouseEnter(branches, setBranches, hoverDomains);
+            let hoverProfiles = mouseEnter(profiles, setProfiles, hoverBranches);
+            mouseEnter(specialities, setSpecialities, hoverProfiles);
+        } else if(LABELS[1] === label) {
+            mouseEnter(branches, setBranches, [item]);
         }
     }
 
     const onMouseLeave = (label) => {
+
+        const mouseLeave = (targetItems, setTargetItems) => {
+            targetItems.forEach(item => item.setMouseEnter(false));
+            setTargetItems([...targetItems]);
+        }
         if(LABELS[0] === label) {
-            domains.forEach(domain => domain.setMouseEnter(false));
-            setDomains([...domains]);
+            mouseLeave(domains, setDomains);
+            mouseLeave(branches, setBranches);
+            mouseLeave(profiles, setProfiles);
+            mouseLeave(specialities, setSpecialities);
+        } else if(LABELS[1] === label) {
+            mouseLeave(branches, setBranches);
         }
     }
 
-    if (schools && domains) {
         return (
             <Container fluid style={{paddingLeft: "0", paddingRight: "0"}}>
-                <FilterItem
-                    label={LABELS[0]}
-                    labelTitle={LABELS_TITLE[0]}
-                    allItemValue={ALL_VALUE}
-                    allItems={schools}
-                    activeColor={ACTIVE_COLOR}
-                    disableColor={DISABLE_COLOR}
-                    labelColor={LABEL_COLOR}
-                    sizeButton={SIZE_BUTTON}
-                    isActiveScroll={IS_ACTIVE_SCROLL}
-                    onActiveItems={onSelectedItems}
-                    onMouseEnterItem={onMouseEnter}
-                    onMouseLeaveItem={onMouseLeave}
-                />
-                <br/>
-                <FilterItem
-                    label={LABELS[1]}
-                    labelTitle={LABELS_TITLE[1]}
-                    allItemValue={ALL_VALUE}
-                    allItems={domains}
-                    activeColor={ACTIVE_COLOR}
-                    disableColor={DISABLE_COLOR}
-                    labelColor={LABEL_COLOR}
-                    sizeButton={SIZE_BUTTON}
-                    isActiveScroll={IS_ACTIVE_SCROLL}
-                    onActiveItems={onSelectedItems}
-                    onMouseEnterItem={onMouseEnter}
-                    onMouseLeaveItem={onMouseLeave}
-                />
+                {schools ?
+                    <div>
+                        <FilterItem
+                            label={LABELS[0]}
+                            labelTitle={LABELS_TITLE[0]}
+                            allItemValue={ALL_VALUE}
+                            allItems={schools}
+                            activeColor={ACTIVE_COLOR}
+                            disableColor={DISABLE_COLOR}
+                            labelColor={LABEL_COLOR}
+                            sizeButton={SIZE_BUTTON}
+                            isActiveScroll={IS_ACTIVE_SCROLL}
+                            onActiveItems={onSelectedItems}
+                            onMouseEnterItem={onMouseEnter}
+                            onMouseLeaveItem={onMouseLeave}/>
+                        <br/>
+                    </div> : <></>}
+                {domains ?
+                    <div>
+                        <FilterItem
+                            label={LABELS[1]}
+                            labelTitle={LABELS_TITLE[1]}
+                            allItemValue={ALL_VALUE}
+                            allItems={domains}
+                            activeColor={ACTIVE_COLOR}
+                            disableColor={DISABLE_COLOR}
+                            labelColor={LABEL_COLOR}
+                            sizeButton={SIZE_BUTTON}
+                            isActiveScroll={IS_ACTIVE_SCROLL}
+                            onActiveItems={onSelectedItems}
+                            onMouseEnterItem={onMouseEnter}
+                            onMouseLeaveItem={onMouseLeave}/>
+                        <br/>
+                    </div> : <></>}
+                {branches ?
+                    <div>
+                        <FilterItem
+                            label={LABELS[2]}
+                            labelTitle={LABELS_TITLE[2]}
+                            allItemValue={ALL_VALUE}
+                            allItems={branches}
+                            activeColor={ACTIVE_COLOR}
+                            disableColor={DISABLE_COLOR}
+                            labelColor={LABEL_COLOR}
+                            sizeButton={SIZE_BUTTON}
+                            isActiveScroll={IS_ACTIVE_SCROLL}
+                            onActiveItems={onSelectedItems}
+                            onMouseEnterItem={onMouseEnter}
+                            onMouseLeaveItem={onMouseLeave}/>
+                        <br/>
+                    </div> : <></>}
+                {profiles ?
+                    <div>
+                        <FilterItem
+                            label={LABELS[3]}
+                            labelTitle={LABELS_TITLE[3]}
+                            allItemValue={ALL_VALUE}
+                            allItems={profiles}
+                            activeColor={ACTIVE_COLOR}
+                            disableColor={DISABLE_COLOR}
+                            labelColor={LABEL_COLOR}
+                            sizeButton={SIZE_BUTTON}
+                            isActiveScroll={IS_ACTIVE_SCROLL}
+                            onActiveItems={onSelectedItems}
+                            onMouseEnterItem={onMouseEnter}
+                            onMouseLeaveItem={onMouseLeave}/>
+                        <br/>
+                    </div> : <></>}
+                {specialities ?
+                    <div>
+                        <FilterItem
+                            label={LABELS[4]}
+                            labelTitle={LABELS_TITLE[4]}
+                            allItemValue={ALL_VALUE}
+                            allItems={specialities}
+                            activeColor={ACTIVE_COLOR}
+                            disableColor={DISABLE_COLOR}
+                            labelColor={LABEL_COLOR}
+                            sizeButton={SIZE_BUTTON}
+                            isActiveScroll={IS_ACTIVE_SCROLL}
+                            onActiveItems={onSelectedItems}
+                            onMouseEnterItem={onMouseEnter}
+                            onMouseLeaveItem={onMouseLeave}/>
+                    </div> : <></>}
             </Container>
         );
-    } else {
-        return <></>
-    }
 };
 
 export {Item};

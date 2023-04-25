@@ -72,6 +72,25 @@ function App() {
         return response.data;
     }
 
+    async function getBranches() {
+        console.log("App -> all branches")
+        const response = await axios.get('http://localhost:8080/api/sciences/branches')
+        return response.data;
+    }
+
+    async function getProfiles() {
+        console.log("App -> all profiles")
+        const response = await axios.get('http://localhost:8080/api/sciences/profiles')
+        return response.data;
+    }
+
+    async function getSpecialities() {
+        console.log("App -> all specialities")
+        const response = await axios.get('http://localhost:8080/api/sciences/specialities')
+        return response.data;
+    }
+
+
     async function getSupervisorsBySchoolId(id) {
         console.log("StudentForm ---> load supervisors")
         const response = await axios.get('http://localhost:8080/api/supervisors/schools/' + id)
@@ -92,106 +111,18 @@ function App() {
         console.log(response.data);
         setStudentPrint(response.data);
     }
-    // const studentPrint = {
-    //     id: 1,
-    //     corporateEmail: 'ion.ionita@usm.com',
-    //     firstName: 'Ion',
-    //     lastName: 'Ionita',
-    //     patronymicName: 'Ionca',
-    //     yearBirth: 2002,
-    //     identNumber: '123456789123',
-    //     gender: 'M',
-    //     citizenship: {
-    //         id: 1,
-    //         country: 'Republica Moldova',
-    //     },
-    //     diplomaSeries: 'AMP12345678',
-    //     diplomaNumber: '12345678',
-    //     personalEmail: 'ion.ionita@gmial.com',
-    //     phoneNumber: '067412255',
-    //     status: 'ACTIVE',
-    //     registration: 'ENROLLED',
-    //     orders: [
-    //         {
-    //             number: '11c-4', date: '12-07-2022',
-    //             orderSubtype: {
-    //                 order: 'Inmatriculare',
-    //                 orderType: {order: 'Inmatriculat in anul I'}
-    //             }
-    //         }
-    //     ],
-    //     yearStudy: 'I',
-    //     beginStudies: '12-04-2020',
-    //     endStudies: '12-04-2023',
-    //     studyType: 'FREQUENCY',
-    //     financing: 'BUDGET',
-    //     remark: 'info',
-    //     supervisor: {
-    //         firstName: 'Andronic',
-    //         lastName: 'Larisa',
-    //         post: 'conferențiar cercetător',
-    //         speciality: 'doctor habilitat în științe biologice'
-    //     },
-    //     speciality: {
-    //         name: 'Chimie anorganică',
-    //         id: 141.01,
-    //         scienceProfile: {
-    //             name: 'Chimie anorganică',
-    //             scienceBranch: {
-    //                 name: 'Ştiinţe chimice',
-    //                 scienceDomain: {
-    //                     name: 'Științe ale naturii',
-    //                     scienceSchool: {
-    //                         name: 'Științe Biologice, Geonomice, Chimice și Tehnologice',
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     },
-    //     steeringCommittee: [{
-    //         firstName: 'Andronic',
-    //         lastName: 'Larisa',
-    //         post: 'conferențiar cercetător',
-    //         speciality: 'doctor habilitat în științe biologice'
-    //     }, {
-    //         firstName: 'Andronic',
-    //         lastName: 'Larisa',
-    //         post: 'conferențiar cercetător',
-    //         speciality: 'doctor habilitat în științe biologice'
-    //     }],
-    //     scienceTopic: 'topic to searching',
-    // }
+
     return (
         <div style={{"margin": "40px 10%"}}>
-            {/*{ studentPrint !== null ? <StudentPrint student={studentPrint}/>*/}
-            {/*    : <Button onClick={e => getStudentById(1)}>GET</Button>}*/}
 
-
-            {/*{ studentPrint !== null ? <StudentForm*/}
-            {/*    student={null}*/}
-            {/*    setStudent={setStudent}*/}
-            {/*    countries={countries}*/}
-            {/*    orders={orders}*/}
-            {/*    schools={schools}*/}
-            {/*    specialities={{items: specialities, get: getSpecialitiesBySchoolId}}*/}
-            {/*    supervisors={{items: supervisors, get: getSupervisorsBySchoolId}}*/}
-            {/*/>*/}
-            {/*    : <Button onClick={e => getStudentById(1)}>GET</Button>}*/}
             <StudentFilterBar
                 getSchools={getSchools}
                 getDomains={getDomains}
+                getBranches={getBranches}
+                getProfiles={getProfiles}
+                getSpecialities={getSpecialities}
             />
-            {/*{ schools.length !== 0 || domains.length !== 0 ?*/}
-            {/*    <StudentFilterBar*/}
-            {/*        schools={getSchools}*/}
-            {/*        domains={getDomains}*/}
-            {/*    /> :*/}
-            {/*    <Button onClick={*/}
-            {/*        () => {*/}
-            {/*            getDomains();*/}
-            {/*            getSchools();*/}
-            {/*        }*/}
-            {/*    }>GET</Button>}*/}
+
             <div style={{paddingBottom: "5em"}}/>
             { supervisors !== null ? <SupervisorList supervisors={supervisors} onSelectedSupervisor={e => console.log(e)}/> :
                 <Button onClick={e => getSupervisorsBySchoolId(1)}>GET</Button>}

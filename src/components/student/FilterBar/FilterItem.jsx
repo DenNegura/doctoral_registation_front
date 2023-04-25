@@ -38,7 +38,7 @@ const FilterItem = ({label, labelTitle, allItemValue, allItems,
         let newItems = [...items]
         newItems.forEach(item => item.setActive(false));
         setItems(newItems);
-        onActiveItems(label, [])
+        onActiveItems(label, getVisibleItems(newItems))
     }
 
     const select = (item, index) => {
@@ -51,12 +51,13 @@ const FilterItem = ({label, labelTitle, allItemValue, allItems,
 
         newItems[index] = item;
         setItems(newItems);
-        onActiveItems(label, getActiveItems(newItems));
 
         if(containsActiveItems(newItems)) {
             setAllItemColor(disableColor);
+            onActiveItems(label, getActiveItems(newItems));
         } else {
             setAllItemColor(activeColor);
+            onActiveItems(label, getVisibleItems(newItems));
         }
     }
 
@@ -70,6 +71,15 @@ const FilterItem = ({label, labelTitle, allItemValue, allItems,
         return activeItems;
     }
 
+    const getVisibleItems = (items) => {
+        let visibleItems = []
+        items.forEach(item => {
+            if(item.isVisible) {
+                visibleItems.push(item);
+            }
+        })
+        return visibleItems;
+    }
     const containsActiveItems = (items) => {
         for(let i = 0; i < items.length; i++) {
             if(items[i].isActive) {
