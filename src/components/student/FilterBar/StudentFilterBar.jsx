@@ -96,51 +96,61 @@ const StudentFilterBar = ({getSchools, getDomains, getBranches, getProfiles, get
 
 
     const onSelectedItems = (label, items) => {
+        console.log(items)
 
-        const selectItems = (targetItems, setTargetItems, parentItems=null) => {
-            if(parentItems === null) {
-                targetItems.forEach(item => item.setVisible(true));
-                setTargetItems([...targetItems]);
-                return targetItems;
+        const getItems = (targetItems, setTargetItems, parentItems) => {
+            let selectedParentItems = [];
+            parentItems.forEach(item => {
+                if(item.isActive) {
+                    selectedParentItems.push(item);
+                }
+            });
+            console.log(selectedParentItems)
+            let items;
+            if(selectedParentItems.length === 0) {
+                items = getVisibleItems(targetItems, parentItems);
+            } else {
+                items = getVisibleItems(targetItems, selectedParentItems);
             }
-            let selectItems = []
-            console.log(parentItems);
+            setTargetItems([...targetItems]);
+            console.log('getItems  -> ', items);
+            return items;
+        }
+
+        const getVisibleItems = (targetItems, parentItems) => {
+            let items = []
             targetItems.forEach(targetItem => {
+                console.log('getVisible  -> ', targetItem);
                 let isActive = targetItem.isActive;
                 targetItem.setVisible(false);
-                parentItems.forEach(parentItem => {
-                    if (parentItem.id === targetItem.parentId) {
+                for(let i = 0; i < parentItems.length; i++) {
+                    if (parentItems[i].id === targetItem.parentId) {
                         targetItem.setVisible(true);
                         if (isActive) {
                             targetItem.setActive(true);
                         }
-                        selectItems.push(targetItem)
+                        items.push(targetItem);
+                        break;
                     }
-                })
+                }
             });
-            setTargetItems([...targetItems]);
-            return selectItems;
+            return items;
         }
 
-        if (LABELS[0] === label) {
-            if (items.length === 0) {
-                selectItems(domains, setDomains);
-                selectItems(branches, setBranches);
-            } else {
-                let selectDomains = selectItems(domains, setDomains, items);
-                let selectBranches = selectItems(branches, setBranches, selectDomains);
-                let selectProfiles = selectItems(profiles, setProfiles, selectBranches);
-                selectItems(specialities, setSpecialities, selectProfiles);
-            }
-        } else if (LABELS[1] === label) {
-            let selectBranches = selectItems(branches, setBranches, items);
-            let selectProfiles = selectItems(profiles, setProfiles, selectBranches);
-            selectItems(specialities, setSpecialities, selectProfiles);
-        } else if (LABELS[2] === label) {
-            let selectProfiles = selectItems(profiles, setProfiles, items);
-            selectItems(specialities, setSpecialities, selectProfiles);
-        } else if (LABELS[3] === label) {
-            selectItems(specialities, setSpecialities, items);
+        if (LABELS[0] === label) { // schools
+            let selectDomains = getItems(domains, setDomains, items);
+            let selectBranches = getItems(branches, setBranches, selectDomains);
+            let selectProfiles = getItems(profiles, setProfiles, selectBranches);
+            getItems(specialities, setSpecialities, selectProfiles);
+        } else if (LABELS[1] === label) { // domains
+            let selectBranches = getItems(branches, setBranches, items);
+            let selectProfiles = getItems(profiles, setProfiles, selectBranches);
+            getItems(specialities, setSpecialities, selectProfiles);
+        } else if (LABELS[2] === label) { // branches
+            let selectProfiles = getItems(profiles, setProfiles, items);
+            getItems(specialities, setSpecialities, selectProfiles);
+        } else if (LABELS[3] === label) { // profiles
+            getItems(specialities, setSpecialities, items);
         }
     }
 
@@ -165,7 +175,14 @@ const StudentFilterBar = ({getSchools, getDomains, getBranches, getProfiles, get
             let hoverProfiles = mouseEnter(profiles, setProfiles, hoverBranches);
             mouseEnter(specialities, setSpecialities, hoverProfiles);
         } else if(LABELS[1] === label) {
-            mouseEnter(branches, setBranches, [item]);
+            let hoverBranches = mouseEnter(branches, setBranches, [item]);
+            let hoverProfiles = mouseEnter(profiles, setProfiles, hoverBranches);
+            mouseEnter(specialities, setSpecialities, hoverProfiles);
+        } else if(LABELS[2] === label) {
+            let hoverProfiles = mouseEnter(profiles, setProfiles, [item]);
+            mouseEnter(specialities, setSpecialities, hoverProfiles);
+        } else if(LABELS[3] === label) {
+            mouseEnter(specialities, setSpecialities, [item]);
         }
     }
 
@@ -182,6 +199,13 @@ const StudentFilterBar = ({getSchools, getDomains, getBranches, getProfiles, get
             mouseLeave(specialities, setSpecialities);
         } else if(LABELS[1] === label) {
             mouseLeave(branches, setBranches);
+            mouseLeave(profiles, setProfiles);
+            mouseLeave(specialities, setSpecialities);
+        } else if(LABELS[2] === label) {
+            mouseLeave(profiles, setProfiles);
+            mouseLeave(specialities, setSpecialities);
+        } else if(LABELS[3] === label) {
+            mouseLeave(specialities, setSpecialities);
         }
     }
 
