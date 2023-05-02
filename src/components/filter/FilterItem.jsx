@@ -1,13 +1,63 @@
 import React, {useEffect, useState} from 'react';
 import Col from "react-bootstrap/Col";
-import classes from "../StudentStyles.module.css";
+import classes from "./FilterStyles.module.css";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import {Card} from "react-bootstrap";
+import Settings from "./settings";
 
-const FilterItem = ({label, labelTitle, allItemValue, allItems,
-                        activeColor, disableColor, labelColor, sizeButton,
-                        isActiveScroll, onActiveItems, onMouseEnterItem, onMouseLeaveItem}) => {
+class Item {
+
+    static activeColor = Settings.ACTIVE_COLOR;
+
+    static disableColor = Settings.DISABLE_COLOR;
+
+    static mouseEnterColor = Settings.MOUSE_ENTER_COLOR;
+
+    constructor(id, value, parentId, isActive = false,
+                isVisible = true, isMouseEnter = false) {
+        this.id = id;
+        this.value = value;
+        this.parentId = parentId;
+        this.isActive = isActive;
+        this.isVisible = isVisible;
+        this.isMouseEnter = isMouseEnter;
+    }
+
+    color() {
+        return this.isMouseEnter ? Item.mouseEnterColor :
+            this.isActive ? Item.activeColor : Item.disableColor;
+    }
+
+    setActive(isActive) {
+        this.isActive = isActive;
+    }
+
+    setVisible(isVisible) {
+        this.isVisible = isVisible;
+        if (this.isVisible === false) {
+            this.setActive(false);
+        }
+    }
+
+    setMouseEnter(isMouseEnter) {
+        this.isMouseEnter = isMouseEnter;
+    }
+
+    static getActiveItems(items) {
+        return items.filter(item => item.isActive);
+    }
+
+}
+
+const FilterItem = ({label, labelTitle, allItems,
+                        allItemValue = Settings.ALL_VALUE,
+                        activeColor = Settings.ACTIVE_COLOR,
+                        disableColor = Settings.DISABLE_COLOR,
+                        labelColor = Settings.LABEL_COLOR,
+                        sizeButton = Settings.SIZE_BUTTON,
+                        isActiveScroll = Settings.IS_ACTIVE_SCROLL,
+                        onActiveItems, onMouseEnterItem, onMouseLeaveItem}) => {
 
     const [isScroll, setScroll] = useState(isActiveScroll);
 
@@ -130,5 +180,7 @@ const FilterItem = ({label, labelTitle, allItemValue, allItems,
         </Card>
     );
 };
+
+export {Item};
 
 export default FilterItem;

@@ -227,7 +227,7 @@ const OrderForm = ({orders, studentOrders}) => {
                             </Col>
                             <Col md={"auto"}>
                                 <Button variant="outline-danger"
-                                        onClick={e => console.log(selectedOrder)}
+                                        onClick={() => console.log(selectedOrder)}
                                 >Sterge ordin</Button>
                             </Col>
                         </Row>

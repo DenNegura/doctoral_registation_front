@@ -3,9 +3,13 @@ import axios from "axios";
 import React, {useState} from "react";
 import Button from "react-bootstrap/Button";
 import SupervisorList from "./components/SupervisorList";
-import StudentFilterBar from "./components/student/FilterBar/StudentFilterBar";
+import FilterSciences from "./components/filter/student/FilterSciences";
+import StudentForm from "./components/StudentForm";
+import FilterAccordion from "./components/filter/student/FilterAccordion";
 
 function App() {
+
+    const SERVER = 'http://localhost:8080'
 
     // const [orders, setOrders] = useState([])
 
@@ -47,7 +51,7 @@ function App() {
 
     async function getSpecialitiesBySchoolId(id) {
         console.log("StudentForm ---> load specialities")
-        const response = await axios.get('http://localhost:8080/api/sciences/specialities/schools/' + id)
+        const response = await axios.get( SERVER+'/api/sciences/specialities/schools/' + id)
         setSpecialities(response.data.map(item => {
             return {id: item.id, value: item.id + ' ' + item.name}
         }));
@@ -60,40 +64,40 @@ function App() {
 
     async function getSchools() {
         console.log("App -> all schools")
-        const response = await axios.get('http://localhost:8080/api/sciences/schools')
+        const response = await axios.get(SERVER + '/api/sciences/schools')
         // setSchools(response.data);
         return response.data;
     }
 
-    async function getDomains() {
+    async function getDomains(schoolId) {
         console.log("App -> all domains")
-        const response = await axios.get('http://localhost:8080/api/sciences/domains')
+        const response = await axios.get(SERVER + '/api/sciences/domains')
         //setDomains(response.data);
         return response.data;
     }
 
     async function getBranches() {
         console.log("App -> all branches")
-        const response = await axios.get('http://localhost:8080/api/sciences/branches')
+        const response = await axios.get(SERVER + '/api/sciences/branches')
         return response.data;
     }
 
     async function getProfiles() {
         console.log("App -> all profiles")
-        const response = await axios.get('http://localhost:8080/api/sciences/profiles')
+        const response = await axios.get(SERVER + '/api/sciences/profiles')
         return response.data;
     }
 
     async function getSpecialities() {
         console.log("App -> all specialities")
-        const response = await axios.get('http://localhost:8080/api/sciences/specialities')
+        const response = await axios.get(SERVER + '/api/sciences/specialities')
         return response.data;
     }
 
 
     async function getSupervisorsBySchoolId(id) {
         console.log("StudentForm ---> load supervisors")
-        const response = await axios.get('http://localhost:8080/api/supervisors/schools/' + id)
+        const response = await axios.get(SERVER + '/api/supervisors/schools/' + id)
         // setSupervisors(response.data.map(item => {
         //     return {
         //         id: item.id,
@@ -107,22 +111,27 @@ function App() {
 
     async function getStudentById(id) {
         console.log("StudentForm ---> load student " + id)
-        const response = await axios.get('http://localhost:8080/api/students/' + id)
+        const response = await axios.get(SERVER + '/api/students/' + id)
         console.log(response.data);
         setStudentPrint(response.data);
     }
 
     return (
         <div style={{"margin": "40px 10%"}}>
-
-            <StudentFilterBar
+            <FilterAccordion
                 getSchools={getSchools}
                 getDomains={getDomains}
                 getBranches={getBranches}
                 getProfiles={getProfiles}
-                getSpecialities={getSpecialities}
-            />
-
+                getSpecialities={getSpecialities}>
+            </FilterAccordion>
+            {/*<FilterSciences*/}
+            {/*    getSchools={getSchools}*/}
+            {/*    getDomains={getDomains}*/}
+            {/*    getBranches={getBranches}*/}
+            {/*    getProfiles={getProfiles}*/}
+            {/*    getSpecialities={getSpecialities}*/}
+            {/*/>*/}
             <div style={{paddingBottom: "5em"}}/>
             { supervisors !== null ? <SupervisorList supervisors={supervisors} onSelectedSupervisor={e => console.log(e)}/> :
                 <Button onClick={e => getSupervisorsBySchoolId(1)}>GET</Button>}
