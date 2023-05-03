@@ -44,10 +44,18 @@ class Item {
         this.isMouseEnter = isMouseEnter;
     }
 
+    equals(item) {
+        return this.id === item.id;
+    }
+    
     static getActiveItems(items) {
         return items.filter(item => item.isActive);
     }
 
+    static sort(items) {
+        return items.sort((a, b) => a.id > b.id);
+    }
+    
 }
 
 const FilterItem = ({label, labelTitle, allItems,
@@ -57,22 +65,35 @@ const FilterItem = ({label, labelTitle, allItems,
                         labelColor = Settings.LABEL_COLOR,
                         sizeButton = Settings.SIZE_BUTTON,
                         isActiveScroll = Settings.IS_ACTIVE_SCROLL,
-                        onActiveItems, onMouseEnterItem, onMouseLeaveItem}) => {
+                        onActiveItems, onMouseEnterItem, onMouseLeaveItem,
+                        defaultSelectItem = null,
+                        isMultipleSelect = true}) => {
 
     const [isScroll, setScroll] = useState(isActiveScroll);
 
     const [allItemColor, setAllItemColor] = useState(activeColor);
 
     const [items, setItems] = useState([]);
+    
+    const [defaultItem, setDefaultItem] = useState(null);
 
     useEffect(() => {
         setItems([...allItems])
-        if(containsActiveItems(allItems)) {
-            setAllItemColor(disableColor);
+        if(isMultipleSelect) {
+            if(containsActiveItems(allItems)) {
+                setAllItemColor(disableColor);
+            } else {
+                setAllItemColor(activeColor);
+            }   
         } else {
-            setAllItemColor(activeColor);
+            let item = allItems.filter(item =>
+                item.equals(defaultSelectItem))[0];
+            if(!item) {
+                item = allItems[0];
+            }
+            setDefaultItem(item);
         }
-    }, [activeColor, allItems, disableColor])
+    }, [activeColor, allItems, defaultSelectItem, disableColor, isMultipleSelect])
 
 
     const changeScroll = () => {
@@ -91,7 +112,7 @@ const FilterItem = ({label, labelTitle, allItems,
         onActiveItems(label, getVisibleItems(newItems))
     }
 
-    const select = (item, index) => {
+    const multipleSelect = (item, index) => {
         let newItems = [...items]
         if(item.isActive) {
             item.setActive(false);
@@ -108,6 +129,30 @@ const FilterItem = ({label, labelTitle, allItems,
         } else {
             setAllItemColor(activeColor);
             onActiveItems(label, getVisibleItems(newItems));
+        }
+    }
+
+    const onlySelect = (item, index) => {
+        let newItems = [...items]
+        let activeItem;
+        if(item.isActive) {
+            item.setActive(false);
+            defaultItem.setActive(true);
+            activeItem = defaultItem;
+        } else {
+            newItems.forEach(item => item.setActive(false))
+            item.setActive(true);
+            activeItem = item;
+        }
+        newItems[index] = item;
+        setItems(newItems);
+        onActiveItems(label, [activeItem]);
+    }
+    const select = (item, index) => {
+        if(isMultipleSelect) {
+            multipleSelect(item, index);
+        } else {
+            onlySelect(item, index);
         }
     }
 
@@ -152,14 +197,17 @@ const FilterItem = ({label, labelTitle, allItems,
                             {labelTitle}
                         </Button>
                     </Col>
-                    <Col className={classes.colFilterBar}>
-                        <Button
-                            variant={allItemColor}
-                            size={sizeButton}
-                            onClick={() => selectAll()}>
-                            {allItemValue}
-                        </Button>
-                    </Col>
+                    {isMultipleSelect ?
+                        <Col className={classes.colFilterBar}>
+                            <Button
+                                variant={allItemColor}
+                                size={sizeButton}
+                                onClick={() => selectAll()}>
+                                {allItemValue}
+                            </Button>
+                        </Col> :
+                        <></>
+                    }
                     {items.map((item, index) => {
                         if(item.isVisible) {
                             return <Col key={item.id} className={classes.colFilterBar}>

@@ -69,9 +69,15 @@ function App() {
         return response.data;
     }
 
+    // async function getDomains(schoolId) {
+    //     console.log("App -> all domains")
+    //     const response = await axios.get(SERVER + '/api/sciences/domains')
+    //     //setDomains(response.data);
+    //     return response.data;
+    // }
     async function getDomains(schoolId) {
         console.log("App -> all domains")
-        const response = await axios.get(SERVER + '/api/sciences/domains')
+        const response = await axios.get(SERVER + '/api/sciences/domains/school/' + schoolId)
         //setDomains(response.data);
         return response.data;
     }
@@ -96,7 +102,7 @@ function App() {
 
 
     async function getSupervisorsBySchoolId(id) {
-        console.log("StudentForm ---> load supervisors")
+        console.log("App -> load supervisors")
         const response = await axios.get(SERVER + '/api/supervisors/schools/' + id)
         // setSupervisors(response.data.map(item => {
         //     return {
@@ -104,7 +110,7 @@ function App() {
         //         value: item.firstName + ' ' + item.lastName + ', ' + item.post + ', ' + item.speciality
         //     }
         // }));
-        setSupervisors(response.data)
+        return response.data;
     }
 
     const [studentPrint, setStudentPrint] = useState(null);
@@ -121,9 +127,7 @@ function App() {
             <FilterAccordion
                 getSchools={getSchools}
                 getDomains={getDomains}
-                getBranches={getBranches}
-                getProfiles={getProfiles}
-                getSpecialities={getSpecialities}>
+                getSupervisors={getSupervisorsBySchoolId}>
             </FilterAccordion>
             {/*<FilterSciences*/}
             {/*    getSchools={getSchools}*/}
