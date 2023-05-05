@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Accordion, Container} from "react-bootstrap";
 
 
-import FilterItem, {Item} from "../components/FilterItem";
+import FilterItem from "../components/FilterItem";
+import Item from "../components/Item";
 
 const LABELS_ACCORDION = ["school", "domain", "supervisor"]
 

@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Accordion, Container} from "react-bootstrap";
-import FilterItem, {Item} from "../components/FilterItem";
 import STUDENT_PROPERTIES from "../../student/properties";
+import Item from "../components/Item";
+import FilterItem from "../components/FilterItem";
 
 const LABELS_ACCORDION = ["property"]
 

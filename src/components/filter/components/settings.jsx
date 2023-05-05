@@ -17,7 +17,7 @@ class Settings {
 
     static LABEL_SEARCH = '🔎';
 
-    static LABEL_INPUT = ''
+    static LABEL_INPUT = '🖊️';
 }
 
 export default Settings;

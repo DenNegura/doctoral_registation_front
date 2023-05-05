@@ -4,10 +4,8 @@ import classes from "../FilterStyles.module.css";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import {Card} from "react-bootstrap";
-import Settings from "./settings";
-import Form from "react-bootstrap/Form";
-import FilterSearchOption from "./FilterOption";
 import FilterOption from "./FilterOption";
+import Settings from "./settings";
 
 
 const defaultSortedItems = (label, item) => {
