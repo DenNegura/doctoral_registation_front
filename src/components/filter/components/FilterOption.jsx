@@ -20,7 +20,8 @@ const FilterOption = ({label, onSubmit, onChange,
         }
     }
 
-    const onSubmitFunction = () => {
+    const onSubmitFunction = (e) => {
+        e.preventDefault()
         setValue(value);
         if(onSubmit !== undefined) {
             onSubmit(value);
@@ -44,7 +45,6 @@ const FilterOption = ({label, onSubmit, onChange,
                     {label}
                 </Button>
             </Col>
-
             {isVisible ?
                 <Col className={classes.colFilterBar}>
                     <Form onSubmit={onSubmitFunction}>

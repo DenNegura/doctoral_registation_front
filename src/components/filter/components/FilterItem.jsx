@@ -6,11 +6,7 @@ import Row from "react-bootstrap/Row";
 import {Card} from "react-bootstrap";
 import FilterOption from "./FilterOption";
 import Settings from "./settings";
-
-
-const defaultSortedItems = (label, item) => {
-
-}
+import FilterUtils from "./FilterUtils"
 
 const FilterItem = ({label, labelTitle, allItems,
                         allItemValue = Settings.ALL_VALUE,
@@ -51,22 +47,6 @@ const FilterItem = ({label, labelTitle, allItems,
         }
     }, [activeColor, allItems, defaultSelectItem, disableColor, isMultipleSelect])
 
-    const submitSearchOption = (e) => {
-        e.preventDefault();
-    }
-
-    const changeSearchOption = (e) => {
-        console.log(e);
-    }
-
-    const submitAddOption = (e) => {
-        e.preventDefault();
-        console.log(e);
-    }
-
-    const changeAddOption = (e) => {
-    }
-
     const changeScroll = () => {
         if(isScroll) {
             setScroll(false);
@@ -80,7 +60,7 @@ const FilterItem = ({label, labelTitle, allItems,
         let newItems = [...items]
         newItems.forEach(item => item.setActive(false));
         setItems(newItems);
-        onActiveItems(label, getVisibleItems(newItems))
+        onActiveItems(label, FilterUtils.getVisibleItems(newItems))
     }
 
     const multipleSelect = (item, index) => {
@@ -96,10 +76,10 @@ const FilterItem = ({label, labelTitle, allItems,
 
         if(containsActiveItems(newItems)) {
             setAllItemColor(disableColor);
-            onActiveItems(label, getActiveItems(newItems));
+            onActiveItems(label, FilterUtils.getActiveItems(newItems));
         } else {
             setAllItemColor(activeColor);
-            onActiveItems(label, getVisibleItems(newItems));
+            onActiveItems(label, FilterUtils.getVisibleItems(newItems));
         }
     }
 
@@ -127,25 +107,6 @@ const FilterItem = ({label, labelTitle, allItems,
         }
     }
 
-    const getActiveItems = (items) => {
-        let activeItems = []
-        items.forEach(item => {
-            if(item.isActive) {
-                activeItems.push(item);
-            }
-        })
-        return activeItems;
-    }
-
-    const getVisibleItems = (items) => {
-        let visibleItems = []
-        items.forEach(item => {
-            if(item.isVisible) {
-                visibleItems.push(item);
-            }
-        })
-        return visibleItems;
-    }
     const containsActiveItems = (items) => {
         for(let i = 0; i < items.length; i++) {
             if(items[i].isActive) {
@@ -170,12 +131,14 @@ const FilterItem = ({label, labelTitle, allItems,
                     </Col>
                     {searchOption != null ?
                         <FilterOption
-                            label={Settings.LABEL_SEARCH}/>
+                            label={Settings.LABEL_SEARCH}
+                            onChange={searchOption}/>
                         : <></>
                     }
                     {addOption != null ?
                         <FilterOption
-                            label={Settings.LABEL_INPUT}/>
+                            label={Settings.LABEL_INPUT}
+                            onSubmit={addOption}/>
                         : <></>
                     }
                     {isMultipleSelect ?

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Accordion, Container} from "react-bootstrap";
 import STUDENT_PROPERTIES from "../../student/properties";
 import Item from "../components/Item";
+import FilterUtils from "../components/FilterUtils"
 import FilterItem from "../components/FilterItem";
 
 const LABELS_ACCORDION = ["property"]
@@ -56,8 +57,9 @@ const FilterProperties = ({getCountries}) => {
     }
 
     const addAgeBirth = (value) => {
+        console.log(value)
         let item = new Item(value, value);
-        if(!Item.includes(ageBirth, item)) {
+        if(FilterUtils.isYear(value) && !FilterUtils.includes(ageBirth, item)) {
             setAgeBirth(ageBirth => [...ageBirth, item]);
         }
     }

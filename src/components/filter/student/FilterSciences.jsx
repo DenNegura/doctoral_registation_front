@@ -4,6 +4,7 @@ import {Accordion, Container} from "react-bootstrap";
 
 import FilterItem from "../components/FilterItem";
 import Item from "../components/Item";
+import FilterUtils from "../components/FilterUtils";
 
 const LABELS_ACCORDION = ["school", "domain", "supervisor"]
 
@@ -82,7 +83,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
         });
     }
     const lazyLoadDomains = () => {
-        let activeSchools = Item.getActiveItems(schools);
+        let activeSchools = FilterUtils.getActiveItems(schools);
         if (activeSchools.length === 0) {
             schools.forEach(school => {
                 if (!loadedDomains.includes(school.id)) {
@@ -104,11 +105,11 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
         getSupervisors(schoolId).then(supervisorList => {
             let loadedSupervisors = supervisorList.map(supervisor =>
                 new Item(supervisor.id, supervisor.firstName + ' ' + supervisor.lastName, supervisor.scienceSchoolId));
-            setSupervisors(supervisors => Item.sort([...supervisors, ...loadedSupervisors]));
+            setSupervisors(supervisors => FilterUtils.sort([...supervisors, ...loadedSupervisors]));
         });
     }
     const lazyLoadSupervisors = () => {
-        let activeSchools = Item.getActiveItems(schools);
+        let activeSchools = FilterUtils.getActiveItems(schools);
         if (activeSchools.length === 0) {
             schools.forEach(school => {
                 if(!loadedSupervisors.includes(school.id)) {
