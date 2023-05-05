@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Accordion, Container} from "react-bootstrap";
 
 
-import FilterItem, {Item} from "../FilterItem";
+import FilterItem, {Item} from "../components/FilterItem";
 
 const LABELS_ACCORDION = ["school", "domain", "supervisor"]
 
@@ -26,7 +26,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
 
     const roleSupervisors = [
         new Item(1, "Conducator", null, true),
-        new Item(2, "Memru comisiei", null)];
+        new Item(2, "Membru comisiei", null)];
 
     const [loadedSupervisors, setLoadedSupervisors] = useState([]);
 

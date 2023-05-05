@@ -1,61 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import Col from "react-bootstrap/Col";
-import classes from "./FilterStyles.module.css";
+import classes from "../FilterStyles.module.css";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import {Card} from "react-bootstrap";
 import Settings from "./settings";
+import Form from "react-bootstrap/Form";
+import FilterSearchOption from "./FilterOption";
+import FilterOption from "./FilterOption";
 
-class Item {
 
-    static activeColor = Settings.ACTIVE_COLOR;
+const defaultSortedItems = (label, item) => {
 
-    static disableColor = Settings.DISABLE_COLOR;
-
-    static mouseEnterColor = Settings.MOUSE_ENTER_COLOR;
-
-    constructor(id, value, parentId, isActive = false,
-                isVisible = true, isMouseEnter = false) {
-        this.id = id;
-        this.value = value;
-        this.parentId = parentId;
-        this.isActive = isActive;
-        this.isVisible = isVisible;
-        this.isMouseEnter = isMouseEnter;
-    }
-
-    color() {
-        return this.isMouseEnter ? Item.mouseEnterColor :
-            this.isActive ? Item.activeColor : Item.disableColor;
-    }
-
-    setActive(isActive) {
-        this.isActive = isActive;
-    }
-
-    setVisible(isVisible) {
-        this.isVisible = isVisible;
-        if (this.isVisible === false) {
-            this.setActive(false);
-        }
-    }
-
-    setMouseEnter(isMouseEnter) {
-        this.isMouseEnter = isMouseEnter;
-    }
-
-    equals(item) {
-        return this.id === item.id;
-    }
-    
-    static getActiveItems(items) {
-        return items.filter(item => item.isActive);
-    }
-
-    static sort(items) {
-        return items.sort((a, b) => a.id > b.id);
-    }
-    
 }
 
 const FilterItem = ({label, labelTitle, allItems,
@@ -67,7 +23,9 @@ const FilterItem = ({label, labelTitle, allItems,
                         isActiveScroll = Settings.IS_ACTIVE_SCROLL,
                         onActiveItems, onMouseEnterItem, onMouseLeaveItem,
                         defaultSelectItem = null,
-                        isMultipleSelect = true}) => {
+                        isMultipleSelect = true,
+                        searchOption = null,
+                        addOption = null}) => {
 
     const [isScroll, setScroll] = useState(isActiveScroll);
 
@@ -95,6 +53,21 @@ const FilterItem = ({label, labelTitle, allItems,
         }
     }, [activeColor, allItems, defaultSelectItem, disableColor, isMultipleSelect])
 
+    const submitSearchOption = (e) => {
+        e.preventDefault();
+    }
+
+    const changeSearchOption = (e) => {
+        console.log(e);
+    }
+
+    const submitAddOption = (e) => {
+        e.preventDefault();
+        console.log(e);
+    }
+
+    const changeAddOption = (e) => {
+    }
 
     const changeScroll = () => {
         if(isScroll) {
@@ -197,6 +170,16 @@ const FilterItem = ({label, labelTitle, allItems,
                             {labelTitle}
                         </Button>
                     </Col>
+                    {searchOption != null ?
+                        <FilterOption
+                            label={Settings.LABEL_SEARCH}/>
+                        : <></>
+                    }
+                    {addOption != null ?
+                        <FilterOption
+                            label={Settings.LABEL_INPUT}/>
+                        : <></>
+                    }
                     {isMultipleSelect ?
                         <Col className={classes.colFilterBar}>
                             <Button
@@ -228,7 +211,5 @@ const FilterItem = ({label, labelTitle, allItems,
         </Card>
     );
 };
-
-export {Item};
 
 export default FilterItem;

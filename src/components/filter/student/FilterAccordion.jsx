@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {Accordion} from "react-bootstrap";
 import FilterSciences from "./FilterSciences";
+import FilterProperties from "./FilterProperties";
 
-const FilterAccordion = ({getSchools, getDomains, getSupervisors}) => {
+const FilterAccordion = ({getSchools, getDomains, getSupervisors, getCountries}) => {
 
     const [selectedPanels, setSelectedPanels] = useState([]);
 
@@ -17,6 +18,8 @@ const FilterAccordion = ({getSchools, getDomains, getSupervisors}) => {
                 getSchools={getSchools}
                 getDomains={getDomains}
                 getSupervisors={getSupervisors}/>
+            <FilterProperties
+                getCountries={getCountries}/>
         </Accordion>
     );
 };

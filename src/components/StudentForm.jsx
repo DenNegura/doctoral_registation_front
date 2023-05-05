@@ -10,6 +10,7 @@ import ScrollList from "./ScrollList/ScrollList";
 import ItemFilter from "./ItemFilter";
 import DateSelect from "./DateSelect";
 import OrderForm from "./OrderForm";
+import STUDENT_PROPERTIES from "./student/properties";
 
 
 const schema = yup.object().shape({
@@ -303,8 +304,9 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                             onChange={handleChange}
                                             isValid={touched.gender && !errors.gender}
                                         >
-                                            <option value="M">Masculin</option>
-                                            <option value="F">Feminin</option>
+                                            {STUDENT_PROPERTIES.GENDER.map(type => {
+                                                return <option key={type.id} value={type.id}>{type.value}</option>
+                                            })}
                                         </Form.Select>
                                     </Form.Group>
                                 </Col>
@@ -456,9 +458,9 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                             onChange={handleChange}
                                             isValid={touched.registration && !errors.registration}
                                         >
-                                            <option value="ENROLLED">Inmatriculat</option>
-                                            <option value="TRANSFERRED">Transferat</option>
-                                            <option value="REINSTATED">Restabilit</option>
+                                            {STUDENT_PROPERTIES.REGISTRATION.map(type => {
+                                                return <option key={type.id} value={type.id}>{type.value}</option>
+                                            })}
                                         </Form.Select>
                                     </Form.Group>
                                 </Col>
@@ -471,8 +473,9 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                             onChange={handleChange}
                                             isValid={touched.studyType && !errors.studyType}
                                         >
-                                            <option value="FREQUENCY">Frecvență</option>
-                                            <option value="LOW_FREQUENCY">Frecvență redusă</option>
+                                            {STUDENT_PROPERTIES.STUDY_TYPE.map(type => {
+                                                return <option key={type.id} value={type.id}>{type.value}</option>
+                                            })}
                                         </Form.Select>
                                     </Form.Group>
                                 </Col>
@@ -485,8 +488,9 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                             onChange={handleChange}
                                             isValid={touched.financing && !errors.financing}
                                         >
-                                            <option value="BUDGET">Budget</option>
-                                            <option value="CONTRACT">Taxă</option>
+                                            {STUDENT_PROPERTIES.FINANCING.map(type => {
+                                                return <option key={type.id} value={type.id}>{type.value}</option>
+                                            })}
                                         </Form.Select>
                                     </Form.Group>
                                 </Col>
@@ -499,12 +503,9 @@ const StudentForm = ({student, setStudent, countries, orders, schools, specialit
                                             onChange={handleChange}
                                             isValid={touched.study && !errors.study}
                                         >
-                                            <option value="I">Anul I</option>
-                                            <option value="II">Anul II</option>
-                                            <option value="III">Anul III</option>
-                                            <option value="IV">Anul IV</option>
-                                            <option value="EXTRA_I">Grație I-II</option>
-                                            <option value="EXTRA_II">Grație II</option>
+                                            {STUDENT_PROPERTIES.YEAR_STUDY.map(type => {
+                                                return <option key={type.id} value={type.id}>{type.value}</option>
+                                            })}
                                         </Form.Select>
                                     </Form.Group>
                                 </Col>

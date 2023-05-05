@@ -82,24 +82,11 @@ function App() {
         return response.data;
     }
 
-    async function getBranches() {
-        console.log("App -> all branches")
-        const response = await axios.get(SERVER + '/api/sciences/branches')
+    async function getCountries() {
+        console.log("App -> all countries")
+        const response = await axios.get(SERVER + '/api/countries')
         return response.data;
     }
-
-    async function getProfiles() {
-        console.log("App -> all profiles")
-        const response = await axios.get(SERVER + '/api/sciences/profiles')
-        return response.data;
-    }
-
-    async function getSpecialities() {
-        console.log("App -> all specialities")
-        const response = await axios.get(SERVER + '/api/sciences/specialities')
-        return response.data;
-    }
-
 
     async function getSupervisorsBySchoolId(id) {
         console.log("App -> load supervisors")
@@ -127,7 +114,8 @@ function App() {
             <FilterAccordion
                 getSchools={getSchools}
                 getDomains={getDomains}
-                getSupervisors={getSupervisorsBySchoolId}>
+                getSupervisors={getSupervisorsBySchoolId}
+                getCountries={getCountries}>
             </FilterAccordion>
             {/*<FilterSciences*/}
             {/*    getSchools={getSchools}*/}
