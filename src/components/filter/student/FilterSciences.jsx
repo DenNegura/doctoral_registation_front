@@ -61,22 +61,22 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
         getDomains(schoolId).then(domainsList => {
             let loadedDomains = domainsList.map(domain =>
                 new Item(domain.id, domain.number + ' ' + domain.name, domain.scienceSchoolId));
-            setDomains(domains => Item.sort([...domains, ...loadedDomains]));
+            setDomains(domains => FilterUtils.sort([...domains, ...loadedDomains]));
             domainsList.forEach(domain => {
                 let branchesList = domain.scienceBranches;
                 let loadedBranches = branchesList.map(branch =>
                     new Item(branch.id, branch.id + ' ' + branch.name, branch.scienceDomainId));
-                setBranches(branches => Item.sort([...branches, ...loadedBranches]));
+                setBranches(branches => FilterUtils.sort([...branches, ...loadedBranches]));
                 branchesList.forEach(branch => {
                     let profilesList = branch.scienceProfiles;
                     let loadedProfiles = profilesList.map(profile =>
                         new Item(profile.id, profile.id + ' ' + profile.name, profile.scienceBranchId));
-                    setProfiles(profiles => Item.sort([...profiles, ...loadedProfiles]));
+                    setProfiles(profiles => FilterUtils.sort([...profiles, ...loadedProfiles]));
                     profilesList.forEach(profile => {
                         let specialitiesList = profile.specialities;
                         let loadedSpecialities = specialitiesList.map(speciality =>
                             new Item(speciality.id, speciality.id + ' ' + speciality.name, speciality.scienceProfileId));
-                        setSpecialities(specialities => Item.sort([...specialities, ...loadedSpecialities]));
+                        setSpecialities(specialities => FilterUtils.sort([...specialities, ...loadedSpecialities]));
                     })
                 })
             })

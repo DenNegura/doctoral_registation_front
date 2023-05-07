@@ -4,9 +4,10 @@ import classes from "../FilterStyles.module.css";
 import Button from "react-bootstrap/Button";
 import Settings from "./settings";
 import Form from "react-bootstrap/Form";
+import {OverlayTrigger, Tooltip} from "react-bootstrap";
 
-const FilterOption = ({label, onSubmit, onChange,
-                      sizeButton = Settings.SIZE_BUTTON}) => {
+const FilterOption = ({label, onSubmit, onChange, tooltip,
+                          sizeButton = Settings.SIZE_BUTTON}) => {
 
     const [isVisible, setVisible] = useState(false);
 
@@ -38,12 +39,27 @@ const FilterOption = ({label, onSubmit, onChange,
     return (
         <>
             <Col className={classes.colFilterBar}>
-                <Button
-                    variant={Settings.OPTION_COLOR}
-                    size={sizeButton}
-                    onClick={changeVisible}>
-                    {label}
-                </Button>
+                {tooltip ?
+                    <OverlayTrigger overlay={
+                        <Tooltip>
+                            {tooltip.map((info, index) => {
+                                return <div key={index}>{info}</div>
+                            })}
+                        </Tooltip>}>
+                        <Button
+                            variant={Settings.OPTION_COLOR}
+                            size={sizeButton}
+                            onClick={changeVisible}>
+                            {label}
+                        </Button>
+                    </OverlayTrigger> :
+                    <Button
+                        variant={Settings.OPTION_COLOR}
+                        size={sizeButton}
+                        onClick={changeVisible}>
+                        {label}
+                    </Button>
+                }
             </Col>
             {isVisible ?
                 <Col className={classes.colFilterBar}>

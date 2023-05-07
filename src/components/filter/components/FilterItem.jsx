@@ -18,8 +18,8 @@ const FilterItem = ({label, labelTitle, allItems,
                         onActiveItems, onMouseEnterItem, onMouseLeaveItem,
                         defaultSelectItem = null,
                         isMultipleSelect = true,
-                        searchOption = null,
-                        addOption = null}) => {
+                        searchOption, searchTooltipOption,
+                        addOption, addTooltipOption}) => {
 
     const [isScroll, setScroll] = useState(isActiveScroll);
 
@@ -132,12 +132,14 @@ const FilterItem = ({label, labelTitle, allItems,
                     {searchOption != null ?
                         <FilterOption
                             label={Settings.LABEL_SEARCH}
+                            tooltip={searchTooltipOption}
                             onChange={searchOption}/>
                         : <></>
                     }
                     {addOption != null ?
                         <FilterOption
                             label={Settings.LABEL_INPUT}
+                            tooltip={addTooltipOption}
                             onSubmit={addOption}/>
                         : <></>
                     }

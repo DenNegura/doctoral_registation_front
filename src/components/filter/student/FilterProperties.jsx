@@ -57,8 +57,25 @@ const FilterProperties = ({getCountries}) => {
     }
 
     const addAgeBirth = (value) => {
-        console.log(value)
-        let item = new Item(value, value);
+        let array = [];
+        let item = null;
+        if(FilterUtils.isYear(value)) {
+            item = new Item(value, value);
+            item.setActive(true);
+            if(FilterUtils.includes(ageBirth, item)) {
+                return;
+            } else {
+                setAgeBirth(ageBirth => [...ageBirth, item]);
+            }
+        } else {
+            array = FilterUtils.parseToList(value);
+            if(array !== []) {
+                array = array.map(item => new Item(item, item, null, true));
+                array = array.filter(item => !FilterUtils.includes(ageBirth, item));
+            } else {
+                return;
+            }
+        }
         if(FilterUtils.isYear(value) && !FilterUtils.includes(ageBirth, item)) {
             setAgeBirth(ageBirth => [...ageBirth, item]);
         }
@@ -153,8 +170,8 @@ const FilterProperties = ({getCountries}) => {
                                 onActiveItems={onSelectedItems}
                                 onMouseEnterItem={onMouseEnter}
                                 onMouseLeaveItem={onMouseLeave}
-                                searchOption={searchAgeBirth}
-                                addOption={addAgeBirth}/>
+                                addOption={addAgeBirth}
+                                addTooltipOption={['Pentru listă, introduceți de la ... până la']}/>
                             <br/>
                         </div>
                     </Container>
