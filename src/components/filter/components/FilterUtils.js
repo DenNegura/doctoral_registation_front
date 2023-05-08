@@ -21,27 +21,65 @@ class FilterUtils {
         return list.filter(item => item.isActive);
     }
 
+    static capitalize(str) {
+        return str.toLowerCase()
+            .replace(/\b\w/g, (match) => match.toUpperCase());
+    }
+
     static isNumber(str) {
         return /^\d+$/.test(str);
     }
 
-    static isYear(str) {
-        return /^[12]\d{3}$/.test(str);
+    static isDay(str) {
+        if(this.isNumber(str)) {
+            let num = Number.parseInt(str);
+            console.log(num)
+            if(num > 0 && num < 32) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    static parseToList(str) {
-        let from = str.slice(0, 4);
-        let to = str.slice(str.length - 4);
-        if(this.isYear(from) && this.isYear(to)) {
-            from = Number.parseInt(from);
-            to = Number.parseInt(to);
-            let array = [];
-            for(; from < to; from++) {
-                array.push(from);
+    static isMouth(str) {
+        if(this.isNumber(str)) {
+            let num = Number.parseInt(str);
+            if(num > 0 && num < 13) {
+                return true;
             }
-            return array;
         }
-        return [];
+        return false;
+    }
+
+    static isYear(str) {
+        if(this.isNumber(str)) {
+            let num = Number.parseInt(str);
+            if(num > 1940 && num < new Date().getFullYear() - 15) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static isFullName(str) {
+        return /^([A-Za-z-]+ )*[A-Za-z-]+$/.test(str);
+    }
+
+    static isDate(str) {
+        let date = str.split(/([./])\s*/);
+        console.log(date)
+        if(date.length === 5) {
+            if(this.isDay(date[0]) &&
+                this.isMouth(date[2]) &&
+                this.isYear(date[4])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static isEmail(str) {
+        return /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(str);
     }
 }
 

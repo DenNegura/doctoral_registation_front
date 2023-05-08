@@ -107,6 +107,18 @@ const FilterItem = ({label, labelTitle, allItems,
         }
     }
 
+    const onMouseEnter = (label, item) => {
+        if(onMouseEnterItem !== undefined) {
+            onMouseEnterItem(label, item);
+        }
+    }
+
+    const onMouseLeave = (label) => {
+        if(onMouseLeaveItem !== undefined) {
+            onMouseLeaveItem(label);
+        }
+    }
+
     const containsActiveItems = (items) => {
         for(let i = 0; i < items.length; i++) {
             if(items[i].isActive) {
@@ -161,8 +173,8 @@ const FilterItem = ({label, labelTitle, allItems,
                                     variant={item.color()}
                                     size={sizeButton}
                                     onClick={() => select(item, index)}
-                                    onMouseEnter={() => onMouseEnterItem(label, item)}
-                                    onMouseLeave={() => onMouseLeaveItem(label)}>
+                                    onMouseEnter={() => onMouseEnter(label, item)}
+                                    onMouseLeave={() => onMouseLeave(label)}>
                                     {item.value}
                                 </Button>
                             </Col>

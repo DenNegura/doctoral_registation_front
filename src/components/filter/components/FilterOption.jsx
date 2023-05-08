@@ -25,14 +25,15 @@ const FilterOption = ({label, onSubmit, onChange, tooltip,
         e.preventDefault()
         setValue(value);
         if(onSubmit !== undefined) {
-            onSubmit(value);
+            onSubmit(value.trim());
         }
+        setValue('')
     }
 
     const onChangeFunction = (value) => {
         setValue(value);
         if(onChange !== undefined) {
-            onChange(value);
+            onChange(value.trim());
         }
     }
 
