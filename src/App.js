@@ -6,6 +6,7 @@ import SupervisorList from "./components/SupervisorList";
 import FilterSciences from "./components/filter/student/FilterSciences";
 import StudentForm from "./components/StudentForm";
 import FilterAccordion from "./components/filter/student/FilterAccordion";
+import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
 
 function App() {
 
@@ -130,8 +131,19 @@ function App() {
                 getCountries={getCountries}
                 setRequestMap={setRequestMap}>
             </FilterAccordion>
-            <div style={{paddingBottom: "5em"}}/>
-            <Button onClick={() => prepareDataToRequest()}>GET</Button>
+            {/*<div style={{paddingBottom: "5em"}}/>*/}
+            <br/>
+            {/*<Button onClick={() => prepareDataToRequest()}>GET</Button>*/}
+            <ButtonToolbar>
+                <ButtonGroup className="me-2">
+                    <Button>Lista</Button>
+                    <Button>Excel</Button>
+                </ButtonGroup>
+                <div style={{width: "1em"}}></div>
+                <ButtonGroup className="me-2">
+                    <Button variant={"danger"}>Sterge filter</Button>
+                </ButtonGroup>
+            </ButtonToolbar>
 
             {/*<div style={{paddingBottom: "5em"}}/>*/}
             {/*{ supervisors !== null ? <SupervisorList supervisors={supervisors} onSelectedSupervisor={e => console.log(e)}/> :*/}
