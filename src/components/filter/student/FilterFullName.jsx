@@ -3,7 +3,7 @@ import FilterItem from "../components/FilterItem";
 import FilterUtils from "../components/FilterUtils";
 import Item from "../components/Item";
 
-const FilterFullName = ({onSelectedItems}) => {
+const FilterFullName = ({onSelectItems}) => {
 
     const LABEL = "full_name";
 
@@ -25,9 +25,9 @@ const FilterFullName = ({onSelectedItems}) => {
               label={LABEL}
               labelTitle={LABEL_TITLE}
               allItems={fullName}
-              onActiveItems={onSelectedItems}
+              onActiveItems={onSelectItems}
               addOption={addFullName}
-              addTooltipOption={['Introduceți numele, prenumele, al doilea prenume']}/>
+              addTooltipOption={['Introduceți numele, prenumele, al doilea prenume.']}/>
             <br/>
         </div>
     );

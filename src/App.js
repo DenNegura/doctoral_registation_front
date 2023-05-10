@@ -1,6 +1,6 @@
 import './App.css';
 import axios from "axios";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import SupervisorList from "./components/SupervisorList";
 import FilterSciences from "./components/filter/student/FilterSciences";
@@ -109,24 +109,33 @@ function App() {
         setStudentPrint(response.data);
     }
 
+    const [requestMap, setRequestMap] = useState(new Map());
+
+    const prepareDataToRequest = () => {
+        let request = "?";
+        requestMap.forEach((values, key) => {
+            let list = values.join(',');
+            request += key + "=" + list + "&";
+        })
+        request = request.slice(0, -1);
+        console.log(request);
+    }
+
     return (
         <div style={{"margin": "40px 10%"}}>
             <FilterAccordion
                 getSchools={getSchools}
                 getDomains={getDomains}
                 getSupervisors={getSupervisorsBySchoolId}
-                getCountries={getCountries}>
+                getCountries={getCountries}
+                setRequestMap={setRequestMap}>
             </FilterAccordion>
-            {/*<FilterSciences*/}
-            {/*    getSchools={getSchools}*/}
-            {/*    getDomains={getDomains}*/}
-            {/*    getBranches={getBranches}*/}
-            {/*    getProfiles={getProfiles}*/}
-            {/*    getSpecialities={getSpecialities}*/}
-            {/*/>*/}
             <div style={{paddingBottom: "5em"}}/>
-            { supervisors !== null ? <SupervisorList supervisors={supervisors} onSelectedSupervisor={e => console.log(e)}/> :
-                <Button onClick={e => getSupervisorsBySchoolId(1)}>GET</Button>}
+            <Button onClick={() => prepareDataToRequest()}>GET</Button>
+
+            {/*<div style={{paddingBottom: "5em"}}/>*/}
+            {/*{ supervisors !== null ? <SupervisorList supervisors={supervisors} onSelectedSupervisor={e => console.log(e)}/> :*/}
+            {/*    <Button onClick={e => getSupervisorsBySchoolId(1)}>GET</Button>}*/}
         </div>
     );
 }

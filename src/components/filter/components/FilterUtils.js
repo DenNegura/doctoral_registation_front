@@ -81,6 +81,22 @@ class FilterUtils {
     static isEmail(str) {
         return /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(str);
     }
+
+    static isIdentificationNumber(str) {
+        return true;
+    }
+
+    static isDiplomaNumber(str) {
+        return true;
+    }
+
+    static isDiplomaSeries(str) {
+        return true;
+    }
+
+    static isPhoneNumber(str) {
+        return true;
+    }
 }
 
 export default FilterUtils;

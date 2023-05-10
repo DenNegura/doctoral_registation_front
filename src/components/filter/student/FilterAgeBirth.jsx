@@ -3,7 +3,7 @@ import Item from "../components/Item";
 import FilterUtils from "../components/FilterUtils";
 import FilterItem from "../components/FilterItem";
 
-const FilterAgeBirth = ({onSelectedItems}) => {
+const FilterAgeBirth = ({onSelectItems}) => {
 
     const LABEL = "age_birth";
 
@@ -25,9 +25,9 @@ const FilterAgeBirth = ({onSelectedItems}) => {
                 label={LABEL}
                 labelTitle={LABEL_TITLE}
                 allItems={ageBirth}
-                onActiveItems={onSelectedItems}
+                onActiveItems={onSelectItems}
                 addOption={addAgeBirth}
-                addTooltipOption={['Introduceți anul']}/>
+                addTooltipOption={['Introduceți anul.']}/>
             <br/>
         </div>
     );

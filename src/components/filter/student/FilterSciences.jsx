@@ -12,7 +12,7 @@ const LABELS = ["school", "domain", "branch", "profile", "speciality", "role" , 
 
 const LABELS_TITLE = ["Scoala", "Domen", "Branch", "Profile", "Specialitatea", "În rolul de", "Professor"];
 
-const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}) => {
+const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors, onSelectItems}) => {
 
     const [schools, setSchools] = useState([]);
 
@@ -127,7 +127,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
         }
     }
 
-    const onSelectedItems = (label, items) => {
+    const onSelectScienceItems = (label, items) => {
         lazyLoad();
         const getItems = (targetItems, setTargetItems, parentItems) => {
             let selectedParentItems = [];
@@ -264,7 +264,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
                                     label={LABELS[0]}
                                     labelTitle={LABELS_TITLE[0]}
                                     allItems={schools}
-                                    onActiveItems={onSelectedItems}
+                                    onActiveItems={onSelectScienceItems}
                                     onMouseEnterItem={onMouseEnter}
                                     onMouseLeaveItem={onMouseLeave}/>
                                 <br/>
@@ -282,7 +282,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
                                     label={LABELS[1]}
                                     labelTitle={LABELS_TITLE[1]}
                                     allItems={domains}
-                                    onActiveItems={onSelectedItems}
+                                    onActiveItems={onSelectScienceItems}
                                     onMouseEnterItem={onMouseEnter}
                                     onMouseLeaveItem={onMouseLeave}/>
                                 <br/>
@@ -293,7 +293,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
                                     label={LABELS[2]}
                                     labelTitle={LABELS_TITLE[2]}
                                     allItems={branches}
-                                    onActiveItems={onSelectedItems}
+                                    onActiveItems={onSelectScienceItems}
                                     onMouseEnterItem={onMouseEnter}
                                     onMouseLeaveItem={onMouseLeave}/>
                                 <br/>
@@ -304,7 +304,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
                                     label={LABELS[3]}
                                     labelTitle={LABELS_TITLE[3]}
                                     allItems={profiles}
-                                    onActiveItems={onSelectedItems}
+                                    onActiveItems={onSelectScienceItems}
                                     onMouseEnterItem={onMouseEnter}
                                     onMouseLeaveItem={onMouseLeave}/>
                                 <br/>
@@ -315,7 +315,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
                                     label={LABELS[4]}
                                     labelTitle={LABELS_TITLE[4]}
                                     allItems={specialities}
-                                    onActiveItems={onSelectedItems}
+                                    onActiveItems={onSelectScienceItems}
                                     onMouseEnterItem={onMouseEnter}
                                     onMouseLeaveItem={onMouseLeave}/>
                             </div> : <></>}
@@ -331,7 +331,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
                                 label={LABELS[5]}
                                 labelTitle={LABELS_TITLE[5]}
                                 allItems={roleSupervisors}
-                                onActiveItems={onSelectedItems}
+                                onActiveItems={onSelectScienceItems}
                                 onMouseEnterItem={onMouseEnter}
                                 onMouseLeaveItem={onMouseLeave}
                                 defaultSelectItem={roleSupervisors[0]}
@@ -344,7 +344,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors}
                                     label={LABELS[6]}
                                     labelTitle={LABELS_TITLE[6]}
                                     allItems={supervisors}
-                                    onActiveItems={onSelectedItems}
+                                    onActiveItems={onSelectScienceItems}
                                     onMouseEnterItem={onMouseEnter}
                                     onMouseLeaveItem={onMouseLeave}/>
                                 <br/>

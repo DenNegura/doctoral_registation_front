@@ -1,14 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Accordion} from "react-bootstrap";
 import FilterSciences from "./FilterSciences";
 import FilterProperties from "./FilterProperties";
 
-const FilterAccordion = ({getSchools, getDomains, getSupervisors, getCountries}) => {
+const FilterAccordion = ({getSchools, getDomains, getSupervisors, getCountries, setRequestMap}) => {
 
     const [selectedPanels, setSelectedPanels] = useState([]);
 
+    const [params, setParams] = useState(new Map());
+
     const onSelectedPanels = (eventKey) => {
         setSelectedPanels(eventKey);
+    }
+
+    const onSelectItems = (label, items, totalItems) => {
+        if(items.length === totalItems) {
+            if(params.has(label)) {
+                params.delete(label);
+            }
+        } else {
+            params.set(label, items.map(item => item.id));
+        }
+        setRequestMap(params);
     }
 
     return (
@@ -17,9 +30,11 @@ const FilterAccordion = ({getSchools, getDomains, getSupervisors, getCountries})
                 selectedPanels={selectedPanels}
                 getSchools={getSchools}
                 getDomains={getDomains}
-                getSupervisors={getSupervisors}/>
+                getSupervisors={getSupervisors}
+                onSelectItems={onSelectItems}/>
             <FilterProperties
-                getCountries={getCountries}/>
+                getCountries={getCountries}
+                onSelectItems={onSelectItems}/>
         </Accordion>
     );
 };

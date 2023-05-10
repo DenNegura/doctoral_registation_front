@@ -60,7 +60,7 @@ const FilterItem = ({label, labelTitle, allItems,
         let newItems = [...items]
         newItems.forEach(item => item.setActive(false));
         setItems(newItems);
-        onActiveItems(label, FilterUtils.getVisibleItems(newItems))
+        onActiveItems(label, FilterUtils.getVisibleItems(newItems), newItems.length)
     }
 
     const multipleSelect = (item, index) => {
@@ -76,10 +76,10 @@ const FilterItem = ({label, labelTitle, allItems,
 
         if(containsActiveItems(newItems)) {
             setAllItemColor(disableColor);
-            onActiveItems(label, FilterUtils.getActiveItems(newItems));
+            onActiveItems(label, FilterUtils.getActiveItems(newItems), newItems.length);
         } else {
             setAllItemColor(activeColor);
-            onActiveItems(label, FilterUtils.getVisibleItems(newItems));
+            onActiveItems(label, FilterUtils.getVisibleItems(newItems), newItems.length);
         }
     }
 

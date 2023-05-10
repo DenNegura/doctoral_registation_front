@@ -3,7 +3,7 @@ import Item from "../components/Item";
 import FilterUtils from "../components/FilterUtils";
 import FilterItem from "../components/FilterItem";
 
-const FilterEndStudy = ({onSelectedItems}) => {
+const FilterEndStudy = ({onSelectItems}) => {
 
     const LABEL = 'year_end';
 
@@ -11,7 +11,7 @@ const FilterEndStudy = ({onSelectedItems}) => {
 
     const [yearEnd, setYearEnd] = useState([])
 
-    const addYearBegin = (value) => {
+    const addYearEnd = (value) => {
         value = value.replace(/[./]/g, () => '/')
         let item = new Item(value, value, null, true);
         if(FilterUtils.isDate(value) && !FilterUtils.includes(yearEnd, item)) {
@@ -25,9 +25,9 @@ const FilterEndStudy = ({onSelectedItems}) => {
                 label={LABEL}
                 labelTitle={LABEL_TITLE}
                 allItems={yearEnd}
-                onActiveItems={onSelectedItems}
-                addOption={addYearBegin}
-                addTooltipOption={['Introduceți data in format: dd.mm.yyyy sau dd/mm/yyyy']}/>
+                onActiveItems={onSelectItems}
+                addOption={addYearEnd}
+                addTooltipOption={['Introduceți data in format: dd.mm.yyyy sau dd/mm/yyyy.']}/>
             <br/>
         </div>
     );

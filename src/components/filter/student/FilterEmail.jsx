@@ -3,7 +3,7 @@ import FilterItem from "../components/FilterItem";
 import Item from "../components/Item";
 import FilterUtils from "../components/FilterUtils";
 
-const FilterEmail = ({onSelectedItems}) => {
+const FilterEmail = ({onSelectItems}) => {
 
     const LABEL = 'email';
 
@@ -24,9 +24,9 @@ const FilterEmail = ({onSelectedItems}) => {
                 label={LABEL}
                 labelTitle={LABEL_TITLE}
                 allItems={email}
-                onActiveItems={onSelectedItems}
+                onActiveItems={onSelectItems}
                 addOption={addEmail}
-                addTooltipOption={['Introduceți email corporativ sau personal']}/>
+                addTooltipOption={['Introduceți email corporativ sau personal.']}/>
             <br/>
         </div>
     );
