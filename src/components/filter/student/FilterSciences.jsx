@@ -27,8 +27,8 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors,
     const [specialities, setSpecialities] = useState([]);
 
     const roleSupervisors = [
-        new Item(1, "Conducator", null, true),
-        new Item(2, "Membru comisiei", null)];
+        new Item("supervisor_id", "Conducator", null, true),
+        new Item("committee_member_id", "Membru comisiei", null)];
 
     const [loadedSupervisors, setLoadedSupervisors] = useState([]);
 
@@ -127,6 +127,37 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors,
         }
     }
 
+    const returnSelectItems = () => {
+        let items = [];
+        const selectItems = (label, scienceItems) => {
+             items = FilterUtils.getActiveItems(scienceItems);
+             if(items.length !== 0) {
+                 onSelectItems(label, items, scienceItems.length);
+                 return true;
+             }
+             return false;
+        }
+        if(!selectItems(LABELS[4], specialities)) {
+            if(!selectItems(LABELS[3], profiles)) {
+                if(!selectItems(LABELS[2], branches)) {
+                    if(!selectItems(LABELS[1], domains)) {
+                        selectItems(LABELS[0], schools);
+                    }
+                }
+            }
+        }
+        items = FilterUtils.getActiveItems(supervisors);
+        if(items.length !== 0) {
+            if(roleSupervisors.at(0).isActive) {
+                onSelectItems(roleSupervisors.at(0).id, items, supervisors.length);
+                onSelectItems(roleSupervisors.at(1).id, [], supervisors.length);
+            } else if(roleSupervisors.at(1).isActive) {
+                    onSelectItems(roleSupervisors.at(1).id, items, supervisors.length);
+                onSelectItems(roleSupervisors.at(0).id, [], supervisors.length);
+            }
+        }
+    }
+
     const onSelectScienceItems = (label, items) => {
         lazyLoad();
         const getItems = (targetItems, setTargetItems, parentItems) => {
@@ -185,6 +216,7 @@ const FilterSciences = ({selectedPanels, getSchools, getDomains, getSupervisors,
         } else if (LABELS[3] === label) { // profiles
             getItems(specialities, setSpecialities, items);
         }
+        returnSelectItems();
     }
 
     const onMouseEnter = (label, item) => {

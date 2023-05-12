@@ -14,7 +14,7 @@ const FilterAccordion = ({getSchools, getDomains, getSupervisors, getCountries, 
     }
 
     const onSelectItems = (label, items, totalItems) => {
-        if(items.length === totalItems) {
+        if(items.length === totalItems || items.length === 0) {
             if(params.has(label)) {
                 params.delete(label);
             }
