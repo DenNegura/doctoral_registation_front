@@ -1,4 +1,5 @@
 class Settings {
+
     static ALL_VALUE = "Toate";
 
     static LABEL_COLOR = "warning";

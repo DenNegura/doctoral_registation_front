@@ -6,53 +6,48 @@ import {Card} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Supervisor from "./domains/Supervisor";
 
 const schema = yup.object().shape({
-    id: yup.number(),
-    firstName: yup.string().required("is empty"),
-    lastName: yup.string().required("is empty"),
-    post: yup.string().required("is empty"),
-    speciality: yup.string().required("is empty"),
+    firstName: yup.string().required("Introduceți numele"),
+    lastName: yup.string().required("Introduceți prenumele"),
+    post: yup.string().required("Introduceți post"),
+    speciality: yup.string().required("Introduceți specialitatea"),
 });
-const SupervisorForm = ({supervisor, setSupervisor, getSchools}) => {
-
-
-    const [newSupervisor, setNewSupervisor] = useState({...supervisor});
+const SupervisorForm = ({supervisor, setSupervisor, schools}) => {
 
     const [scienceSchoolId, setScienceSchoolId] =
         useState(supervisor ? supervisor.scienceSchoolId : 1);
 
-    const [schools, setSchools] = useState([])
+    const id = supervisor ? supervisor.id : null;
 
-    useEffect(() => {
-        getSchools().then(schoolsList => {
-            setSchools(schoolsList.map(
-                school => {return {id: school.id, value: school.name}}))
-        })
-        setSchools([
-            {id: 1, value: "school 1"},
-            {id: 2, value: "school 2"},
-            {id: 3, value: "school 3"},
-        ])
-    }, [])
+    const submitSupervisor = (e) => {
+        let supervisor = Supervisor.create(e);
+        supervisor.id = id;
+        supervisor.scienceSchoolId = scienceSchoolId;
+        setSupervisor(supervisor);
+    }
+
     return (
         <Formik
+            onSubmit={submitSupervisor}
             validationSchema={schema}
-            onSubmit={console.log}
+            validateOnChange={false}
+            validateOnBlur={false}
             initialValues={{
-                id: supervisor ? supervisor.id : null,
                 firstName: supervisor ? supervisor.firstName : '',
                 lastName: supervisor ? supervisor.lastName : '',
                 post: supervisor ? supervisor.post : '',
                 speciality: supervisor ? supervisor.speciality : '',
                 academician: supervisor ? supervisor.academician : '',
-            }}
-        >
+            }}>
             {({
                   handleSubmit,
+                  handleBlur,
                   handleChange,
                   values,
                   touched,
+                  isValid,
                   errors,
               }) => (
                   <Form noValidate onSubmit={handleSubmit}>
@@ -78,6 +73,8 @@ const SupervisorForm = ({supervisor, setSupervisor, getSchools}) => {
                                           </Form.Control.Feedback>
                                       </Form.Group>
                                   </Col>
+                              </Row>
+                              <Row className={"mb-3"}>
                                   <Col>
                                       <Form.Group md={"4"} controlId={"formLastName"}>
                                           <Form.Label>Prenumele</Form.Label>
@@ -94,6 +91,8 @@ const SupervisorForm = ({supervisor, setSupervisor, getSchools}) => {
                                           </Form.Control.Feedback>
                                       </Form.Group>
                                   </Col>
+                              </Row>
+                              <Row className={"mb-3"}>
                                   <Col>
                                       <Form.Group md={"4"} controlId={"formPostName"}>
                                           <Form.Label>Post</Form.Label>
@@ -110,6 +109,8 @@ const SupervisorForm = ({supervisor, setSupervisor, getSchools}) => {
                                           </Form.Control.Feedback>
                                       </Form.Group>
                                   </Col>
+                              </Row>
+                              <Row className={"mb-3"}>
                                   <Col>
                                       <Form.Group md={"4"} controlId={"formSpecialityName"}>
                                           <Form.Label>Specialitatea</Form.Label>
@@ -126,6 +127,8 @@ const SupervisorForm = ({supervisor, setSupervisor, getSchools}) => {
                                           </Form.Control.Feedback>
                                       </Form.Group>
                                   </Col>
+                              </Row>
+                              <Row className={"mb-3"}>
                                   <Col>
                                       <Form.Group md="4" controlId={"formSchool"}>
                                           <Form.Label>Scoala doctorala</Form.Label>
@@ -144,10 +147,14 @@ const SupervisorForm = ({supervisor, setSupervisor, getSchools}) => {
                                       </Form.Group>
                                   </Col>
                               </Row>
+                              <Row className={"mb-3"}>
+                                  <Col>
+                                      <br/>
+                                      <Button type="submit" name={"submitBtn"}>Confirma</Button>
+                                  </Col>
+                              </Row>
                           </Card.Body>
                       </Card>
-                      <br/>
-                      <Button type="submit" name={"submitBtn"}>Submit form</Button>
                   </Form>
             )}
         </Formik>

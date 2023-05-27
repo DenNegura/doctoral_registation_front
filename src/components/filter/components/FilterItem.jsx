@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import {Card} from "react-bootstrap";
 import FilterOption from "./FilterOption";
-import Settings from "./settings";
+import Settings from "../../settings/Settings";
 import FilterUtils from "./FilterUtils"
 
 const FilterItem = ({label, labelTitle, allItems,

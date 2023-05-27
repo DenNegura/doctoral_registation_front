@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Card, Table} from "react-bootstrap";
+import ItemFilter from "./ItemFilter";
 
-const SupervisorList = ({supervisors, title, onSelectedSupervisor}) => {
+const SupervisorList = ({supervisors, onSelectedSupervisor}) => {
+
+    const [sortedValue, setSortedValue] = useState('');
 
     const selectSupervisor = (row) => {
         if(isNaN(row)) return;
@@ -9,15 +12,31 @@ const SupervisorList = ({supervisors, title, onSelectedSupervisor}) => {
         onSelectedSupervisor(supervisor);
     }
 
+    const getFilteredSupervisors = useMemo(() => {
+        const compare = (str) => {
+            return str.replace(' ', '')
+                .toLowerCase().includes(sortedValue
+                    .toLowerCase().replace(' ', ''));
+        }
+        if(sortedValue !== '') {
+            return [...supervisors].filter(s =>
+                compare(s.firstName + s.lastName + s.post + s.speciality))
+        } else {
+            return supervisors;
+        }
+    }, [sortedValue, supervisors])
+
     return (
         <Card>
             <Card.Header>
-                {title === undefined ?
-                    <Card.Title>Lista profesorilor</Card.Title> :
-                    <Card.Title>{title}</Card.Title> }
+                <Card.Title>Lista profesorilor</Card.Title>
             </Card.Header>
-            <Card.Body style={{padding: "0%"}}>
-                <Table hover responsive={"xl"} onClick={e => selectSupervisor(parseInt(e.target.parentElement.id))}>
+            <Card.Body>
+                <ItemFilter
+                    onChange={setSortedValue}
+                    placeholder={"Căutați"}/>
+                <Table hover responsive={"xl"} onClick={
+                    e => selectSupervisor(parseInt(e.target.parentElement.id))}>
                     <thead>
                     <tr>
                         <th>#</th>
@@ -27,17 +46,22 @@ const SupervisorList = ({supervisors, title, onSelectedSupervisor}) => {
                         <th>Specialitatea</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    {supervisors.map((supervisor, index) => {
-                        return <tr key={index} id={index}>
-                            <td>{index + 1}</td>
-                            <td>{supervisor.firstName}</td>
-                            <td>{supervisor.lastName}</td>
-                            <td>{supervisor.post}</td>
-                            <td>{supervisor.speciality}</td>
-                        </tr>
-                    })}
-                    </tbody>
+                    {supervisors !== null ?
+                        <tbody>
+                        {getFilteredSupervisors.map((supervisor, index) => {
+                            return <tr key={index} id={index}>
+                                <td>{index + 1}</td>
+                                <td>{supervisor.firstName}</td>
+                                <td>{supervisor.lastName}</td>
+                                <td>{supervisor.post}</td>
+                                <td>{supervisor.speciality}</td>
+                            </tr>
+                        })}
+                        </tbody> :
+                        <tbody>
+                        </tbody>
+                    }
+
                 </Table>
             </Card.Body>
         </Card>

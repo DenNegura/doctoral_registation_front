@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Col from "react-bootstrap/Col";
 import classes from "../FilterStyles.module.css";
 import Button from "react-bootstrap/Button";
-import Settings from "./settings";
+import Settings from "../../settings/Settings";
 import Form from "react-bootstrap/Form";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 

@@ -9,6 +9,7 @@ import FilterAccordion from "./components/filter/student/FilterAccordion";
 import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
 import StudentFilterPage from "./pages/StudentFilterPage";
 import SupervisorForm from "./components/SupervisorForm";
+import SupervisorFormPage from "./pages/SupervisorFormPage";
 
 function App() {
 
@@ -116,7 +117,7 @@ function App() {
     return (
         <div style={{"margin": "40px 10%"}}>
             {/*<StudentFilterPage/>*/}
-            <SupervisorForm getSchools={getSchools}/>
+            <SupervisorFormPage/>
         </div>
     );
 }
