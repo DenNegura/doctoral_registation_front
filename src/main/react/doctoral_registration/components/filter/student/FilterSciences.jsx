@@ -1,4 +1,4 @@
-    import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Accordion, Container} from "react-bootstrap";
 
 
@@ -8,7 +8,7 @@ import FilterUtils from "../components/FilterUtils";
 
 const LABELS_ACCORDION = ["school", "domain", "supervisor"]
 
-const LABELS = ["school_id", "domain_id", "branch_id", "profile_id", "speciality_id", "role" , "supervisor"];
+const LABELS = ["school_id", "domain_id", "branch_id", "profile_id", "speciality_id", "role", "supervisor"];
 
 const LABELS_TITLE = ["Scoala", "Domen", "Branch", "Profile", "Specialitatea", "În rolul de", "Professor"];
 
@@ -47,14 +47,14 @@ const FilterSciences = (
     const returnSelectItems = () => {
 
         const clearMap = () => {
-            for(let i = 0; i < 5; i++) {
+            for (let i = 0; i < 5; i++) {
                 onSelectItems(LABELS[i], []);
             }
         }
 
         const selectItems = (label, scienceItems) => {
             let items = FilterUtils.getActiveItems(scienceItems);
-            if(items.length !== 0 && items.length !== scienceItems.length) {
+            if (items.length !== 0 && items.length !== scienceItems.length) {
                 clearMap();
                 onSelectItems(label, items, scienceItems.length);
                 return true;
@@ -62,11 +62,11 @@ const FilterSciences = (
             return false;
         }
 
-        if(!selectItems(LABELS[4], specialities)) {
-            if(!selectItems(LABELS[3], profiles)) {
-                if(!selectItems(LABELS[2], branches)) {
-                    if(!selectItems(LABELS[1], domains)) {
-                        if(!selectItems(LABELS[0], schools)) {
+        if (!selectItems(LABELS[4], specialities)) {
+            if (!selectItems(LABELS[3], profiles)) {
+                if (!selectItems(LABELS[2], branches)) {
+                    if (!selectItems(LABELS[1], domains)) {
+                        if (!selectItems(LABELS[0], schools)) {
                             clearMap();
                         }
                     }
@@ -74,10 +74,10 @@ const FilterSciences = (
             }
         }
         const items = FilterUtils.getActiveItems(supervisors);
-        if(roleSupervisors.at(0).isActive) {
+        if (roleSupervisors.at(0).isActive) {
             onSelectItems(roleSupervisors.at(0).id, items, supervisors.length);
             onSelectItems(roleSupervisors.at(1).id, [], supervisors.length);
-        } else if(roleSupervisors.at(1).isActive) {
+        } else if (roleSupervisors.at(1).isActive) {
             onSelectItems(roleSupervisors.at(1).id, items, supervisors.length);
             onSelectItems(roleSupervisors.at(0).id, [], supervisors.length);
         }
@@ -152,14 +152,14 @@ const FilterSciences = (
         let activeSchools = FilterUtils.getActiveItems(schools);
         if (activeSchools.length === 0) {
             schools.forEach(school => {
-                if(!loadedSupervisors.includes(school.id)) {
+                if (!loadedSupervisors.includes(school.id)) {
                     loadSupervisors(school.id);
                     setLoadedSupervisors(loadSupervisors => [...loadSupervisors, school.id]);
                 }
             });
         } else {
             activeSchools.forEach(school => {
-                if(!loadedSupervisors.includes(school.id)) {
+                if (!loadedSupervisors.includes(school.id)) {
                     loadSupervisors(school.id);
                     setLoadedSupervisors(loadSupervisors => [...loadSupervisors, school.id]);
                 }
@@ -206,13 +206,13 @@ const FilterSciences = (
         }
 
         if (LABELS[0] === label) { // schools
-            if(isOpenAccordionItem(LABELS_ACCORDION[1])) {
+            if (isOpenAccordionItem(LABELS_ACCORDION[1])) {
                 let selectDomains = getItems(domains, setDomains, items);
                 let selectBranches = getItems(branches, setBranches, selectDomains);
                 let selectProfiles = getItems(profiles, setProfiles, selectBranches);
                 getItems(specialities, setSpecialities, selectProfiles);
             }
-            if(isOpenAccordionItem(LABELS_ACCORDION[2])) {
+            if (isOpenAccordionItem(LABELS_ACCORDION[2])) {
                 getItems(supervisors, setSupervisors, items);
             }
         } else if (LABELS[1] === label) { // domains
@@ -245,13 +245,13 @@ const FilterSciences = (
         }
 
         if (LABELS[0] === label) {
-            if(isOpenAccordionItem(LABELS_ACCORDION[1])) {
+            if (isOpenAccordionItem(LABELS_ACCORDION[1])) {
                 let hoverDomains = mouseEnter(domains, setDomains, [item]);
                 let hoverBranches = mouseEnter(branches, setBranches, hoverDomains);
                 let hoverProfiles = mouseEnter(profiles, setProfiles, hoverBranches);
                 mouseEnter(specialities, setSpecialities, hoverProfiles);
             }
-            if(isOpenAccordionItem(LABELS_ACCORDION[2])) {
+            if (isOpenAccordionItem(LABELS_ACCORDION[2])) {
                 mouseEnter(supervisors, setSupervisors, [item]);
             }
         } else if (LABELS[1] === label) {
@@ -273,13 +273,13 @@ const FilterSciences = (
             setTargetItems([...targetItems]);
         }
         if (LABELS[0] === label) {
-            if(isOpenAccordionItem(LABELS_ACCORDION[1])) {
+            if (isOpenAccordionItem(LABELS_ACCORDION[1])) {
                 mouseLeave(domains, setDomains);
                 mouseLeave(branches, setBranches);
                 mouseLeave(profiles, setProfiles);
                 mouseLeave(specialities, setSpecialities);
             }
-            if(isOpenAccordionItem(LABELS_ACCORDION[2])) {
+            if (isOpenAccordionItem(LABELS_ACCORDION[2])) {
                 mouseLeave(supervisors, setSupervisors)
             }
         } else if (LABELS[1] === label) {

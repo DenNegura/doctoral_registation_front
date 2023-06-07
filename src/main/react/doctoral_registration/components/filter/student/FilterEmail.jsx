@@ -13,7 +13,7 @@ const FilterEmail = ({onSelectItems}) => {
 
     const addEmail = (value) => {
         let item = new Item(value, value, null, true);
-        if(FilterUtils.isEmail(value) && !FilterUtils.includes(email, item)) {
+        if (FilterUtils.isEmail(value) && !FilterUtils.includes(email, item)) {
             setEmail(email => {
                 const items = [...email, item];
                 getSelectItems(LABEL, items);
@@ -24,7 +24,7 @@ const FilterEmail = ({onSelectItems}) => {
 
     const getSelectItems = (label, items) => {
         const activeItems = FilterUtils.getActiveItems(items);
-        if(!activeItems.length) {
+        if (!activeItems.length) {
             onSelectItems(label, items, 0);
         } else {
             onSelectItems(label, activeItems, 0);

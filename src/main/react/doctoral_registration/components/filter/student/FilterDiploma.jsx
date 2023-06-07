@@ -14,7 +14,7 @@ const FilterDiploma = ({onSelectItems}) => {
     const addDiploma = (value) => {
         value = value.trim();
         let item = new Item(value, value, null, true);
-        if((FilterUtils.isDiplomaSeries(value) || FilterUtils.isDiplomaNumber(value)) &&
+        if ((FilterUtils.isDiplomaSeries(value) || FilterUtils.isDiplomaNumber(value)) &&
             !FilterUtils.includes(diploma, item)) {
             setDiploma(diploma => {
                 const items = [...diploma, item];
@@ -26,7 +26,7 @@ const FilterDiploma = ({onSelectItems}) => {
 
     const getSelectItems = (label, items) => {
         const activeItems = FilterUtils.getActiveItems(items);
-        if(!activeItems.length) {
+        if (!activeItems.length) {
             onSelectItems(label, items, 0);
         } else {
             onSelectItems(label, activeItems, 0);

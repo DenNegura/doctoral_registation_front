@@ -7,9 +7,6 @@ import OrderType from "../components/domains/OrderType";
 import Student from "../components/domains/Student";
 import ControlBox from "../components/controlbox/ControlBox";
 import ButtonUp from "../components/controlbox/ButtonUp";
-import ButtonBox from "../components/controlbox/ButtonBox";
-import Images from "../../../resources/settings/Images";
-import StudentModalView from "../components/view/student/StudentModalView";
 import {ItemsParser} from "../components/scrolllist/ScrollList";
 
 const StudentFormPage = () => {

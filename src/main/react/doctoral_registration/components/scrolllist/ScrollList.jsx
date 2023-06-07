@@ -14,10 +14,15 @@ class ItemsParser {
     }
 
     static ENTITY = {
-        SPECIALITY: item => {return {id: item.id, value: item.id + ' ' + item.name}},
-        SUPERVISOR: item => {return {
-            id: item.id,
-            value: item.firstName + ' ' + item.lastName + ', ' + item.post + ', ' + item.speciality}}
+        SPECIALITY: item => {
+            return {id: item.id, value: item.id + ' ' + item.name}
+        },
+        SUPERVISOR: item => {
+            return {
+                id: item.id,
+                value: item.firstName + ' ' + item.lastName + ', ' + item.post + ', ' + item.speciality
+            }
+        }
     }
 }
 

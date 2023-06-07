@@ -23,9 +23,9 @@ class DateParser {
     }
 
     static FORMAT = {
-        DD_MM_YYYY: {D: 2, M:2, TO: 'dmy'},
-        MM_DD_YYYY: {D: 2, M:2, TO: 'mdy'},
-        YYYY_MM_DD: {D: 2, M:2, TO: 'ymd'},
+        DD_MM_YYYY: {D: 2, M: 2, TO: 'dmy'},
+        MM_DD_YYYY: {D: 2, M: 2, TO: 'mdy'},
+        YYYY_MM_DD: {D: 2, M: 2, TO: 'ymd'},
     }
 
     static DELIMITER = {

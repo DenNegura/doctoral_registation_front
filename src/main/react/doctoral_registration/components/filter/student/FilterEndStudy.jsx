@@ -14,7 +14,7 @@ const FilterEndStudy = ({onSelectItems}) => {
     const addYearEnd = (value) => {
         value = value.replace(/[./]/g, () => '/')
         let item = new Item(value, value, null, true);
-        if(FilterUtils.isDate(value) && !FilterUtils.includes(yearEnd, item)) {
+        if (FilterUtils.isDate(value) && !FilterUtils.includes(yearEnd, item)) {
             setYearEnd(yearEnd => {
                 const items = [...yearEnd, item];
                 getSelectItems(LABEL, items);
@@ -25,7 +25,7 @@ const FilterEndStudy = ({onSelectItems}) => {
 
     const getSelectItems = (label, items) => {
         const activeItems = FilterUtils.getActiveItems(items);
-        if(!activeItems.length) {
+        if (!activeItems.length) {
             onSelectItems(label, items, 0);
         } else {
             onSelectItems(label, activeItems, 0);

@@ -1,9 +1,6 @@
 import React, {useMemo, useState} from 'react';
-import {Card, Image, InputGroup, Table} from "react-bootstrap";
+import {Card, Table} from "react-bootstrap";
 import FilterBox from "../../filterbox/FilterBox";
-import Images from "../../../../../resources/settings/Images";
-import Student from "../../domains/Student";
-import student from "../../domains/Student";
 
 const StudentList = ({students, title, onSelectedStudent}) => {
 
@@ -11,7 +8,7 @@ const StudentList = ({students, title, onSelectedStudent}) => {
         {firstName: '', lastName: '', yearStudy: '', speciality: '', school: ''});
 
     const selectStudent = (row) => {
-        if(isNaN(row)) return;
+        if (isNaN(row)) return;
         const student = students.filter((student, index) => index === row)[0];
         onSelectedStudent(student);
     }
@@ -19,27 +16,27 @@ const StudentList = ({students, title, onSelectedStudent}) => {
     const getFilteredStudents = useMemo(() => {
         let studentsList = students;
         let value = sortedValue.firstName.trim();
-        if(value !== '') {
+        if (value !== '') {
             studentsList = studentsList
                 .filter(student => student.firstName.includes(value));
         }
         value = sortedValue.lastName.trim();
-        if(value !== '') {
+        if (value !== '') {
             studentsList = studentsList
                 .filter(student => student.lastName.includes(value));
         }
         value = sortedValue.yearStudy.trim();
-        if(value !== '') {
+        if (value !== '') {
             studentsList = studentsList
                 .filter(student => student.yearStudy.includes(value));
         }
         value = sortedValue.speciality.trim();
-        if(value !== '') {
+        if (value !== '') {
             studentsList = studentsList
                 .filter(student => (student.speciality.id + ' ' + student.speciality.name).includes(value));
         }
         value = sortedValue.school.trim();
-        if(value !== '') {
+        if (value !== '') {
             studentsList = studentsList
                 .filter(student => student.speciality.scienceSchool.includes(value));
         }
@@ -51,7 +48,7 @@ const StudentList = ({students, title, onSelectedStudent}) => {
             <Card.Header>
                 {title === undefined ?
                     <Card.Title>Lista studentelor</Card.Title> :
-                    <Card.Title>{title}</Card.Title> }
+                    <Card.Title>{title}</Card.Title>}
             </Card.Header>
             <Card.Body style={{padding: "0%"}}>
                 <Table hover bordered responsive={"xl"} onClick={e =>

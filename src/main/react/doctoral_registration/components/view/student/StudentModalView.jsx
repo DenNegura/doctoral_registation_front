@@ -3,7 +3,7 @@ import {Modal} from "react-bootstrap";
 import StudentView from "./StudentView";
 
 const StudentModalView = ({isVisible, onHide, student}) => {
-    if(student && isVisible) {
+    if (student && isVisible) {
         return (
             <Modal
                 size={"xl"}

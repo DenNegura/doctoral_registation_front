@@ -8,39 +8,41 @@ import FilterOption from "./FilterOption";
 import Settings from "../../../../../resources/settings/Settings";
 import FilterUtils from "./FilterUtils"
 
-const FilterItem = ({label, labelTitle, allItems,
+const FilterItem = ({
+                        label, labelTitle, allItems,
                         allItemValue = Settings.ALL_VALUE,
                         activeColor = Settings.ACTIVE_COLOR,
                         disableColor = Settings.DISABLE_COLOR,
                         labelColor = Settings.LABEL_COLOR,
                         sizeButton = Settings.SIZE_BUTTON,
                         isActiveScroll = Settings.IS_ACTIVE_SCROLL,
-                            onActiveItems, onMouseEnterItem, onMouseLeaveItem,
+                        onActiveItems, onMouseEnterItem, onMouseLeaveItem,
                         defaultSelectItem = null,
                         isMultipleSelect = true,
                         searchOption, searchTooltipOption,
-                        addOption, addTooltipOption}) => {
+                        addOption, addTooltipOption
+                    }) => {
 
     const [isScroll, setScroll] = useState(isActiveScroll);
 
     const [allItemColor, setAllItemColor] = useState(activeColor);
 
-        const [items, setItems] = useState([]);
-    
+    const [items, setItems] = useState([]);
+
     const [defaultItem, setDefaultItem] = useState(null);
 
     useEffect(() => {
         setItems([...allItems])
-        if(isMultipleSelect) {
-            if(containsActiveItems(allItems)) {
+        if (isMultipleSelect) {
+            if (containsActiveItems(allItems)) {
                 setAllItemColor(disableColor);
             } else {
                 setAllItemColor(activeColor);
-            }   
+            }
         } else {
             let item = allItems.filter(item =>
                 item.equals(defaultSelectItem))[0];
-            if(!item) {
+            if (!item) {
                 item = allItems[0];
             }
             setDefaultItem(item);
@@ -48,7 +50,7 @@ const FilterItem = ({label, labelTitle, allItems,
     }, [activeColor, allItems, defaultSelectItem, disableColor, isMultipleSelect])
 
     const changeScroll = () => {
-        if(isScroll) {
+        if (isScroll) {
             setScroll(false);
         } else {
             setScroll(true);
@@ -65,7 +67,7 @@ const FilterItem = ({label, labelTitle, allItems,
 
     const multipleSelect = (item, index) => {
         let newItems = [...items]
-        if(item.isActive) {
+        if (item.isActive) {
             item.setActive(false);
         } else {
             item.setActive(true);
@@ -74,7 +76,7 @@ const FilterItem = ({label, labelTitle, allItems,
         newItems[index] = item;
         setItems(newItems);
 
-        if(containsActiveItems(newItems)) {
+        if (containsActiveItems(newItems)) {
             setAllItemColor(disableColor);
             onActiveItems(label, FilterUtils.getActiveItems(newItems), newItems.length);
         } else {
@@ -86,7 +88,7 @@ const FilterItem = ({label, labelTitle, allItems,
     const onlySelect = (item, index) => {
         let newItems = [...items]
         let activeItem;
-        if(item.isActive) {
+        if (item.isActive) {
             item.setActive(false);
             defaultItem.setActive(true);
             activeItem = defaultItem;
@@ -100,7 +102,7 @@ const FilterItem = ({label, labelTitle, allItems,
         onActiveItems(label, [activeItem]);
     }
     const select = (item, index) => {
-        if(isMultipleSelect) {
+        if (isMultipleSelect) {
             multipleSelect(item, index);
         } else {
             onlySelect(item, index);
@@ -108,20 +110,20 @@ const FilterItem = ({label, labelTitle, allItems,
     }
 
     const onMouseEnter = (label, item) => {
-        if(onMouseEnterItem !== undefined) {
+        if (onMouseEnterItem !== undefined) {
             onMouseEnterItem(label, item);
         }
     }
 
     const onMouseLeave = (label) => {
-        if(onMouseLeaveItem !== undefined) {
+        if (onMouseLeaveItem !== undefined) {
             onMouseLeaveItem(label);
         }
     }
 
     const containsActiveItems = (items) => {
-        for(let i = 0; i < items.length; i++) {
-            if(items[i].isActive) {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].isActive) {
                 return true;
             }
         }
@@ -167,7 +169,7 @@ const FilterItem = ({label, labelTitle, allItems,
                         <></>
                     }
                     {items.map((item, index) => {
-                        if(item.isVisible) {
+                        if (item.isVisible) {
                             return <Col key={item.id} className={classes.colFilterBar}>
                                 <Button
                                     variant={item.color()}

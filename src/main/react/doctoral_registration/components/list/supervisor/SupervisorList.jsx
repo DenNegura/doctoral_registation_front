@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Card, Table} from "react-bootstrap";
 import FilterBox from "../../filterbox/FilterBox";
 
@@ -7,7 +7,7 @@ const SupervisorList = ({supervisors, onSelectedSupervisor}) => {
     const [sortedValue, setSortedValue] = useState('');
 
     const selectSupervisor = (row) => {
-        if(isNaN(row)) return;
+        if (isNaN(row)) return;
         const supervisor = supervisors.filter((supervisor, index) => index === row)[0];
         onSelectedSupervisor(supervisor);
     }
@@ -18,7 +18,7 @@ const SupervisorList = ({supervisors, onSelectedSupervisor}) => {
                 .toLowerCase().includes(sortedValue
                     .toLowerCase().replace(' ', ''));
         }
-        if(sortedValue !== '') {
+        if (sortedValue !== '') {
             return [...supervisors].filter(s =>
                 compare(s.firstName + s.lastName + s.post + s.speciality))
         } else {

@@ -14,7 +14,7 @@ const FilterPhoneNumber = ({onSelectItems}) => {
     const addPhoneNumber = (value) => {
         value = value.trim();
         let item = new Item(value, value, null, true);
-        if(FilterUtils.isPhoneNumber(value) && !FilterUtils.includes(phoneNumber, item)) {
+        if (FilterUtils.isPhoneNumber(value) && !FilterUtils.includes(phoneNumber, item)) {
             setPhoneNumber(phoneNumber => {
                 const items = [...phoneNumber, item];
                 getSelectItems(LABEL, items);
@@ -25,7 +25,7 @@ const FilterPhoneNumber = ({onSelectItems}) => {
 
     const getSelectItems = (label, items) => {
         const activeItems = FilterUtils.getActiveItems(items);
-        if(!activeItems.length) {
+        if (!activeItems.length) {
             onSelectItems(label, items, 0);
         } else {
             onSelectItems(label, activeItems, 0);

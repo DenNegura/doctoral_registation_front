@@ -218,7 +218,8 @@ const StudentForm = ({
             .map(item => Supervisor.fromObject({id: item.id}));
 
         const student = Student.toServer(
-            {...e,
+            {
+                ...e,
                 beginStudies: beginDate,
                 endDate: endDate,
                 speciality: speciality,
@@ -243,7 +244,7 @@ const StudentForm = ({
                     identNumber: student.identNumber,
                     yearBirth: student.yearBirth,
                     citizenship: student.citizenship.id,
-                    personalEmail:student.personalEmail,
+                    personalEmail: student.personalEmail,
                     phoneNumber: student.phoneNumber,
                     diplomaSeries: student.diplomaSeries,
                     diplomaNumber: student.diplomaNumber,

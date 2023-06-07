@@ -13,7 +13,7 @@ const FilterIdentNumber = ({onSelectItems}) => {
 
     const addIdentNumber = (value) => {
         let item = new Item(value, value, null, true);
-        if(FilterUtils.isIdentificationNumber(value) && !FilterUtils.includes(identNumber, item)) {
+        if (FilterUtils.isIdentificationNumber(value) && !FilterUtils.includes(identNumber, item)) {
             setIdentNumber(identNumber => {
                 const items = [...identNumber, item];
                 getSelectItems(LABEL, items);
@@ -24,7 +24,7 @@ const FilterIdentNumber = ({onSelectItems}) => {
 
     const getSelectItems = (label, items) => {
         const activeItems = FilterUtils.getActiveItems(items);
-        if(!activeItems.length) {
+        if (!activeItems.length) {
             onSelectItems(label, items, 0);
         } else {
             onSelectItems(label, activeItems, 0);

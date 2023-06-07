@@ -5,8 +5,8 @@ class FilterUtils {
     }
 
     static includes(list, item) {
-        for(let i = 0; i < list.length; i++) {
-            if(list[i].equals(item)) {
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].equals(item)) {
                 return true;
             }
         }
@@ -31,10 +31,10 @@ class FilterUtils {
     }
 
     static isDay(str) {
-        if(this.isNumber(str)) {
+        if (this.isNumber(str)) {
             let num = Number.parseInt(str);
             console.log(num)
-            if(num > 0 && num < 32) {
+            if (num > 0 && num < 32) {
                 return true;
             }
         }
@@ -42,9 +42,9 @@ class FilterUtils {
     }
 
     static isMouth(str) {
-        if(this.isNumber(str)) {
+        if (this.isNumber(str)) {
             let num = Number.parseInt(str);
-            if(num > 0 && num < 13) {
+            if (num > 0 && num < 13) {
                 return true;
             }
         }
@@ -52,9 +52,9 @@ class FilterUtils {
     }
 
     static isYear(str) {
-        if(this.isNumber(str)) {
+        if (this.isNumber(str)) {
             let num = Number.parseInt(str);
-            if(num > 1940 && num < new Date().getFullYear() - 15) {
+            if (num > 1940 && num < new Date().getFullYear() - 15) {
                 return true;
             }
         }
@@ -68,8 +68,8 @@ class FilterUtils {
     static isDate(str) {
         let date = str.split(/([./])\s*/);
         console.log(date)
-        if(date.length === 5) {
-            if(this.isDay(date[0]) &&
+        if (date.length === 5) {
+            if (this.isDay(date[0]) &&
                 this.isMouth(date[2]) &&
                 this.isYear(date[4])) {
                 return true;

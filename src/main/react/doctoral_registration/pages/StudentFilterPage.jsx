@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import FilterAccordion from "../components/filter/student/FilterAccordion";
 import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
 import Server from "../server/Server";
 import Student from "../components/domains/Student";
 import ControlBox from "../components/controlbox/ControlBox";
@@ -11,7 +10,6 @@ import ButtonBox from "../components/controlbox/ButtonBox";
 import Images from "../../../resources/settings/Images";
 import StudentList from "../components/list/student/StudentList";
 import StudentModalView from "../components/view/student/StudentModalView";
-import DateParser from "../utils/DateParser";
 
 const StudentFilterPage = () => {
 
@@ -61,15 +59,15 @@ const StudentFilterPage = () => {
         })
         request = request.slice(0, -1);
         console.log(request);
-        if(request === '') {
-            if(type === LIST) {
+        if (request === '') {
+            if (type === LIST) {
                 getAllStudents();
             }
-            if(type === EXCEL) {
+            if (type === EXCEL) {
 
             }
         } else {
-            if(type === LIST) {
+            if (type === LIST) {
                 getStudentsByFilter(request);
             }
         }

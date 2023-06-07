@@ -6,15 +6,17 @@ import Settings from "../../../../../resources/settings/Settings";
 import Form from "react-bootstrap/Form";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 
-const FilterOption = ({label, onSubmit, onChange, tooltip,
-                          sizeButton = Settings.SIZE_BUTTON}) => {
+const FilterOption = ({
+                          label, onSubmit, onChange, tooltip,
+                          sizeButton = Settings.SIZE_BUTTON
+                      }) => {
 
     const [isVisible, setVisible] = useState(false);
 
     const [value, setValue] = useState('');
 
     const changeVisible = () => {
-        if(isVisible) {
+        if (isVisible) {
             setVisible(false);
         } else {
             setVisible(true);
@@ -24,7 +26,7 @@ const FilterOption = ({label, onSubmit, onChange, tooltip,
     const onSubmitFunction = (e) => {
         e.preventDefault()
         setValue(value);
-        if(onSubmit !== undefined) {
+        if (onSubmit !== undefined) {
             onSubmit(value.trim());
         }
         setValue('')
@@ -32,7 +34,7 @@ const FilterOption = ({label, onSubmit, onChange, tooltip,
 
     const onChangeFunction = (value) => {
         setValue(value);
-        if(onChange !== undefined) {
+        if (onChange !== undefined) {
             onChange(value.trim());
         }
     }

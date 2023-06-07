@@ -10,11 +10,11 @@ class Server {
     static GET_ALL = {
         SCHOOLS: this.SCIENCES_URL + '/schools',
         DOMAINS: this.SCIENCES_URL + '/domains',
-        SPECIALITIES: this.SCIENCES_URL + '/specialities', 
-        COUNTRIES: this.SERVER_URL + '/countries', 
-        SUPERVISORS: this.SERVER_URL + '/supervisors', 
-        ORDER_TYPES: this.SERVER_URL + '/orders/types', 
-        STUDENTS: this.SERVER_URL + '/students', 
+        SPECIALITIES: this.SCIENCES_URL + '/specialities',
+        COUNTRIES: this.SERVER_URL + '/countries',
+        SUPERVISORS: this.SERVER_URL + '/supervisors',
+        ORDER_TYPES: this.SERVER_URL + '/orders/types',
+        STUDENTS: this.SERVER_URL + '/students',
     }
 
     static GET_BY_ID = {
@@ -87,7 +87,7 @@ class RequestBuilder {
 
     strategy(strategy, position = Server.POSITION.END) {
         this._strategy = strategy;
-        if(this._strategy === Server.STRATEGY.ADD) {
+        if (this._strategy === Server.STRATEGY.ADD) {
             this._position = position;
         }
         return this;

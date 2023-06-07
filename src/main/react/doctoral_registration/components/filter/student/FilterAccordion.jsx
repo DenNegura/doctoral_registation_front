@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Accordion} from "react-bootstrap";
 import FilterSciences from "./FilterSciences";
 import FilterProperties from "./FilterProperties";
@@ -13,8 +13,8 @@ const FilterAccordion = (
     }
 
     const onSelectItems = (label, items, totalItems) => {
-        if(items.length === totalItems || items.length === 0) {
-            if(requestMap.has(label)) {
+        if (items.length === totalItems || items.length === 0) {
+            if (requestMap.has(label)) {
                 requestMap.delete(label);
             }
         } else {

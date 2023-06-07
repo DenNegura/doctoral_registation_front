@@ -14,7 +14,7 @@ const FilterAgeBirth = ({onSelectItems}) => {
     const addAgeBirth = (value) => {
         value = value.trim();
         let item = new Item(value, value, null, true);
-        if(FilterUtils.isYear(value) && !FilterUtils.includes(ageBirth, item)) {
+        if (FilterUtils.isYear(value) && !FilterUtils.includes(ageBirth, item)) {
             setAgeBirth(ageBirth => {
                 const items = [...ageBirth, item];
                 getSelectItems(LABEL, items);
@@ -25,7 +25,7 @@ const FilterAgeBirth = ({onSelectItems}) => {
 
     const getSelectItems = (label, items) => {
         const activeItems = FilterUtils.getActiveItems(items);
-        if(!activeItems.length) {
+        if (!activeItems.length) {
             onSelectItems(label, items, 0);
         } else {
             onSelectItems(label, activeItems, 0);
