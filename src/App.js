@@ -2,14 +2,18 @@ import './App.css';
 import axios from "axios";
 import React, {useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
-import SupervisorList from "./components/SupervisorList";
-import FilterSciences from "./components/filter/student/FilterSciences";
-import StudentForm from "./components/StudentForm";
-import FilterAccordion from "./components/filter/student/FilterAccordion";
+import SupervisorList from "./main/react/doctoral_registration/components/list/supervisor/SupervisorList";
+import FilterSciences from "./main/react/doctoral_registration/components/filter/student/FilterSciences";
+import StudentForm from "./main/react/doctoral_registration/components/inputform/student/StudentForm";
+import FilterAccordion from "./main/react/doctoral_registration/components/filter/student/FilterAccordion";
 import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
-import StudentFilterPage from "./pages/StudentFilterPage";
-import SupervisorForm from "./components/SupervisorForm";
-import SupervisorFormPage from "./pages/SupervisorFormPage";
+import StudentFilterPage from "./main/react/doctoral_registration/pages/StudentFilterPage";
+import SupervisorForm from "./main/react/doctoral_registration/components/inputform/supervisor/SupervisorForm";
+import SupervisorPage from "./main/react/doctoral_registration/pages/SupervisorPage";
+import StudentFormPage from "./main/react/doctoral_registration/pages/StudentFormPage";
+import StudentView from "./main/react/doctoral_registration/components/view/student/StudentView";
+import Student from "./main/react/doctoral_registration/components/domains/Student";
+import Server from "./main/react/doctoral_registration/server/Server";
 
 function App() {
 
@@ -52,6 +56,10 @@ function App() {
     const [supervisors, setSupervisors] = useState(null);
 
     const [student, setStudent] = useState();
+
+    useEffect(() => {
+        Server.get(Server.GET_BY_ID.STUDENT, setStudent).params(1).map(Student.fromObject).build();
+    }, [])
 
     async function getSpecialitiesBySchoolId(id) {
         console.log("StudentForm ---> load specialities")
@@ -115,9 +123,14 @@ function App() {
 
 
     return (
-        <div style={{"margin": "40px 10%"}}>
-            {/*<StudentFilterPage/>*/}
-            <SupervisorFormPage/>
+        <div>
+            <div style={{"margin": "40px 10%"}}>
+                <StudentFilterPage/>
+                {/*<SupervisorPage/>*/}
+                {/*<StudentFormPage/>*/}
+                {/*<StudentListPage/>*/}
+                {/*<StudentView student={new Student()}/>*/}
+            </div>
         </div>
     );
 }
