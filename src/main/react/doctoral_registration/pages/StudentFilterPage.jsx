@@ -44,6 +44,22 @@ const StudentFilterPage = () => {
             .params(params).map(Student.fromServer).build();
     }
 
+    const getExcel = async (params) => {
+        await (await fetch(Server.SERVER_URL + '/excel/student', params)).blob().then(
+           blob => {
+               const url = window.URL.createObjectURL(new Blob([blob]));
+               const link = document.createElement('a');
+               link.href = url;
+               link.setAttribute('download', 'report.xlsx'); // Установка имени файла
+               document.body.appendChild(link);
+               link.click();
+               document.body.removeChild(link);
+           }
+       );
+
+        // Server.request(Server.SERVER_URL + '/excel/student' + params).then(() => {})
+    }
+
     const [requestMap, setRequestMap] = useState(new Map());
 
     const LIST = 1;
@@ -64,11 +80,14 @@ const StudentFilterPage = () => {
                 getAllStudents();
             }
             if (type === EXCEL) {
-
+                getExcel('')
             }
         } else {
             if (type === LIST) {
                 getStudentsByFilter(request);
+            }
+            if(type === EXCEL) {
+                getExcel(request)
             }
         }
     }

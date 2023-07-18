@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    padding: 10px;
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.labelBox {
+    float: left;
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    font-size: 15px;
+    border-radius: 2em;
+    border-style: hidden;
+    background-color: #ccd5e5;
+}
+
+.labelBox:hover {
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.status {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.select {
+    background-color: #abbaea;
+}
+
+
+.line {
+    float: left;
+    height: 0;
+    width: 40px;
+    border: 1px dashed black;
+    /*background-color: black;*/
+    margin: 0 10px;
+}

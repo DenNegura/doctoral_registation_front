@@ -1,0 +1,10 @@
+.header {
+    border-bottom: none !important;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: .25em .3em !important;
+}

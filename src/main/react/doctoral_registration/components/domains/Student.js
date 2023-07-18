@@ -1,4 +1,5 @@
 import DateParser from "../../utils/DateParser";
+import Country from "./Country";
 
 class Order {
     id;
@@ -52,29 +53,29 @@ class Student {
 
     id;
 
-    corporateEmail;
+    corporateEmail  = '';
 
-    firstName;
+    firstName  = '';
 
-    lastName;
+    lastName  = '';
 
-    patronymicName;
+    patronymicName = '';
 
     yearBirth;
 
-    identNumber;
+    identNumber = '';
 
     gender;
 
     citizenship;
 
-    diplomaSeries;
+    diplomaSeries = '';
 
-    diplomaNumber;
+    diplomaNumber = '';
 
-    personalEmail;
+    personalEmail = '';
 
-    phoneNumber;
+    phoneNumber = '';
 
     status;
 
@@ -101,6 +102,10 @@ class Student {
     speciality;
 
     steeringCommittee = [];
+
+    constructor() {
+        this.citizenship = Country.fromObject({id: 1});
+    }
 
     static fromServer(object) {
         const student = Student.fromObject(object);

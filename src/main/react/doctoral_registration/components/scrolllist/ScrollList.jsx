@@ -1,55 +1,44 @@
 import React from 'react';
-import {Card, ListGroup} from "react-bootstrap";
+import {Card, Image, ListGroup} from "react-bootstrap";
 import classes from "./ScrollList.module.css";
+import Images from "../../../../resources/settings/Images";
 
-
-class ItemsParser {
-
-    static toItems(type, entities) {
-        return entities.map(entity => type(entity));
-    }
-
-    static toItem(type, entity) {
-        return type(entity);
-    }
-
-    static ENTITY = {
-        SPECIALITY: item => {
-            return {id: item.id, value: item.id + ' ' + item.name}
-        },
-        SUPERVISOR: item => {
-            return {
-                id: item.id,
-                value: item.firstName + ' ' + item.lastName + ', ' + item.post + ', ' + item.speciality
-            }
-        }
-    }
-}
-
-const ScrollList = ({items, height, onChange}) => {
-
+const ScrollList = ({items, height, invalid, valid, onChange, getValue, getKey}) => {
     return (
-        <Card>
+        <Card style={{"height": height}}
+              className={(invalid ? classes.invalid : '') + (valid ? classes.valid: '')}>
+            {invalid ?
+                <Image
+                    className={classes.invalidImage}
+                    src={Images.INVALID}
+                    alt={'invalid'}/>
+                : <></>
+            }
             <div style={{"height": height}} className={classes.scrollList}>
                 <ListGroup variant={"flush"}>
                     {items ?
                         items.map(item => {
                             return <ListGroup.Item
                                 action
-                                id={item.id}
-                                value={item.value}
-                                key={item.id}
+                                type={"button"}
+                                id={getKey(item)}
+                                value={getKey(item)}
+                                key={getKey(item)}
                                 onClick={onChange}
                             >
-                                {item.value}
+                                {getValue(item)}
                             </ListGroup.Item>
                         }) : <ListGroup.Item/>
                     }
                 </ListGroup>
             </div>
+            {invalid ?
+                <label className={classes.invalidMessage}>
+                    {invalid}
+                </label> : <></>
+            }
         </Card>
     );
 };
 
-export {ItemsParser};
 export default ScrollList;

@@ -1,0 +1,66 @@
+.tabContainer {
+    border-radius: var(--bs-card-border-radius);
+}
+
+.tabContainer button {
+    border-top: none !important;
+}
+
+.leftTab {
+    border-left: none !important;
+    border-top-right-radius: 0 !important;
+}
+
+.centerTab {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.rightTab {
+    border-right: none !important;
+    border-top-left-radius: 0 !important;
+}
+
+.tabCard {
+    border: none !important;
+}
+
+.labelCol {
+    display: flex;
+    align-items: center;
+}
+
+.unresolvedOrderStatus {
+    border-color: #dc3545 !important;
+}
+
+.resolvedOrderStatus {
+    border-color: #198754 !important;
+}
+
+.labelHeader {
+    text-align: center;
+    background-color: #e8e8ef !important;
+    width: 15em;
+}
+
+.labelColumn {
+    text-align: center;
+    width: 15em;
+}
+
+.previewCard {
+    position: relative;
+}
+
+.previewButton {
+    position: absolute;
+    z-index: 2;
+    top: 15px;
+    right: 25px;
+}
+
+.previewImage {
+    width: 20px;
+    height: 20px;
+}

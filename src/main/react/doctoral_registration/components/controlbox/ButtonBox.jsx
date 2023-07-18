@@ -2,10 +2,10 @@ import React from 'react';
 import {Image} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
-const ButtonBox = ({image, onClick}) => {
+const ButtonBox = ({image, size, variant, onClick}) => {
     return (
-        <Button variant={"light"} onClick={onClick}>
-            <Image src={image} alt={"add"}/>
+        <Button variant={variant ? variant : "light"} onClick={onClick}>
+            <Image src={image} alt={"add"} width={size} height={size}/>
         </Button>
     );
 };

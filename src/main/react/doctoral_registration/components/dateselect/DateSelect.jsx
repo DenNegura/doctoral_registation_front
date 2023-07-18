@@ -1,10 +1,12 @@
 import React, {useMemo} from 'react';
 import {InputGroup} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import classes from './DateSelect.module.css';
 
 const DateSelect = ({
                         count, setDate, defaultDate,
-                        minAge = null, maxAge = (new Date()).getFullYear()
+                        minAge = null, maxAge = (new Date()).getFullYear(),
+                        invalid, valid
                     }) => {
 
     count = Number(count)
@@ -70,6 +72,7 @@ const DateSelect = ({
                     value={defaultDate.getDate()}
                     onChange={e =>
                         setDate(new Date(defaultDate.getFullYear(), defaultDate.getMonth(), Number(e.target.value)))}
+                    className={(invalid ? classes.invalid : '') + (valid ? classes.valid : '')}
                 >
                     {
                         days.map(day => {
@@ -83,6 +86,7 @@ const DateSelect = ({
                     value={defaultDate.getMonth()}
                     onChange={e =>
                         setDate(new Date(defaultDate.getFullYear(), Number(e.target.value), defaultDate.getDate()))}
+                    className={(invalid ? classes.invalid : '') + (valid ? classes.valid : '')}
                 >
                     {
                         months.map(month => {
@@ -96,6 +100,8 @@ const DateSelect = ({
                     value={defaultDate.getFullYear()}
                     onChange={e =>
                         setDate(new Date(Number(e.target.value), defaultDate.getMonth(), defaultDate.getDate()))}
+                    isInvalid={!!invalid}
+                    isValid={valid}
                 >
                     {
                         years.map(year => {
@@ -106,6 +112,9 @@ const DateSelect = ({
                     }
                 </Form.Select>
             </InputGroup>
+            <div className={invalid ? classes.invalidBoxMessage : classes.disable}>
+                {invalid}
+            </div>
         </Form.Group>
     );
 };
